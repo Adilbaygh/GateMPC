@@ -1,0 +1,6 @@
+Quantity,Estimate,Spread or interval,Verdict
+Γ = C_d W_eff,25.5567 m^1.5/s,"[25.4956, 25.6178]",identified
+α (opening exponent),1.0005,"[0.9999, 1.0012]",identified
+β (head exponent),0.5086,"[0.5068, 0.5104]",identified
+z₀ (sill elevation),2.11 ft,flat valley 0.82 ft wide,NOT identified — free-flow fraction 1.1e-05
+A_s (pool storage area),"297,190 m²",IQR/median 1.231,"NOT identified — 14.8% of 3,055 estimates physically impossible"

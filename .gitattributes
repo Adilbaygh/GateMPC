@@ -1,0 +1,38 @@
+# Line endings, and one rule that the reproducibility of this repository depends on.
+#
+# THE DATA PACKAGE IS NEVER TOUCHED. Its files are covered by SHA-256 checksums, and
+# `scripts/download_usgs.py --verify` compares them byte for byte. If git were allowed
+# to normalise line endings on checkout, every checksum would fail on Windows and the
+# package would look corrupt when it is not. So DATA/ is marked binary: what is
+# committed is what is checked out, on every platform.
+DATA/** -text
+
+# Everything else is normalised to LF in the repository. Contributors on Windows may
+# have CRLF in their working copy; what is stored stays LF, so a diff never turns into
+# a whole-file rewrite.
+* text=auto eol=lf
+
+# Result files are written by the scripts with newline="\n". Keeping them LF means a
+# rerun on Windows produces a file identical to the one a rerun on Linux produces.
+results/**/*.json text eol=lf
+results/**/*.csv  text eol=lf
+results/**/*.md   text eol=lf
+
+# Sources.
+*.py   text eol=lf diff=python
+*.md   text eol=lf
+*.toml text eol=lf
+*.txt  text eol=lf
+*.cff  text eol=lf
+*.yml  text eol=lf
+
+# Binaries, so git neither converts them nor tries to diff them as text.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.docx binary
+*.xlsx binary
+*.pptx binary
+
+# Figures are large and rarely reviewed line by line; mark them for a compact diff.
+results/figures/*.png binary linguist-generated=true

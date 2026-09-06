@@ -1,0 +1,1623 @@
+{
+ "api_collection": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous",
+ "http_requests_made_this_run": 0,
+ "layers": [
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34949,
+   "records_used": 34949,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2011-01-01T00%3A00%3A00Z%2F2011-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2011
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35126,
+   "records_used": 35126,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2012-01-01T00%3A00%3A00Z%2F2012-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2012
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34917,
+   "records_used": 34917,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2013-01-01T00%3A00%3A00Z%2F2013-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2013
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34977,
+   "records_used": 34977,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2014-01-01T00%3A00%3A00Z%2F2014-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2014
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34811,
+   "records_used": 34811,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2015-01-01T00%3A00%3A00Z%2F2015-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2015
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 31990,
+   "records_used": 31990,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2016-01-01T00%3A00%3A00Z%2F2016-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2016
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34761,
+   "records_used": 34761,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2017-01-01T00%3A00%3A00Z%2F2017-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2017
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34895,
+   "records_used": 34895,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2018
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35028,
+   "records_used": 35028,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2019
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35131,
+   "records_used": 35131,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2020
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34732,
+   "records_used": 34732,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2021
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35040,
+   "records_used": 35040,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2022
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35295,
+   "records_used": 35295,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2023
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35608,
+   "records_used": 35608,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2024
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34714,
+   "records_used": 34714,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2025
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 23757,
+   "records_used": 23757,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2026
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 33862,
+   "records_used": 33862,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2011-01-01T00%3A00%3A00Z%2F2011-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2011
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 33541,
+   "records_used": 33541,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2012-01-01T00%3A00%3A00Z%2F2012-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2012
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34545,
+   "records_used": 34545,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2013-01-01T00%3A00%3A00Z%2F2013-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2013
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 33974,
+   "records_used": 33974,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2014-01-01T00%3A00%3A00Z%2F2014-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2014
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34578,
+   "records_used": 34578,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2015-01-01T00%3A00%3A00Z%2F2015-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2015
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34811,
+   "records_used": 34811,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2016-01-01T00%3A00%3A00Z%2F2016-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2016
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34782,
+   "records_used": 34782,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2017-01-01T00%3A00%3A00Z%2F2017-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2017
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34883,
+   "records_used": 34883,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2018
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34833,
+   "records_used": 34833,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2019
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34963,
+   "records_used": 34963,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2020
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34814,
+   "records_used": 34814,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2021
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35031,
+   "records_used": 35031,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2022
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35030,
+   "records_used": 35030,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2023
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34713,
+   "records_used": 34713,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2024
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34723,
+   "records_used": 34723,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2025
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 23765,
+   "records_used": 23765,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2026
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2011-01-01T00%3A00%3A00Z%2F2011-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2011
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2012-01-01T00%3A00%3A00Z%2F2012-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2012
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2013-01-01T00%3A00%3A00Z%2F2013-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2013
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2014-01-01T00%3A00%3A00Z%2F2014-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2014
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2015-01-01T00%3A00%3A00Z%2F2015-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2015
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2016-01-01T00%3A00%3A00Z%2F2016-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2016
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 33180,
+   "records_used": 33180,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2017-01-01T00%3A00%3A00Z%2F2017-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2017
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70073,
+   "records_used": 70073,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2018
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70052,
+   "records_used": 70052,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2019
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70263,
+   "records_used": 70263,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2020
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 69162,
+   "records_used": 69162,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2021
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70080,
+   "records_used": 70080,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2022
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 67775,
+   "records_used": 67775,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2023
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 69852,
+   "records_used": 69852,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2024
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 69428,
+   "records_used": 69428,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2025
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 47534,
+   "records_used": 47534,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2026
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2011-01-01T00%3A00%3A00Z%2F2011-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2011
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2012-01-01T00%3A00%3A00Z%2F2012-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2012
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2013-01-01T00%3A00%3A00Z%2F2013-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2013
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2014-01-01T00%3A00%3A00Z%2F2014-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2014
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2015-01-01T00%3A00%3A00Z%2F2015-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2015
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2016-01-01T00%3A00%3A00Z%2F2016-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2016
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2017-01-01T00%3A00%3A00Z%2F2017-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2017
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2018
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2019
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2020
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2021
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2022
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2023
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2024
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2025
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 23636,
+   "records_used": 23636,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2026
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35037,
+   "records_used": 35037,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2011-01-01T00%3A00%3A00Z%2F2011-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2011
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35126,
+   "records_used": 35126,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2012-01-01T00%3A00%3A00Z%2F2012-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2012
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35032,
+   "records_used": 35032,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2013-01-01T00%3A00%3A00Z%2F2013-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2013
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35035,
+   "records_used": 35035,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2014-01-01T00%3A00%3A00Z%2F2014-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2014
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35004,
+   "records_used": 35004,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2015-01-01T00%3A00%3A00Z%2F2015-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2015
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 32775,
+   "records_used": 32775,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2016-01-01T00%3A00%3A00Z%2F2016-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2016
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34742,
+   "records_used": 34742,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2017-01-01T00%3A00%3A00Z%2F2017-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2017
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34889,
+   "records_used": 34889,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2018
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35021,
+   "records_used": 35021,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2019
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35117,
+   "records_used": 35117,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2020
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34693,
+   "records_used": 34693,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2021
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35039,
+   "records_used": 35039,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2022
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35040,
+   "records_used": 35040,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2023
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34929,
+   "records_used": 34929,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2024
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34719,
+   "records_used": 34719,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2025
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 23777,
+   "records_used": 23777,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09522700",
+   "year": 2026
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2011-01-01T00%3A00%3A00Z%2F2011-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2011
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2012-01-01T00%3A00%3A00Z%2F2012-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2012
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2013-01-01T00%3A00%3A00Z%2F2013-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2013
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2014-01-01T00%3A00%3A00Z%2F2014-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2014
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2015-01-01T00%3A00%3A00Z%2F2015-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2015
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2016-01-01T00%3A00%3A00Z%2F2016-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2016
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2017-01-01T00%3A00%3A00Z%2F2017-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2017
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2018
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2019
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2020
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2021
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2022
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2023
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2024
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 0,
+   "records_used": 0,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2025
+  },
+  {
+   "layer": "coverage_census.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 11961,
+   "records_used": 11961,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "27eff542253a9575edb1c942e6e95bebd8de820a64dcea0cc06019cd33d972cf",
+   "site": "09428500",
+   "year": 2026
+  },
+  {
+   "layer": "gaugings.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "records_returned": 317,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/field-measurements/items?monitoring_location_id=USGS-09522700&parameter_code=00060&limit=10000&f=json",
+   "served_from_cache": true,
+   "sha256": "b9ea843abf05bf6f63514a2fd703fcb67d002305b0727d7be706b47acf284e0c",
+   "site": "09522700"
+  },
+  {
+   "layer": "gaugings.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "records_returned": 244,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/field-measurements/items?monitoring_location_id=USGS-09428500&parameter_code=00060&limit=10000&f=json",
+   "served_from_cache": true,
+   "sha256": "b9ea843abf05bf6f63514a2fd703fcb67d002305b0727d7be706b47acf284e0c",
+   "site": "09428500"
+  },
+  {
+   "layer": "observations/09428500_2026.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 23765,
+   "records_used_by_role": {
+    "discharge": 23765
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00060&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "f0ee4a7f84944028d050fbedaa20de6d8f71c8bb4e9cff3264db015413f3db96",
+   "site": "09428500",
+   "year": 2026
+  },
+  {
+   "layer": "observations/09428500_2026.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 23636,
+   "records_used_by_role": {
+    "headwater": 11961,
+    "tailwater": 11675
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=00065&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "f0ee4a7f84944028d050fbedaa20de6d8f71c8bb4e9cff3264db015413f3db96",
+   "site": "09428500",
+   "year": 2026
+  },
+  {
+   "layer": "observations/09428500_2026.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 11961,
+   "records_used_by_role": {
+    "gate_opening": 11961
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09428500&parameter_code=45592&datetime=2026-01-01T00%3A00%3A00Z%2F2026-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "f0ee4a7f84944028d050fbedaa20de6d8f71c8bb4e9cff3264db015413f3db96",
+   "site": "09428500",
+   "year": 2026
+  },
+  {
+   "layer": "observations/09522700_2018.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34895,
+   "records_used_by_role": {
+    "discharge": 34895
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "f58edaa4b12775dfc6beede07751689a7dcce47b1a2c784907b621459d4127c4",
+   "site": "09522700",
+   "year": 2018
+  },
+  {
+   "layer": "observations/09522700_2018.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70073,
+   "records_used_by_role": {
+    "headwater": 35038,
+    "tailwater": 35035
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "f58edaa4b12775dfc6beede07751689a7dcce47b1a2c784907b621459d4127c4",
+   "site": "09522700",
+   "year": 2018
+  },
+  {
+   "layer": "observations/09522700_2018.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34889,
+   "records_used_by_role": {
+    "gate_opening": 34889
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2018-01-01T00%3A00%3A00Z%2F2018-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "f58edaa4b12775dfc6beede07751689a7dcce47b1a2c784907b621459d4127c4",
+   "site": "09522700",
+   "year": 2018
+  },
+  {
+   "layer": "observations/09522700_2019.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35028,
+   "records_used_by_role": {
+    "discharge": 35028
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "07a1d2e17dd964f280d69f6ddc419cff6ddff92e53ed36e6eef3366b9d551d8d",
+   "site": "09522700",
+   "year": 2019
+  },
+  {
+   "layer": "observations/09522700_2019.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70052,
+   "records_used_by_role": {
+    "headwater": 35028,
+    "tailwater": 35024
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "07a1d2e17dd964f280d69f6ddc419cff6ddff92e53ed36e6eef3366b9d551d8d",
+   "site": "09522700",
+   "year": 2019
+  },
+  {
+   "layer": "observations/09522700_2019.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35021,
+   "records_used_by_role": {
+    "gate_opening": 35021
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2019-01-01T00%3A00%3A00Z%2F2019-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "07a1d2e17dd964f280d69f6ddc419cff6ddff92e53ed36e6eef3366b9d551d8d",
+   "site": "09522700",
+   "year": 2019
+  },
+  {
+   "layer": "observations/09522700_2020.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35131,
+   "records_used_by_role": {
+    "discharge": 35131
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "1bc95c715b7edccf1a75f5c76e2e9e1bf977513caa746ea47a0f3f7d85757d1d",
+   "site": "09522700",
+   "year": 2020
+  },
+  {
+   "layer": "observations/09522700_2020.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70263,
+   "records_used_by_role": {
+    "headwater": 35131,
+    "tailwater": 35132
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "1bc95c715b7edccf1a75f5c76e2e9e1bf977513caa746ea47a0f3f7d85757d1d",
+   "site": "09522700",
+   "year": 2020
+  },
+  {
+   "layer": "observations/09522700_2020.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35117,
+   "records_used_by_role": {
+    "gate_opening": 35117
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2020-01-01T00%3A00%3A00Z%2F2020-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "1bc95c715b7edccf1a75f5c76e2e9e1bf977513caa746ea47a0f3f7d85757d1d",
+   "site": "09522700",
+   "year": 2020
+  },
+  {
+   "layer": "observations/09522700_2021.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34732,
+   "records_used_by_role": {
+    "discharge": 34732
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "d50a5435043a1bcc5cf6c3990b656bdba3ba35461bc3405ef1b90a4e326da34c",
+   "site": "09522700",
+   "year": 2021
+  },
+  {
+   "layer": "observations/09522700_2021.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 69162,
+   "records_used_by_role": {
+    "headwater": 34582,
+    "tailwater": 34580
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "d50a5435043a1bcc5cf6c3990b656bdba3ba35461bc3405ef1b90a4e326da34c",
+   "site": "09522700",
+   "year": 2021
+  },
+  {
+   "layer": "observations/09522700_2021.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34693,
+   "records_used_by_role": {
+    "gate_opening": 34693
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2021-01-01T00%3A00%3A00Z%2F2021-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "d50a5435043a1bcc5cf6c3990b656bdba3ba35461bc3405ef1b90a4e326da34c",
+   "site": "09522700",
+   "year": 2021
+  },
+  {
+   "layer": "observations/09522700_2022.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35040,
+   "records_used_by_role": {
+    "discharge": 35040
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "ede199d9bb8cc194385ed565c1a0a7287eda11de4c8c50615f36df6f5e103bdf",
+   "site": "09522700",
+   "year": 2022
+  },
+  {
+   "layer": "observations/09522700_2022.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 70080,
+   "records_used_by_role": {
+    "headwater": 35040,
+    "tailwater": 35040
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "ede199d9bb8cc194385ed565c1a0a7287eda11de4c8c50615f36df6f5e103bdf",
+   "site": "09522700",
+   "year": 2022
+  },
+  {
+   "layer": "observations/09522700_2022.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35039,
+   "records_used_by_role": {
+    "gate_opening": 35039
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2022-01-01T00%3A00%3A00Z%2F2022-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "ede199d9bb8cc194385ed565c1a0a7287eda11de4c8c50615f36df6f5e103bdf",
+   "site": "09522700",
+   "year": 2022
+  },
+  {
+   "layer": "observations/09522700_2023.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35295,
+   "records_used_by_role": {
+    "discharge": 35295
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "6864c83eb600a23508c2ec2dd5e666bb25af418959bd41df7fe85fc6a6d0cbc8",
+   "site": "09522700",
+   "year": 2023
+  },
+  {
+   "layer": "observations/09522700_2023.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 67775,
+   "records_used_by_role": {
+    "headwater": 33887,
+    "tailwater": 33888
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "6864c83eb600a23508c2ec2dd5e666bb25af418959bd41df7fe85fc6a6d0cbc8",
+   "site": "09522700",
+   "year": 2023
+  },
+  {
+   "layer": "observations/09522700_2023.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 35040,
+   "records_used_by_role": {
+    "gate_opening": 35040
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2023-01-01T00%3A00%3A00Z%2F2023-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "6864c83eb600a23508c2ec2dd5e666bb25af418959bd41df7fe85fc6a6d0cbc8",
+   "site": "09522700",
+   "year": 2023
+  },
+  {
+   "layer": "observations/09522700_2024.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 35608,
+   "records_used_by_role": {
+    "discharge": 35608
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "da11c663704c812432247cf20ad707c1a38982c2d1302276e8d16cead2686e44",
+   "site": "09522700",
+   "year": 2024
+  },
+  {
+   "layer": "observations/09522700_2024.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 69852,
+   "records_used_by_role": {
+    "headwater": 34926,
+    "tailwater": 34926
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "da11c663704c812432247cf20ad707c1a38982c2d1302276e8d16cead2686e44",
+   "site": "09522700",
+   "year": 2024
+  },
+  {
+   "layer": "observations/09522700_2024.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34929,
+   "records_used_by_role": {
+    "gate_opening": 34929
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2024-01-01T00%3A00%3A00Z%2F2024-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "da11c663704c812432247cf20ad707c1a38982c2d1302276e8d16cead2686e44",
+   "site": "09522700",
+   "year": 2024
+  },
+  {
+   "layer": "observations/09522700_2025.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00060",
+   "records_returned": 34714,
+   "records_used_by_role": {
+    "discharge": 34714
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00060&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "cfb3861bbb06955ed9ef8ca22dc3c2ae3f00a2ac2ba387c96325ffbce49d2c6d",
+   "site": "09522700",
+   "year": 2025
+  },
+  {
+   "layer": "observations/09522700_2025.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "00065",
+   "records_returned": 69428,
+   "records_used_by_role": {
+    "headwater": 34714,
+    "tailwater": 34714
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=00065&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "cfb3861bbb06955ed9ef8ca22dc3c2ae3f00a2ac2ba387c96325ffbce49d2c6d",
+   "site": "09522700",
+   "year": 2025
+  },
+  {
+   "layer": "observations/09522700_2025.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "parameter_code": "45592",
+   "records_returned": 34719,
+   "records_used_by_role": {
+    "gate_opening": 34719
+   },
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items?monitoring_location_id=USGS-09522700&parameter_code=45592&datetime=2025-01-01T00%3A00%3A00Z%2F2025-12-31T23%3A59%3A59Z&limit=50000&f=json",
+   "served_from_cache": true,
+   "sha256": "cfb3861bbb06955ed9ef8ca22dc3c2ae3f00a2ac2ba387c96325ffbce49d2c6d",
+   "site": "09522700",
+   "year": 2025
+  },
+  {
+   "layer": "time_series_metadata.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "records_returned": 5,
+   "records_used": 4,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?monitoring_location_id=USGS-09522700&limit=100&f=json",
+   "served_from_cache": true,
+   "sha256": "ce6e65eb5ef2fffe0235a9b129beea3fcfa1b1ba765f96ad275db2e8fb32029f",
+   "site": "09522700"
+  },
+  {
+   "layer": "time_series_metadata.csv",
+   "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+   "records_returned": 5,
+   "records_used": 4,
+   "request_url": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?monitoring_location_id=USGS-09428500&limit=100&f=json",
+   "served_from_cache": true,
+   "sha256": "ce6e65eb5ef2fffe0235a9b129beea3fcfa1b1ba765f96ad275db2e8fb32029f",
+   "site": "09428500"
+  }
+ ],
+ "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+ "package": "USGS_canal_gates_v1",
+ "retrieved_utc": "2026-09-05T21:53:29+00:00",
+ "series_roles": {
+  "09428500": {
+   "14eef6ee": "tailwater",
+   "190daf89": "gate_opening",
+   "52737a6e": "discharge",
+   "aa6d1692": "headwater"
+  },
+  "09522700": {
+   "373d93c6f7d24462aae0c5e9b3056415": "headwater",
+   "4b3972dec3cc43beb1c05be12b7804f7": "tailwater",
+   "aa7306544e844561ad2ccf2476f7ca58": "gate_opening",
+   "d3ec91292d17403397678bc7ed056f2d": "discharge"
+  }
+ },
+ "sites": {
+  "09428500": {
+   "name": "CRIR Main Canal near Parker, AZ",
+   "role": "external validation only; not a cross-validation fold",
+   "years": [
+    2026
+   ]
+  },
+  "09522700": {
+   "name": "Wellton-Mohawk Main Canal near Yuma, AZ",
+   "role": "primary structure; cross-validation folds",
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  }
+ }
+}

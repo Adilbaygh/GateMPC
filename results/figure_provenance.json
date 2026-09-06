@@ -1,0 +1,98 @@
+{
+  "figures": [
+    {
+      "number": 1,
+      "name": "kappa",
+      "section": "Section 4.1",
+      "what": "kappa is a rating output, not a measurement",
+      "sources": [
+        "results/archive_diagnostics.json",
+        "results/tables/kappa_daily.csv"
+      ]
+    },
+    {
+      "number": 2,
+      "name": "gaugings",
+      "section": "Section 4.2",
+      "what": "benchmark gate law against 77 gaugings",
+      "sources": [
+        "results/gate_law_validation.json",
+        "results/tables/gauging_residual_bins.csv",
+        "results/tables/gauging_residuals.csv"
+      ]
+    },
+    {
+      "number": 3,
+      "name": "storage",
+      "section": "Section 4.3",
+      "what": "A_s is not identifiable from the archive",
+      "sources": [
+        "results/archive_diagnostics.json",
+        "results/tables/storage_estimates.csv"
+      ]
+    },
+    {
+      "number": 4,
+      "name": "census",
+      "section": "Section 2.3",
+      "what": "why the folds are 2018-2025",
+      "sources": [
+        "DATA/USGS_canal_gates_v1/coverage_census.csv"
+      ]
+    },
+    {
+      "number": 5,
+      "name": "envelope",
+      "section": "Section 4.4",
+      "what": "modelling error over the operating envelope",
+      "sources": [
+        "results/model_error_envelope.json"
+      ]
+    },
+    {
+      "number": 6,
+      "name": "control",
+      "section": "Section 4.4",
+      "what": "closed-loop cost, and its unstable sign",
+      "sources": [
+        "results/control_comparison.json"
+      ]
+    },
+    {
+      "number": 7,
+      "name": "moves",
+      "section": "Section 2.2",
+      "what": "gate movements on the archive's own grid",
+      "sources": [
+        "results/archive_diagnostics.json",
+        "results/tables/gate_step_histogram.csv"
+      ]
+    },
+    {
+      "number": 8,
+      "name": "grid",
+      "section": "Section 2.4",
+      "what": "the one-second timestamp offset and its cost",
+      "sources": [
+        "DATA/USGS_canal_gates_v1/grid_diagnostics.csv"
+      ]
+    },
+    {
+      "number": 9,
+      "name": "rating",
+      "section": "Section 4.1",
+      "what": "how tightly the rating holds its coefficient",
+      "sources": [
+        "results/discharge_coefficient.json",
+        "results/tables/discharge_coefficient_bins.csv"
+      ]
+    },
+    {
+      "number": 10,
+      "name": "structure",
+      "section": "Section 2.1",
+      "what": "the structure and its published series",
+      "sources": []
+    }
+  ]
+}

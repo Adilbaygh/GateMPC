@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gatempc"
+version = "0.1.0"
+description = "Identification of a real canal gate law from an open archive, and its effect on predictive control"
+requires-python = ">=3.11"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+    "canal automation",
+    "gate hydraulics",
+    "system identification",
+    "model predictive control",
+    "reproducibility",
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "requests>=2.31",
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+]
+
+# The explorer is an extra on purpose: every published number can be recomputed
+# without a GUI toolkit, and a reviewer on a headless machine should not be asked to
+# install one.
+[project.urls]
+Repository = "https://github.com/Adilbaygh/GateMPC"
+Issues = "https://github.com/Adilbaygh/GateMPC/issues"
+
+[project.optional-dependencies]
+gui = ["PyQt6>=6.6"]
+test = ["pytest>=8.0"]
+
+[project.scripts]
+gatempc-gui = "gatempc.gui.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

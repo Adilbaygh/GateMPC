@@ -1,0 +1,3 @@
+envelope,a_lo_m,a_hi_m,dh_lo_m,dh_hi_m,error_min,error_max,error_min_ci,error_max_ci
+asce_test_2_1,0.268154,2.257515,0.100000,0.350000,-0.00672788,0.00510135,-0.00906233,0.00650270
+observed_wellton_mohawk,0.003048,1.862328,0.274320,1.682496,-0.00031062,0.01866712,-0.00510567,0.02301553

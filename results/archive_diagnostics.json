@@ -1,0 +1,454 @@
+{
+ "all_checks_passed": true,
+ "coverage": {
+  "2018": {
+   "rows_with_all_four": 34614,
+   "usable": 34538
+  },
+  "2019": {
+   "rows_with_all_four": 35014,
+   "usable": 34740
+  },
+  "2020": {
+   "rows_with_all_four": 35116,
+   "usable": 34771
+  },
+  "2021": {
+   "rows_with_all_four": 33763,
+   "usable": 32666
+  },
+  "2022": {
+   "rows_with_all_four": 35039,
+   "usable": 33033
+  },
+  "2023": {
+   "rows_with_all_four": 31735,
+   "usable": 30715
+  },
+  "2024": {
+   "rows_with_all_four": 33841,
+   "usable": 31992
+  },
+  "2025": {
+   "rows_with_all_four": 34714,
+   "usable": 33867
+  }
+ },
+ "environment": {
+  "python": "3.13.5"
+ },
+ "extremes": {
+  "discharge": {
+   "max": {
+    "approval": "Approved",
+    "raw": "1110",
+    "time_utc": "2021-04-23T00:15:00+00:00",
+    "value": 1110.0
+   },
+   "min": {
+    "approval": "Approved",
+    "raw": "0.00",
+    "time_utc": "2018-01-28T13:30:00+00:00",
+    "value": 0.0
+   }
+  },
+  "gate_opening": {
+   "max": {
+    "approval": "Approved",
+    "raw": "6.11",
+    "time_utc": "2021-06-04T14:30:00+00:00",
+    "value": 6.11
+   },
+   "min": {
+    "approval": "Approved",
+    "raw": "-0.03",
+    "time_utc": "2018-01-28T13:15:00+00:00",
+    "value": -0.03
+   }
+  },
+  "headwater": {
+   "max": {
+    "approval": "Approved",
+    "raw": "12.34",
+    "time_utc": "2025-09-05T05:00:00+00:00",
+    "value": 12.34
+   },
+   "min": {
+    "approval": "Approved",
+    "raw": "2.42",
+    "time_utc": "2021-07-22T13:30:00+00:00",
+    "value": 2.42
+   }
+  },
+  "tailwater": {
+   "max": {
+    "approval": "Approved",
+    "raw": "8.82",
+    "time_utc": "2018-05-12T10:30:00+00:00",
+    "value": 8.82
+   },
+   "min": {
+    "approval": "Approved",
+    "raw": "2.42",
+    "time_utc": "2021-07-22T13:30:00+00:00",
+    "value": 2.42
+   }
+  }
+ },
+ "folds": [
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "gate_movement": {
+  "above_threshold": 7854,
+  "distinct_step_sizes": 346,
+  "max_move_ft": 3.1000000000000005,
+  "median_move_ft": 0.01,
+  "moved": 49463,
+  "pairs": 273100,
+  "q95_move_ft": 0.4499999999999998,
+  "threshold_ft": 0.02
+ },
+ "kappa": {
+  "complete_days": 2664,
+  "days": 2849,
+  "largest_single_day_move_anywhere": 1.3095710230238402,
+  "n_usable": 266322,
+  "overnight_move": 0.038049135413599666,
+  "periods": [
+   {
+    "complete_days": 1281,
+    "complete_days_beyond": {
+     "0.001": 31,
+     "0.005": 11,
+     "0.01": 10,
+     "0.05": 0
+    },
+    "daily_deviation": {
+     "max": 0.029224574057102104,
+     "p50": 9.2919200071373e-05,
+     "p90": 0.0002973221042601448,
+     "p99": 0.0036638034312274073
+    },
+    "from": "2018-01-01",
+    "iqr_m": 0.005538111188260864,
+    "median_m": 5.647424789540861,
+    "n": 128734,
+    "q05": 5.639555551281912,
+    "q95": 5.6545960434094455,
+    "relative_iqr": 0.0009806436375244078,
+    "to": "2021-10-07"
+   },
+   {
+    "complete_days": 1383,
+    "complete_days_beyond": {
+     "0.001": 112,
+     "0.005": 12,
+     "0.01": 7,
+     "0.05": 1
+    },
+    "daily_deviation": {
+     "max": 0.14923607095682156,
+     "p50": 9.791930764480039e-05,
+     "p90": 0.0006922740835505255,
+     "p99": 0.0044140069525658784
+    },
+    "from": "2021-10-08",
+    "iqr_m": 0.006245338013264323,
+    "median_m": 5.865131603355635,
+    "n": 137588,
+    "q05": 5.854688235691604,
+    "q95": 5.875004356418371,
+    "relative_iqr": 0.001064824872760086,
+    "to": "2025-12-31"
+   }
+  ],
+  "split_after": "2021-10-07",
+  "split_before": "2021-10-08",
+  "step_relative": 0.038549750006050765,
+  "window_shift": {
+   "days": 30,
+   "largest_elsewhere": 0.0019474039036641022,
+   "magnitude": 0.03854277325587718
+  }
+ },
+ "package": "USGS_canal_gates_v1",
+ "reproduction_checks": [
+  {
+   "got": 34614,
+   "name": "coverage: 2018 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 34614
+  },
+  {
+   "got": 35014,
+   "name": "coverage: 2019 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 35014
+  },
+  {
+   "got": 35116,
+   "name": "coverage: 2020 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 35116
+  },
+  {
+   "got": 33763,
+   "name": "coverage: 2021 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 33763
+  },
+  {
+   "got": 35039,
+   "name": "coverage: 2022 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 35039
+  },
+  {
+   "got": 31735,
+   "name": "coverage: 2023 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 31735
+  },
+  {
+   "got": 33841,
+   "name": "coverage: 2024 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 33841
+  },
+  {
+   "got": 34714,
+   "name": "coverage: 2025 matches grid_diagnostics.csv",
+   "ok": true,
+   "want": 34714
+  },
+  {
+   "got": 266322,
+   "name": "kappa: usable samples",
+   "ok": true,
+   "want": 266322
+  },
+  {
+   "got": "2021-10-07",
+   "name": "kappa: rating step found on",
+   "ok": true,
+   "want": "2021-10-07"
+  },
+  {
+   "got": 128734,
+   "name": "kappa: period 1 samples",
+   "ok": true,
+   "want": 128734
+  },
+  {
+   "got": 5.6474,
+   "name": "kappa: period 1 median (4 dp)",
+   "ok": true,
+   "want": 5.6474
+  },
+  {
+   "got": 137588,
+   "name": "kappa: period 2 samples",
+   "ok": true,
+   "want": 137588
+  },
+  {
+   "got": 5.8651,
+   "name": "kappa: period 2 median (4 dp)",
+   "ok": true,
+   "want": 5.8651
+  },
+  {
+   "got": 0.0385,
+   "name": "kappa: step size (4 dp)",
+   "ok": true,
+   "want": 0.0385
+  },
+  {
+   "got": 2358,
+   "name": "A_s: accepted events, window 4",
+   "ok": true,
+   "want": 2358
+  },
+  {
+   "got": 241288.75341474073,
+   "name": "A_s: pooled median, window 4",
+   "ok": true,
+   "want": 241288.75341474073
+  },
+  {
+   "got": 3055,
+   "name": "A_s: accepted events, window 8",
+   "ok": true,
+   "want": 3055
+  },
+  {
+   "got": 297189.5254354293,
+   "name": "A_s: pooled median, window 8",
+   "ok": true,
+   "want": 297189.5254354293
+  },
+  {
+   "got": 3050,
+   "name": "A_s: accepted events, window 12",
+   "ok": true,
+   "want": 3050
+  },
+  {
+   "got": 334123.5342506106,
+   "name": "A_s: pooled median, window 12",
+   "ok": true,
+   "want": 334123.5342506106
+  },
+  {
+   "got": 2038,
+   "name": "A_s: rejects, C2_neighbour_move",
+   "ok": true,
+   "want": 2038
+  },
+  {
+   "got": 1485,
+   "name": "A_s: rejects, C3_slope_change_not_significant",
+   "ok": true,
+   "want": 1485
+  },
+  {
+   "got": 68,
+   "name": "A_s: rejects, C4_shut_or_no_head",
+   "ok": true,
+   "want": 68
+  },
+  {
+   "got": 0,
+   "name": "A_s: rejects, C5_Q_outlier",
+   "ok": true,
+   "want": 0
+  },
+  {
+   "got": 144,
+   "name": "A_s: rejects, dQ_not_significant",
+   "ok": true,
+   "want": 144
+  },
+  {
+   "got": 0,
+   "name": "A_s: rejects, degenerate_slope",
+   "ok": true,
+   "want": 0
+  },
+  {
+   "got": 30,
+   "name": "A_s: rejects, window_off_grid",
+   "ok": true,
+   "want": 30
+  },
+  {
+   "got": 1.231153218289041,
+   "name": "A_s: IQR / median",
+   "ok": true,
+   "want": 1.231153218289041
+  },
+  {
+   "got": 0.1479541734860884,
+   "name": "A_s: negative fraction",
+   "ok": true,
+   "want": 0.1479541734860884
+  }
+ ],
+ "site": "09522700",
+ "storage": {
+  "bootstrap": 2000,
+  "bootstrap_seed": 20260905,
+  "c5_iqr_multiplier": 5.0,
+  "criterion_1_pass": true,
+  "criterion_2_pass": false,
+  "identified": false,
+  "iqr_m2": 365885.8406816216,
+  "iqr_ratio": 1.231153218289041,
+  "median_m2": 297189.5254354293,
+  "n_accepted": 3055,
+  "negative_fraction": 0.1479541734860884,
+  "per_fold": {
+   "2018": {
+    "ci_hi": 381392.22459130356,
+    "ci_lo": 303824.2564314595,
+    "median": 342394.1539199985,
+    "n": 451
+   },
+   "2019": {
+    "ci_hi": 357026.382720001,
+    "ci_lo": 294518.88279792655,
+    "median": 324046.8210472663,
+    "n": 428
+   },
+   "2020": {
+    "ci_hi": 335251.26741763257,
+    "ci_lo": 293028.37216524634,
+    "median": 309445.8175397645,
+    "n": 453
+   },
+   "2021": {
+    "ci_hi": 349289.5132429196,
+    "ci_lo": 278248.7668780262,
+    "median": 323059.75007498777,
+    "n": 372
+   },
+   "2022": {
+    "ci_hi": 309272.10872726823,
+    "ci_lo": 235531.68294193855,
+    "median": 274282.5633882304,
+    "n": 317
+   },
+   "2023": {
+    "ci_hi": 347951.71605137596,
+    "ci_lo": 280102.66560000106,
+    "median": 311824.0643234268,
+    "n": 330
+   },
+   "2024": {
+    "ci_hi": 278970.4608710936,
+    "ci_lo": 195742.40865844965,
+    "median": 232053.0280264055,
+    "n": 322
+   },
+   "2025": {
+    "ci_hi": 285810.3224700007,
+    "ci_lo": 226080.92214532106,
+    "median": 259824.87105812973,
+    "n": 382
+   }
+  },
+  "rejects": {
+   "C2_neighbour_move": 2038,
+   "C3_slope_change_not_significant": 1485,
+   "C4_shut_or_no_head": 68,
+   "C5_Q_outlier": 0,
+   "dQ_not_significant": 144,
+   "degenerate_slope": 0,
+   "window_off_grid": 30
+  },
+  "sigma": 3.0,
+  "window_counts": {
+   "12": 3050,
+   "4": 2358,
+   "8": 3055
+  },
+  "window_medians": {
+   "12": 334123.5342506106,
+   "4": 241288.75341474073,
+   "8": 297189.5254354293
+  },
+  "window_primary": 8,
+  "windows": [
+   4,
+   8,
+   12
+  ]
+ }
+}

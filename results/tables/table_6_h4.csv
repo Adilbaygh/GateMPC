@@ -1,0 +1,16 @@
+Quantity,Value,Note
+Field measurements in the archive,317,
+Accepted for the test,77,"inside the fold window, gate steady, rating not Poor"
+— rejected: outside the fold window,231,
+— rejected: gate moved within 30 min,6,
+— rejected: rating Poor or missing,3,
+— accepted: rated Good,28,USGS: within 5% of the actual flow; median residual +0.51%
+— accepted: rated Fair,49,USGS: within 8% of the actual flow; median residual -0.14%
+Median relative residual,+0.51%,criterion ±5%
+Interquartile range,3.58%,
+5th to 95th percentile,-4.46% to +3.89%,
+Full range,-5.40% to +6.71%,
+Structure against a/Δh,2.26%,criterion 5%
+Structure against Δh,1.78%,
+Before the rating change,+0.61% (n = 35),
+After the rating change,+0.26% (n = 42),

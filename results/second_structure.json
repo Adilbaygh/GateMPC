@@ -1,0 +1,125 @@
+{
+ "branch": "different_form",
+ "h5b": {
+  "branch": "structured",
+  "structure": {
+   "a": {
+    "bins": [
+     {
+      "median_residual": -0.005282877602962532,
+      "n": 2335,
+      "x_hi": 3.56616,
+      "x_lo": 3.1150560000000005
+     },
+     {
+      "median_residual": 0.01011577935036767,
+      "n": 2335,
+      "x_hi": 3.727704,
+      "x_lo": 3.56616
+     },
+     {
+      "median_residual": 0.009988903500752988,
+      "n": 2335,
+      "x_hi": 3.843528,
+      "x_lo": 3.727704
+     },
+     {
+      "median_residual": 0.00461585408972276,
+      "n": 2335,
+      "x_hi": 3.9776400000000005,
+      "x_lo": 3.843528
+     },
+     {
+      "median_residual": -0.011633766087829844,
+      "n": 2335,
+      "x_hi": 4.3952160000000005,
+      "x_lo": 3.9776400000000005
+     }
+    ],
+    "ratio_to_median_abs_residual": 2.565352144763409,
+    "spread_of_bin_medians": 0.021749545438197515
+   },
+   "dh": {
+    "bins": [
+     {
+      "median_residual": -0.0115801143335873,
+      "n": 2335,
+      "x_hi": 0.5821680000000029,
+      "x_lo": 0.44500799999999785
+     },
+     {
+      "median_residual": 0.004287940003903534,
+      "n": 2335,
+      "x_hi": 0.6370320000000014,
+      "x_lo": 0.5821680000000029
+     },
+     {
+      "median_residual": 0.009368653428190932,
+      "n": 2335,
+      "x_hi": 0.6858000000000004,
+      "x_lo": 0.6370320000000014
+     },
+     {
+      "median_residual": 0.009634439498984904,
+      "n": 2335,
+      "x_hi": 0.762000000000004,
+      "x_lo": 0.6858000000000004
+     },
+     {
+      "median_residual": -0.005282877602962532,
+      "n": 2335,
+      "x_hi": 1.0180320000000016,
+      "x_lo": 0.762000000000004
+     }
+    ],
+    "ratio_to_median_abs_residual": 2.5022500506612047,
+    "spread_of_bin_medians": 0.021214553832572203
+   },
+   "lag1_autocorrelation": 0.9761315597170958
+  },
+  "thresholds": {
+   "bins": 5,
+   "structured_above": 1.0,
+   "unstructured_at_or_below": 0.5
+  },
+  "verdict": "the residual is dominated by structure in the predictors, so the discharge is a deterministic function of them and this power law is the wrong form: computed, not measured"
+ },
+ "kappa_all": {
+  "complete_days": 26,
+  "label": "all four-series timestamps",
+  "median_m": 2.268855604928836,
+  "n_samples": 11675,
+  "n_usable": 11675,
+  "spread_iqr_over_median": 0.17163702354289934,
+  "typical_complete_day_deviation": 0.09559879517756964,
+  "worst_complete_day_deviation": 0.2462773560060203
+ },
+ "kappa_approved": {
+  "complete_days": 18,
+  "label": "Approved only",
+  "median_m": 2.268855604928836,
+  "n_samples": 8667,
+  "n_usable": 8667,
+  "spread_iqr_over_median": 0.1934855900995743,
+  "typical_complete_day_deviation": 0.08599548472078394,
+  "worst_complete_day_deviation": 0.22677789247243996
+ },
+ "n_approved": 8667,
+ "n_four_series": 11675,
+ "rating_fit": {
+  "c0": -0.5836570680255462,
+  "c1_dh": 0.5660393779994717,
+  "c2_a": 3.1854384441820374,
+  "form": "log Q = c0 + c1 log(dh) + c2 log(a)",
+  "median_abs_relative_residual": 0.008478190989332335,
+  "n": 11675,
+  "q95_abs_relative_residual": 0.029860935513775
+ },
+ "site": "09428500",
+ "thresholds": {
+  "kappa_spread": 0.001,
+  "rating_residual": 0.01
+ },
+ "verdict": "kappa moves, but the discharge is still reproduced by a stage-and-opening rating to within a fraction of a per cent: the circularity repeats in a DIFFERENT form",
+ "year": 2026
+}

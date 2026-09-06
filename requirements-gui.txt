@@ -1,0 +1,11 @@
+# Everything the results explorer needs, on top of requirements.txt.
+#
+#     python -m pip install -r requirements.txt -r requirements-gui.txt
+#     python main.py
+#
+# PyQt6 ships binary wheels for Windows, macOS (Intel and Apple silicon) and Linux
+# x86-64/aarch64, so this installs without a compiler on all three systems. On a Linux
+# machine with no desktop session, set QT_QPA_PLATFORM=offscreen and use
+# `python main.py --screenshot page.png`.
+-r requirements.txt
+PyQt6>=6.6

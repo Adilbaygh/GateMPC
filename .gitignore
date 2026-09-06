@@ -1,0 +1,141 @@
+# GateMPC public-repository allowlist
+#
+# Everything at the repository root is private by default. Only what a reader or reviewer
+# needs in order to rerun the study and check its numbers is allowed below: the software,
+# the normalized data package with its provenance and checksums, the experiment scripts
+# named in the Data Availability Statement, the result files those scripts write, and the
+# tests.
+#
+# Deliberately NOT published: the manuscript and its working files (paper/), the journal
+# template (template/), the reference PDFs (references/, publisher copyright), the internal
+# planning, requirement and audit notes (requirements/, Model/, Scopus/), the reviewer
+# files and closure reports (reviews/, review_reports/), and every local build product
+# (build/).
+
+/*
+
+# ---------------------------------------------------------------- repository metadata
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/LICENSE
+!/LICENSE.*
+!/CITATION.cff
+!/CHANGELOG.md
+!/CONTRIBUTING.md
+!/requirements-lock.txt
+!/requirements-gui.txt
+!/.github/
+!/.github/**
+
+# Images the README shows. Every path named in public text must lead to a public file,
+# so the screenshot the README embeds lives here rather than in build/.
+!/docs/
+/docs/*
+!/docs/explorer.png
+
+# ---------------------------------------------------------------- application and package
+!/main.py
+!/pyproject.toml
+!/requirements.txt
+!/src/
+!/src/**
+
+# ---------------------------------------------------------------- reproducibility tests
+!/tests/
+!/tests/**
+
+# ---------------------------------------------------------------- data package
+# The normalized USGS/Reclamation layers, the provenance file that records every source
+# URL, access date, licence and query, the ASCE Test Case 2 reconstruction, and the
+# SHA-256 checksums that make the build its own regression test.
+# Raw downloads stay out; the download script must be able to rebuild them.
+!/DATA/
+/DATA/*
+# The dedication that covers the package. `/DATA/*` above re-ignores everything
+# directly under DATA/, so this has to be named explicitly -- README.md links to it.
+!/DATA/LICENSE
+# Add one line per published data directory as it is created, e.g.:
+# !/DATA/WelltonMohawk_2026_Package/
+# !/DATA/WelltonMohawk_2026_Package/**
+!/DATA/USGS_canal_gates_v1/
+!/DATA/USGS_canal_gates_v1/**
+
+# ---------------------------------------------------------------- experiment scripts
+# Only the scripts that produce published numbers and figures. The manuscript-authoring
+# tools in this directory operate on the Word files and are working code, not results.
+!/scripts/
+/scripts/*
+# Add one line per published script as it is created, e.g.:
+# !/scripts/rerun_all_results.py
+# !/scripts/record_environment.py
+!/scripts/download_usgs.py
+!/scripts/identify_gate_law.py
+!/scripts/discharge_coefficient.py
+!/scripts/validate_gate_law.py
+!/scripts/model_error_envelope.py
+!/scripts/control_comparison.py
+!/scripts/archive_diagnostics.py
+!/scripts/make_figures.py
+!/scripts/make_tables.py
+!/scripts/second_structure.py
+
+# ---------------------------------------------------------------- published results
+# The files the manuscript and the Supplementary Material cite by name, plus the tables
+# and figures built from them.
+!/results/
+/results/*
+!/results/*.json
+!/results/tables/
+!/results/tables/**
+!/results/figures/
+!/results/figures/**
+
+# ---------------------------------------------------------------- re-excluded everywhere
+# These rules come last so they win over the allowances above.
+
+# Uzbek-labelled working copies of published figures
+*_uz.*
+
+# Editor backups and generator scratch
+*.bak
+*.orig
+*.rej
+
+# Python bytecode and tool caches
+**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+
+# Raw API payloads. The package README and scripts/download_usgs.py both state that
+# these are rebuildable on demand, so they are never published -- and this line keeps
+# them out even if a future allowlist entry above is written too broadly.
+/DATA/.raw_cache/
+
+# Local environments and packaging products
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# IDE, OS, log and temporary files
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
+*.tmp
+*.temp
+~$*

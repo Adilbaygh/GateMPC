@@ -1,0 +1,5 @@
+Parameter code,Role,Unit,Advertised begin,End
+00060,discharge,ft^3/s,2010-10-01,2026-09-05
+00065,H1 (Headwater),ft,2007-10-01,2026-09-05
+00065,H2 (Tailwater),ft,2007-10-01,2026-09-05
+45592,gate opening (averaged over two gates),ft,2002-08-01,2026-09-05

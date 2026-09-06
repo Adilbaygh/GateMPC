@@ -1,0 +1,9 @@
+# Runtime dependencies for the GateMPC reproducibility package.
+# Pinned versions live in requirements-lock.txt, which is what a reviewer installs.
+#
+# The results explorer (main.py) is deliberately NOT listed here: every number in the
+# manuscript can be recomputed without a GUI toolkit. Its one extra dependency is in
+# requirements-gui.txt.
+requests>=2.31
+numpy>=1.26
+matplotlib>=3.8

@@ -1,0 +1,66 @@
+# Citation File Format 1.2.0 — https://citation-file-format.github.io
+#
+# CC0 attaches no conditions to the data package, and MIT asks only that the notice be
+# kept. Citing this work is therefore a request, not a requirement. This file is here so
+# that the request is easy to honour.
+#
+# TWO THINGS ARE STILL OPEN, and are deliberately absent rather than guessed:
+#   * one further author, whose details are not yet settled;
+#   * `preferred-citation`, which is added once the paper has a DOI. Until then there is
+#     no article to point at, and inventing one would be worse than pointing at nothing.
+
+cff-version: 1.2.0
+message: "If this software or data package is useful to you, please cite it as below."
+title: "GateMPC: identifying a canal gate law from an open archive, and what it costs predictive control"
+abstract: >-
+  At a gated canal structure the published continuous discharge is not a measurement:
+  it is the output of a rating equation, so checking a gate law against that series is
+  a tautology that returns a near-perfect fit. This repository holds the detector for
+  that circularity, its confirmation at a second structure whose rating takes a
+  different form, the non-circular check against independent field gaugings, and a
+  closed-loop measurement of what a controller loses by carrying the benchmark's gate
+  law. It ships the normalised USGS data package the results are computed from, the
+  scripts that compute them, the tests, and a desktop application that shows the
+  results and applies the method to a structure of the reader's own.
+type: software
+version: "0.1.0"
+
+authors:
+  - family-names: Kudaybergenov
+    given-names: Adilbay
+    orcid: "https://orcid.org/0000-0002-2630-5182"
+    affiliation: >-
+      Karakalpak State University named after Berdakh;
+      National University of Uzbekistan named after Mirzo Ulugbek
+  - family-names: Kazimbetova
+    given-names: Mukhabbad
+    orcid: "https://orcid.org/0009-0006-2052-4655"
+    affiliation: "Karakalpak State University named after Berdakh"
+  - family-names: Ametova
+    given-names: Gulsara
+    orcid: "https://orcid.org/0009-0003-6824-2559"
+    affiliation: >-
+      "Tashkent Institute of Irrigation and Agricultural Mechanization Engineers"
+      National Research University;
+      Karakalpak State University named after Berdakh
+  - family-names: Ispanova
+    given-names: Jadira
+    orcid: "https://orcid.org/0009-0006-5701-7200"
+    affiliation: "Karakalpak State University named after Berdakh"
+  - family-names: Absametov
+    given-names: Bayram
+    orcid: "https://orcid.org/0009-0009-4062-6917"
+    affiliation: "Karakalpak State University named after Berdakh"
+
+repository-code: "https://github.com/Adilbaygh/GateMPC"
+url: "https://github.com/Adilbaygh/GateMPC"
+license: MIT
+
+keywords:
+  - canal automation
+  - gate hydraulics
+  - discharge rating
+  - system identification
+  - model predictive control
+  - reproducibility
+  - pre-registration

@@ -1,0 +1,44 @@
+{
+ "by_period": {
+  "after": {
+   "kappa_median_m": 5.8651316033556355,
+   "n": 137588,
+   "spread_by_head_difference": 8.97687389629755e-05,
+   "spread_by_relative_opening": 0.00010689420197961135
+  },
+  "before": {
+   "kappa_median_m": 5.647424789540862,
+   "n": 128734,
+   "spread_by_head_difference": 6.867664863503069e-05,
+   "spread_by_relative_opening": 7.425706571831919e-05
+  }
+ },
+ "circular": true,
+ "circularity_note": "kappa is computed from the continuous discharge series, which is itself a rating output produced from the gate opening and the two stages by this same formula. The within-period flatness is therefore evidence that the series is a rating, NOT a measurement of the structure's discharge coefficient. The non-circular test of that is H4 (results/gate_law_validation.json).",
+ "criterion": 0.05,
+ "folds": [
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "h3_supported": false,
+ "implied_w_eff_m_at_cd_061": 9.591527410652166,
+ "kappa_median_m": 5.850831720497821,
+ "kappa_q05_m": 5.642271656784634,
+ "kappa_q95_m": 5.871411398470053,
+ "n_bins": 10,
+ "n_samples": 266322,
+ "pooled_inflation": 338.5120412741702,
+ "pooled_note": "bins drawn across both rating periods confound the step between them with any dependence on opening or head; pooled_inflation is how much larger the pooled spread is than the within-period one",
+ "pooled_spread_by_head_difference": 0.03603856004821222,
+ "pooled_spread_by_relative_opening": 0.03618497451249168,
+ "rating_break_utc": "2021-10-08T00:00:00+00:00",
+ "site": "09522700",
+ "spread_by_head_difference": 8.97687389629755e-05,
+ "spread_by_relative_opening": 0.00010689420197961135
+}

@@ -1,0 +1,15 @@
+Parameter,Value,Unit,Source
+Pool length,7000,m,"[C98] Table 3, in km"
+Bottom width,7,m,[C98] Table 3
+Side slope,1.5,H:V,[C98] Table 3
+Target depth,2.1,m,[C98] Table 3
+Drop across the gate,0.2,m,[C98] Table 1
+Gate width,7,m,[C98] Table 3
+Gate height,2.3,m,[C98] Table 3
+Discharge coefficient,0.61,—,[B25] Table 5
+Storage area A_s,"93,100",m²,derived: length × top width
+Delay τ,1264,s,derived: L/(v+c)
+Regulation step,900,s,[C98] p. 24
+Reference discharge,11.0,m³/s,[C98] Table 6
+Matching opening a_ref,1.3007,m,derived
+Γ_syn = C_d W √(2g),18.9105,m^1.5/s,derived

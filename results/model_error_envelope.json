@@ -1,0 +1,61 @@
+{
+ "closed_loop_warranted": true,
+ "envelopes": {
+  "asce_test_2_1": {
+   "a_range_m": [
+    0.26815384086339833,
+    2.257514548781261
+   ],
+   "dh_range_m": [
+    0.1,
+    0.35
+   ],
+   "error_largest": 0.006727877001457827,
+   "error_largest_ci": 0.009062327063624198,
+   "error_max": 0.005101347567772585,
+   "error_max_ci": 0.006502697121996359,
+   "error_min": -0.006727877001457827,
+   "error_min_ci": -0.009062327063624198,
+   "note": "from the Test 2-1 check-flow range"
+  },
+  "observed_wellton_mohawk": {
+   "a_range_m": [
+    0.0030480000000000004,
+    1.8623280000000002
+   ],
+   "dh_range_m": [
+    0.2743200000000001,
+    1.682496
+   ],
+   "error_largest": 0.018667118068322885,
+   "error_largest_ci": 0.023015528584704903,
+   "error_max": 0.018667118068322885,
+   "error_max_ci": 0.023015528584704903,
+   "error_min": -0.0003106244929833579,
+   "error_min_ci": -0.005105670831508258,
+   "note": "269648 samples, 2018-2025"
+  }
+ },
+ "exponents": {
+  "alpha": 1.0005,
+  "alpha_ci95": [
+   0.9999,
+   1.0012
+  ],
+  "beta": 0.5086,
+  "beta_ci95": [
+   0.5068,
+   0.5104
+  ]
+ },
+ "largest_error_including_ci": 0.023015528584704903,
+ "reference": {
+  "a_ref_m": 1.3006920227241265,
+  "cd_asce": 0.61,
+  "dh_ref_m": 0.2,
+  "gamma_syn": 18.910508654449245,
+  "q_ref_m3s": 11.0,
+  "w_asce_m": 7.0
+ },
+ "threshold": 0.01
+}

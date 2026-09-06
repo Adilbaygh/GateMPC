@@ -1,0 +1,5 @@
+Defect,Size,When,Note
+Undocumented rating revision,+3.85% step in Q/(a√(2gΔh)) overnight,2021-10-07 to 2021-10-08,no note in the published record
+Telemetry timestamp offset,"3,378 four-series samples lost",worst in 09522700 2023,discharge stamped one second early
+Negative gate readings,"9 samples, minimum -0.03 ft",across the folds,published as Approved; instrument zero drift
+Discharge far above anything ever gauged,"14,600 ft³/s — 14× the largest gauging, 13× every other year","09522700, 2015","largest of 317 field gaugings there: 1,050 ft³/s; highest of the other 15 annual maxima: 1,120 ft³/s"

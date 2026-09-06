@@ -1,0 +1,82 @@
+{
+ "cross_validation": {
+  "alpha_ci95": [
+   0.999892615982473,
+   1.0011596897445858
+  ],
+  "alpha_mean": 1.0005261528635294,
+  "beta_ci95": [
+   0.5067605571542513,
+   0.5104078035116166
+  ],
+  "beta_mean": 0.508584180332934,
+  "gamma_ci95": [
+   25.495585310825184,
+   25.617821872760906
+  ],
+  "gamma_mean_m": 25.556703591793045,
+  "z0_ci95_ft": [
+   2.0415688541728647,
+   2.253431145827137
+  ],
+  "z0_mean_ft": 2.147500000000001
+ },
+ "dropped": {
+  "clipped_negative_gate": 9,
+  "gate_shut": 7476,
+  "no_head": 38,
+  "non_positive_discharge": 0
+ },
+ "effect_size": {
+  "rmse_fitted_exponents_m3s": 0.29641978405604846,
+  "rmse_ideal_law_m3s": 0.29967916617258505,
+  "rmse_reduction_percent": 1.0876238605988076
+ },
+ "folds": [
+  2018,
+  2019,
+  2020,
+  2021,
+  2022,
+  2023,
+  2024,
+  2025
+ ],
+ "full_fit": {
+  "alpha": 1.000584995035712,
+  "beta": 0.508757576976841,
+  "free_fraction": 1.1264559443080182e-05,
+  "gamma_m": 25.55799430681882,
+  "n": 266322,
+  "rmse_m3s": 0.29641978405604846,
+  "z0_ft": 2.1100000000000008,
+  "z0_m": 0.6431280000000003
+ },
+ "grid_points": 596,
+ "grid_step_ft": 0.005,
+ "h0c2_second_condition": {
+  "admissible_range_ft": 2.975,
+  "criterion": 0.05,
+  "flat_valley_ft": [
+   1.5600000000000007,
+   2.380000000000001
+  ],
+  "flat_valley_width_ft": 0.8200000000000001,
+  "free_fraction_at_optimum": 1.1264559443080182e-05,
+  "z0_identified": false
+ },
+ "h1": {
+  "alpha_ci_excludes_ideal": false,
+  "beta_ci_excludes_ideal": true,
+  "ideal_alpha": 1.0,
+  "ideal_beta": 0.5,
+  "supported": true
+ },
+ "ideal_law_same_sill": {
+  "gamma_m": 25.5079375509694,
+  "rmse_m3s": 0.29967916617258505
+ },
+ "implied_effective_width_m_at_cd_061": 9.460663561032183,
+ "n_usable_samples": 266322,
+ "site": "09522700"
+}
