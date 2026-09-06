@@ -1,4 +1,8 @@
-"""Page 2 — the detector, and the two structures it was run on."""
+"""Argument page — the detector, and the two structures it was run on.
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -7,8 +11,6 @@ from PyQt6.QtWidgets import QWidget
 from .. import data as gdata
 from .. import widgets as w
 from . import Context
-
-NAV = ("2 · Доиравийлик", "2 · Circularity")
 
 
 def build(context: Context) -> QWidget:

@@ -1,4 +1,8 @@
-"""Page 4 — what the open archive gives, and what it refuses to give."""
+"""Argument page — what the open archive gives, and what it refuses to give.
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -7,8 +11,6 @@ from PyQt6.QtWidgets import QWidget
 from .. import data as gdata
 from .. import widgets as w
 from . import Context
-
-NAV = ("4 · Архивнинг чегаралари", "4 · Limits of the archive")
 
 
 def build(context: Context) -> QWidget:

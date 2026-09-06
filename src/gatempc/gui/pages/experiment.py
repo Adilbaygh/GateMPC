@@ -32,8 +32,6 @@ from ..theme import COLORS
 from ..workers import ScriptRunner, describe
 from . import Context
 
-NAV = ("9 · Бошқарув тажрибаси", "9 · Control experiment")
-
 #: The values the published run used, so a departure can be named rather than guessed.
 REGISTERED = {"replicates": 100, "pool_length": 7000.0, "min_gate_step": 0.0}
 

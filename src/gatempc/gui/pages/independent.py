@@ -1,4 +1,8 @@
-"""Page 3 — the way out of the circle: independent field gaugings (H4)."""
+"""Argument page — the way out of the circle: independent field gaugings (H4).
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -7,8 +11,6 @@ from PyQt6.QtWidgets import QWidget
 from .. import data as gdata
 from .. import widgets as w
 from . import Context
-
-NAV = ("3 · Мустақил текширув", "3 · Independent check")
 
 
 def build(context: Context) -> QWidget:

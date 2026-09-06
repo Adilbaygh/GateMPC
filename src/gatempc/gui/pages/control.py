@@ -1,4 +1,8 @@
-"""Page 5 — what carrying the benchmark law costs a controller."""
+"""Argument page — what carrying the benchmark law costs a controller.
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -7,8 +11,6 @@ from PyQt6.QtWidgets import QWidget
 from .. import data as gdata
 from .. import widgets as w
 from . import Context
-
-NAV = ("5 · Бошқарув", "5 · Control")
 
 
 def build(context: Context) -> QWidget:

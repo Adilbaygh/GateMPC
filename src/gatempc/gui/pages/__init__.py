@@ -15,17 +15,21 @@ closed-loop experiment with parameters you choose. Nothing here writes into
 *The apparatus* is the machinery: every figure and table with its provenance, the
 buttons that reproduce the lot, and the help.
 
-Each page module exposes ``NAV`` (its two nav labels) and ``build(context)``.
+**This module imports no Qt.** The registry below is plain data, so the page list, the
+nav labels and the section names can be read on a machine that has never installed a
+GUI toolkit — which is what makes ``python main.py --list-pages`` work there. Only
+:func:`module_of` reaches for a page module, and only that pulls PyQt6 in.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable
-
-from PyQt6.QtWidgets import QWidget
+from typing import TYPE_CHECKING, Callable
 
 from .. import data as gdata
+
+if TYPE_CHECKING:  # pragma: no cover - typing only, never imported at run time
+    from PyQt6.QtWidgets import QWidget
 
 
 @dataclass
@@ -43,6 +47,17 @@ class Context:
         return i18n.pick(self.language, uzbek, english)
 
 
+@dataclass(frozen=True)
+class Page:
+    """One page, described without loading it."""
+
+    key: str
+    module: str
+    section: str
+    uzbek: str
+    english: str
+
+
 #: Section captions for the sidebar and the View menu.
 SECTIONS: dict[str, tuple[str, str]] = {
     "argument": ("МАҚОЛАНИНГ ЙЎЛИ", "THE ARGUMENT"),
@@ -50,46 +65,62 @@ SECTIONS: dict[str, tuple[str, str]] = {
     "apparatus": ("АППАРАТ", "THE APPARATUS"),
 }
 
-#: (key, module name, section) in nav order.
-PAGE_ORDER: tuple[tuple[str, str, str], ...] = (
-    ("claim", "claim", "argument"),
-    ("circularity", "circularity", "argument"),
-    ("independent", "independent", "argument"),
-    ("archive", "archive", "argument"),
-    ("control", "control", "argument"),
-    ("prereg", "prereg", "argument"),
-    ("calculator", "calculator", "laboratory"),
-    ("detector", "detector_page", "laboratory"),
-    ("experiment", "experiment", "laboratory"),
-    ("gallery", "gallery", "apparatus"),
-    ("reproduce", "reproduce", "apparatus"),
-    ("help", "help", "apparatus"),
+#: The pages, in nav order. The number in each label is its position in this tuple;
+#: ``test_nav_numbers_follow_the_page_order`` keeps the two from drifting apart.
+PAGES: tuple[Page, ...] = (
+    Page("claim", "claim", "argument",
+         "1 · Даъво", "1 · The claim"),
+    Page("circularity", "circularity", "argument",
+         "2 · Доиравийлик", "2 · Circularity"),
+    Page("independent", "independent", "argument",
+         "3 · Мустақил текширув", "3 · Independent check"),
+    Page("archive", "archive", "argument",
+         "4 · Архивнинг чегаралари", "4 · Limits of the archive"),
+    Page("control", "control", "argument",
+         "5 · Бошқарув", "5 · Control"),
+    Page("prereg", "prereg", "argument",
+         "6 · Пре-регистрация", "6 · Pre-registration"),
+    Page("calculator", "calculator", "laboratory",
+         "7 · Затвор калькулятори", "7 · Gate calculator"),
+    Page("detector", "detector_page", "laboratory",
+         "8 · Доиравийлик детектори", "8 · Circularity detector"),
+    Page("experiment", "experiment", "laboratory",
+         "9 · Бошқарув тажрибаси", "9 · Control experiment"),
+    Page("gallery", "gallery", "apparatus",
+         "10 · Расм ва жадваллар", "10 · Figures and tables"),
+    Page("reproduce", "reproduce", "apparatus",
+         "11 · Қайта юритиш", "11 · Reproduce"),
+    Page("help", "help", "apparatus",
+         "12 · Ёрдам", "12 · Help"),
 )
 
-PAGE_KEYS: tuple[str, ...] = tuple(key for key, _module, _section in PAGE_ORDER)
+PAGE_KEYS: tuple[str, ...] = tuple(page.key for page in PAGES)
 
-_MODULES: dict[str, str] = {key: module for key, module, _section in PAGE_ORDER}
-_SECTION_OF: dict[str, str] = {key: section for key, _module, section in PAGE_ORDER}
+_BY_KEY: dict[str, Page] = {page.key: page for page in PAGES}
+
+
+def page_of(key: str) -> Page:
+    return _BY_KEY[key]
 
 
 def module_of(key: str):
-    """Import one page module lazily. Pages pull in matplotlib and the package."""
-    return __import__(f"{__name__}.{_MODULES[key]}", fromlist=["build", "NAV"])
+    """Import one page module. This is the only call here that needs PyQt6."""
+    return __import__(f"{__name__}.{_BY_KEY[key].module}", fromlist=["build"])
 
 
-def build_page(key: str, context: Context) -> QWidget:
+def build_page(key: str, context: Context) -> "QWidget":
     return module_of(key).build(context)
 
 
 def nav_label(key: str, language: str) -> str:
     from .. import i18n
 
-    uzbek, english = module_of(key).NAV
-    return i18n.pick(language, uzbek, english)
+    page = _BY_KEY[key]
+    return i18n.pick(language, page.uzbek, page.english)
 
 
 def section_of(key: str) -> str:
-    return _SECTION_OF[key]
+    return _BY_KEY[key].section
 
 
 def section_label(section: str, language: str) -> str:

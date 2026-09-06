@@ -1,4 +1,8 @@
-"""Page 6 — the pre-registration record, failures included."""
+"""Argument page — the pre-registration record, failures included.
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -8,8 +12,6 @@ from .. import preregistration as record
 from .. import widgets as w
 from ..theme import COLORS, VERDICT_STYLE
 from . import Context
-
-NAV = ("6 · Пре-регистрация", "6 · Pre-registration")
 
 
 def build(context: Context) -> QWidget:

@@ -184,8 +184,8 @@ class MainWindow(QMainWindow):
         compute = bar.addMenu(self.pick("Ҳ&исоблаш", "&Compute"))
         self._menus.append((compute, ("Ҳ&исоблаш", "&Compute")))
         for key in ("calculator", "detector", "experiment"):
-            label = pages.module_of(key).NAV
-            action = self._act(label[0], label[1],
+            page = pages.page_of(key)
+            action = self._act(page.uzbek, page.english,
                                lambda _checked=False, target=key: self.show_page(target))
             compute.addAction(action)
             self._actions.append(action)
@@ -217,8 +217,8 @@ class MainWindow(QMainWindow):
                 heading.setEnabled(False)
                 view.addAction(heading)
                 self.section_actions[section] = heading
-            label = pages.module_of(key).NAV
-            action = self._act(label[0], label[1],
+            page = pages.page_of(key)
+            action = self._act(page.uzbek, page.english,
                                lambda _checked=False, target=key: self.show_page(target),
                                f"Ctrl+{index}" if index <= 9 else "")
             action.setCheckable(True)

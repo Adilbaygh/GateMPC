@@ -1,4 +1,8 @@
-"""Page 1 — the claim, in the fewest numbers that carry it."""
+"""Argument page — the claim, in the fewest numbers that carry it.
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -7,8 +11,6 @@ from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QWidget
 from .. import data as gdata
 from .. import widgets as w
 from . import Context
-
-NAV = ("1 · Даъво", "1 · The claim")
 
 #: The widest of the four within-period spreads of kappa. Rounded, this is the 0.01%
 #: the claim quotes; the exact figure is shown next to it.

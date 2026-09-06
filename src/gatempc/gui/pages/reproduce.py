@@ -1,4 +1,8 @@
-"""Page 8 — reproduce everything, from this window or from a terminal."""
+"""Apparatus page — reproduce everything, from this window or from a terminal.
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -20,8 +24,6 @@ from .. import widgets as w
 from ..theme import COLORS
 from ..workers import ScriptRunner, describe
 from . import Context
-
-NAV = ("11 · Қайта юритиш", "11 · Reproduce")
 
 MAX_CONSOLE_LINES = 4000
 

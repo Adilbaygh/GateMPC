@@ -210,12 +210,16 @@ def test_the_gui_builds_paths_with_pathlib_only():
     assert not offenders, offenders
 
 
-QT_IMPORT = re.compile(r"^\s*(?:import|from)\s+PyQt6\b", re.MULTILINE)
+#: An import at column zero — the kind that actually costs you PyQt6 at import time.
+#: Indented ones are conditional: inside a function, or under `if TYPE_CHECKING`,
+#: which the interpreter never executes.
+QT_IMPORT = re.compile(r"^(?:import|from)\s+PyQt6\b", re.MULTILINE)
 
 
 def test_the_qt_free_layer_imports_without_pyqt():
     """A reviewer who never installs PyQt6 must still be able to import the data layer."""
-    for module in ("__init__", "data", "i18n", "preregistration"):
+    for module in ("__init__", "data", "i18n", "preregistration", "cli",
+                   "pages/__init__"):
         source = (GUI / f"{module}.py").read_text(encoding="utf-8")
         assert not QT_IMPORT.search(source), f"{module}.py imports Qt at module level"
 
@@ -240,27 +244,45 @@ def test_unknown_languages_fall_back_to_uzbek():
 
 
 def test_every_page_declares_both_nav_labels():
+    """Reading the page list must not need a GUI toolkit — see the test below."""
     from gatempc.gui import pages
 
-    for key in pages.PAGE_KEYS:
-        module = pages.module_of(key)
-        uzbek, english = module.NAV
-        assert uzbek.strip() and english.strip(), key
-        assert "&" not in uzbek + english, (
-            f"{key}: '&' becomes a keyboard mnemonic in a Qt button"
+    for page in pages.PAGES:
+        assert page.uzbek.strip() and page.english.strip(), page.key
+        assert "&" not in page.uzbek + page.english, (
+            f"{page.key}: '&' becomes a keyboard mnemonic in a Qt button"
         )
-        assert hasattr(module, "build"), f"{key} has no build()"
+        source = GUI / "pages" / f"{page.module}.py"
+        assert source.is_file(), f"{page.key} names a module that does not exist"
+        # Checked as text rather than by importing, because importing pulls in PyQt6.
+        assert "\ndef build(" in source.read_text(encoding="utf-8"), (
+            f"{page.key} has no build()"
+        )
 
 
 def test_nav_numbers_follow_the_page_order():
     """A reader is told to open “7 · …”; the seventh entry has to be it."""
     from gatempc.gui import pages
 
-    for position, key in enumerate(pages.PAGE_KEYS, start=1):
-        for label in pages.module_of(key).NAV:
+    for position, page in enumerate(pages.PAGES, start=1):
+        for label in (page.uzbek, page.english):
             assert label.split("\u00b7")[0].strip() == str(position), (
-                f"{key} is numbered {label!r} but sits at position {position}"
+                f"{page.key} is numbered {label!r} but sits at position {position}"
             )
+
+
+def test_the_page_registry_needs_no_gui_toolkit():
+    """``main.py --list-pages`` promises to work without PyQt6. This holds it to that.
+
+    The promise was broken once: the registry imported ``QWidget`` for a type
+    annotation, so merely listing the pages required a GUI toolkit. Continuous
+    integration caught it on every platform at once; this test catches it here.
+    """
+    source = (GUI / "pages" / "__init__.py").read_text(encoding="utf-8")
+    assert not QT_IMPORT.search(source), (
+        "pages/__init__.py imports Qt at module level; the page registry must stay "
+        "readable on a machine with no GUI toolkit"
+    )
 
 
 def test_every_page_belongs_to_a_named_section():
@@ -429,3 +451,57 @@ def test_parametrised_scripts_default_to_the_registered_values():
     for default in ("default=SITE", "default=YEAR", "default=BINS",
                     "default=KAPPA_TIGHT", "default=RATING_TIGHT"):
         assert default in second, f"second_structure.py is missing {default}"
+
+
+# ------------------------------------------------------------------- staleness
+
+
+def test_every_result_file_names_the_script_that_writes_it():
+    """The staleness warning is only meaningful if the mapping is complete."""
+    for name in gdata.RESULT_FILES:
+        step = gdata._producer_of(name)
+        assert step is not None, f"no pipeline step writes results/{name}.json"
+
+
+def test_staleness_is_judged_against_the_producing_script_only():
+    """Editing one script must not mark every other result out of date.
+
+    The check compares each result with its own script plus the gatempc modules that
+    script imports, so the per-script cutoff can never exceed the global one.
+    """
+    paths = gdata.ProjectPaths.discover()
+    everything = gdata.newest_source_change(paths)
+    assert everything > 0
+    for step in gdata.PIPELINE:
+        assert gdata.newest_source_change(paths, step.script) <= everything
+
+
+def test_the_cutoff_follows_the_modules_a_script_imports():
+    """second_structure.py imports gatempc.detector, so detector.py counts for it."""
+    paths = gdata.ProjectPaths.discover()
+    detector = paths.root / "src" / "gatempc" / "detector.py"
+    assert detector.is_file()
+    cutoff = gdata.newest_source_change(paths, "second_structure.py")
+    assert cutoff >= detector.stat().st_mtime
+    # make_figures.py does not import the detector, so its cutoff must not be pinned
+    # to a file it never reads.
+    figures = (paths.scripts / "make_figures.py").read_text(encoding="utf-8")
+    assert "gatempc.detector" not in figures
+
+
+def test_no_page_docstring_hard_codes_its_number():
+    """The position lives in ``pages.PAGES`` and nowhere else.
+
+    Three docstrings had gone stale after the pages were reordered — they still said
+    "Page 7" and "Page 8" for what had become 10 and 11. A number written in two
+    places is a number that will disagree with itself.
+    """
+    from gatempc.gui import pages
+
+    numbered = re.compile(r"^\"\"\"Page\s+\d+", re.MULTILINE)
+    offenders = []
+    for page in pages.PAGES:
+        source = (GUI / "pages" / f"{page.module}.py").read_text(encoding="utf-8")
+        if numbered.search(source):
+            offenders.append(page.module)
+    assert not offenders, f"page docstrings that carry a number: {offenders}"

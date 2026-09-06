@@ -1,4 +1,4 @@
-"""Page 12 — how to use the window, and what its words mean.
+"""Apparatus page — how to use the window, and what its words mean.
 
 Written for two readers who arrive with different questions: a reviewer who wants to
 check a number and leave, and an engineer who wants to point the detector at their own
@@ -13,8 +13,6 @@ from PyQt6.QtWidgets import QWidget
 from .. import data as gdata
 from .. import widgets as w
 from . import Context
-
-NAV = ("12 · Ёрдам", "12 · Help")
 
 
 def build(context: Context) -> QWidget:

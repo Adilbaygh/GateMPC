@@ -31,8 +31,6 @@ from .. import widgets as w
 from ..theme import COLORS
 from . import Context
 
-NAV = ("7 · Затвор калькулятори", "7 · Gate calculator")
-
 SWEEP_POINTS = 60
 
 

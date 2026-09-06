@@ -1,4 +1,8 @@
-"""Page 7 — every published figure and table, each with the files it came from."""
+"""Apparatus page — every published figure and table, with the files it came from.
+
+The page's number is not written here. It comes from this module's position in
+``pages.PAGES``, so a reordering cannot leave a stale number behind in a docstring.
+"""
 
 from __future__ import annotations
 
@@ -7,8 +11,6 @@ from PyQt6.QtWidgets import QComboBox, QHBoxLayout, QStackedWidget, QWidget
 from .. import data as gdata
 from .. import widgets as w
 from . import Context
-
-NAV = ("10 · Расм ва жадваллар", "10 · Figures and tables")
 
 
 def build(context: Context) -> QWidget:

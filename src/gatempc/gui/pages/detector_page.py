@@ -33,8 +33,6 @@ from ..theme import COLORS
 from ..workers import FunctionRunner
 from . import Context
 
-NAV = ("8 · Доиравийлик детектори", "8 · Circularity detector")
-
 #: How each branch of the pre-registered rule is coloured and named.
 BRANCH_STYLE = {
     "same_form": ("circular", "Доиравийлик — айнан ўша шаклда",
