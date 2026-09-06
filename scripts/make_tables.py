@@ -239,7 +239,7 @@ def t3_defects():
         section="Section 2.4")
 
 
-# ------------------------------------------------------------------ section 3
+# ----------------------------------------------- section 2, control apparatus
 
 def t4_parameters():
     """The synthetic baseline, as actually used by the code."""
@@ -272,10 +272,10 @@ def t4_parameters():
         "computed by the code from the cited ones.",
         ["Parameter", "Value", "Unit", "Source"], rows,
         ["results/control_comparison.json", "results/model_error_envelope.json"],
-        section="Section 3.4")
+        section="Section 2.8")
 
 
-# ------------------------------------------------------------------ section 5
+# ------------------------------------------------------------------ section 3
 
 def t5_identifiability():
     """What eight years of open archive can and cannot pin down."""
@@ -312,7 +312,7 @@ def t5_identifiability():
         ["results/gate_law.json", "results/archive_diagnostics.json"],
         note="The identification is against the continuous discharge series, "
              "which is a rating output; see Table 6 for the non-circular test.",
-        section="Section 4.3")
+        section="Section 3.3")
 
 
 def t6_h4():
@@ -368,7 +368,7 @@ def t6_h4():
         note=f"verdict: {'supported' if v['h4_supported'] else 'not supported'}"
              f" — the idealised law is adequate for this structure. "
              + _gauging_accuracy_note(v),
-        section="Section 4.2")
+        section="Section 3.2")
 
 
 def _gauging_accuracy_note(v: dict) -> str:
@@ -439,7 +439,7 @@ def t7_control():
         note="absolute values are not realistic canal performance: the pool is "
              "an integrator with delay, identical in both arms, so only the "
              "difference between arms is interpreted. " + _deadband_note(cc),
-        section="Section 4.4")
+        section="Section 3.4")
 
 
 def _deadband_note(cc: dict) -> str:
@@ -520,7 +520,7 @@ def t8_delta():
         ["results/control_comparison.json"],
         note=f"the level sensor resolves {1000 * step:.1f} mm, so the headline "
              f"difference is a small fraction of the instrument's own step",
-        section="Section 4.5")
+        section="Section 3.5")
 
 
 # ------------------------------------------------------------------ appendix

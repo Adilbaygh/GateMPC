@@ -3,7 +3,7 @@
     {
       "number": 1,
       "name": "kappa",
-      "section": "Section 4.1",
+      "section": "Section 3.1",
       "what": "kappa is a rating output, not a measurement",
       "sources": [
         "results/archive_diagnostics.json",
@@ -13,7 +13,7 @@
     {
       "number": 2,
       "name": "gaugings",
-      "section": "Section 4.2",
+      "section": "Section 3.2",
       "what": "benchmark gate law against 77 gaugings",
       "sources": [
         "results/gate_law_validation.json",
@@ -24,7 +24,7 @@
     {
       "number": 3,
       "name": "storage",
-      "section": "Section 4.3",
+      "section": "Section 3.3",
       "what": "A_s is not identifiable from the archive",
       "sources": [
         "results/archive_diagnostics.json",
@@ -43,7 +43,7 @@
     {
       "number": 5,
       "name": "envelope",
-      "section": "Section 4.4",
+      "section": "Section 3.4",
       "what": "modelling error over the operating envelope",
       "sources": [
         "results/model_error_envelope.json"
@@ -52,7 +52,7 @@
     {
       "number": 6,
       "name": "control",
-      "section": "Section 4.4",
+      "section": "Section 3.4",
       "what": "closed-loop cost, and its unstable sign",
       "sources": [
         "results/control_comparison.json"
@@ -80,7 +80,7 @@
     {
       "number": 9,
       "name": "rating",
-      "section": "Section 4.1",
+      "section": "Section 3.1",
       "what": "how tightly the rating holds its coefficient",
       "sources": [
         "results/discharge_coefficient.json",
