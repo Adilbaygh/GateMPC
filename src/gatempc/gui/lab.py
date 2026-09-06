@@ -14,6 +14,7 @@ Two rules hold everywhere in the laboratory:
 from __future__ import annotations
 
 import csv
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
@@ -231,8 +232,8 @@ def available_folds(paths: gdata.ProjectPaths) -> list[tuple[Path, str, int]]:
     return found
 
 
-def registered_sites(paths: gdata.ProjectPaths) -> dict[str, str]:
-    """The sites ``download_usgs.py`` knows how to fetch, read from that script.
+def registered_sites(paths: gdata.ProjectPaths) -> dict[str, dict]:
+    """The sites ``download_usgs.py`` fetches, and the years of each, from that script.
 
     A station's four series are bound to their roles by hand: which of two
     identical stage series is the headwater is not something the downloader can
@@ -243,26 +244,205 @@ def registered_sites(paths: gdata.ProjectPaths) -> dict[str, str]:
                 return _fail(f"unknown site {s}; known: {', '.join(SITES)}")
 
     — and the window must therefore offer exactly what the script accepts. The
-    registry is read from the script rather than copied here: two lists that can
-    disagree are worse than one that cannot. A missing or broken script gives an
-    empty registry and the page hides the offer, rather than taking the window
-    down with it.
+    years are registered the same way and are not a choice either: they are the
+    years the archive carries all four series for, which ``coverage_census.csv``
+    in the data package reports year by year for the whole record. The registry
+    is read from the script rather than copied here: two lists that can disagree
+    are worse than one that cannot. A missing or broken script gives an empty
+    registry and the page hides the offer, rather than taking the window down
+    with it.
+
+    Returns ``{site: {"name": str, "years": tuple[int, ...]}}``.
+    """
+    module = downloader(paths)
+    if module is None:
+        return {}
+    registry = getattr(module, "SITES", None)
+    if not isinstance(registry, dict):
+        return {}
+    found: dict[str, dict] = {}
+    for site, entry in registry.items():
+        if not isinstance(entry, dict):
+            continue
+        years = entry.get("years", ())
+        found[str(site)] = {
+            "name": str(entry.get("name", "")),
+            "years": tuple(int(year) for year in years) if isinstance(
+                years, (list, tuple)) else (),
+            "series": {},
+            "source": "registry",
+        }
+    return found
+
+
+def downloader(paths: gdata.ProjectPaths):
+    """``scripts/download_usgs.py`` as a module, or ``None`` if it cannot be read.
+
+    The window borrows three things from the script — the site registry, the role
+    proposal and the parameter codes — rather than keeping copies that could drift
+    away from it. A broken or missing script disables the offer instead of taking
+    the window down.
     """
     import importlib.util
 
     script = paths.scripts / "download_usgs.py"
     if not script.is_file():
-        return {}
+        return None
     spec = importlib.util.spec_from_file_location("gatempc_downloader", script)
     if spec is None or spec.loader is None:
-        return {}
+        return None
     module = importlib.util.module_from_spec(spec)
     try:
         spec.loader.exec_module(module)
     except Exception:
+        return None
+    return module
+
+
+# ------------------------------------------------------- stations you added
+
+
+#: Where an assignment the reader made is remembered. Under ``build/lab`` with
+#: everything else from a form: it is not part of the published package and must
+#: never be able to look like it.
+STATIONS = "stations.json"
+
+
+def stations_path(paths: gdata.ProjectPaths) -> Path:
+    return paths.root / "build" / "lab" / STATIONS
+
+
+def read_stations(paths: gdata.ProjectPaths) -> dict[str, dict]:
+    """Stations the reader looked up and assigned roles to, in the same shape.
+
+    A file that is missing, unreadable or malformed gives an empty result rather
+    than an exception: this is a convenience store, and losing it costs a lookup,
+    not a result.
+    """
+    path = stations_path(paths)
+    if not path.is_file():
         return {}
-    registry = getattr(module, "SITES", None)
-    if not isinstance(registry, dict):
+    try:
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
         return {}
-    return {str(site): str(entry.get("name", "") if isinstance(entry, dict) else "")
-            for site, entry in registry.items()}
+    if not isinstance(loaded, dict):
+        return {}
+    found: dict[str, dict] = {}
+    for site, entry in loaded.items():
+        if not isinstance(entry, dict):
+            continue
+        series, years = entry.get("series"), entry.get("years")
+        if not isinstance(series, dict) or not isinstance(years, (list, tuple)):
+            continue
+        try:
+            found[str(site)] = {
+                "name": str(entry.get("name", "")),
+                "years": tuple(int(year) for year in years),
+                "series": {str(role): str(tsid) for role, tsid in series.items()},
+                "source": "you",
+            }
+        except (TypeError, ValueError):
+            continue
+    return found
+
+
+def write_station(paths: gdata.ProjectPaths, site: str, name: str,
+                  years: Sequence[int], series: dict[str, str]) -> Path:
+    """Remember one assignment, with the moment it was made.
+
+    The timestamp is not decoration. The roles here were decided by a person
+    reading a free-text label, and if a later result looks wrong the first
+    question is which assignment produced it and when.
+    """
+    path = stations_path(paths)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stations: dict = {}
+    if path.is_file():
+        try:
+            loaded = json.loads(path.read_text(encoding="utf-8"))
+            stations = loaded if isinstance(loaded, dict) else {}
+        except (OSError, ValueError):
+            stations = {}
+    stations[str(site)] = {
+        "name": name,
+        "years": [int(year) for year in years],
+        "series": {str(role): str(tsid) for role, tsid in series.items()},
+        "assigned_utc": datetime.now(timezone.utc).replace(
+            microsecond=0).isoformat().replace("+00:00", "Z"),
+    }
+    path.write_text(json.dumps(stations, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8")
+    return path
+
+
+def known_sites(paths: gdata.ProjectPaths) -> dict[str, dict]:
+    """Everything the window can fetch: the script's registry, then yours.
+
+    A site the script already carries is never shadowed by a stored assignment.
+    The published registry is the one the study stands behind, and a stale entry
+    in ``build/lab`` must not be able to quietly replace it.
+    """
+    found = registered_sites(paths)
+    for site, entry in read_stations(paths).items():
+        if site not in found:
+            found[site] = entry
+    return found
+
+
+def lookup_station(paths: gdata.ProjectPaths, site: str):
+    """Ask the archive what a station publishes; propose the four roles.
+
+    Returns ``(records, proposal, problems, url, from_cache)``. This is the one
+    place in the window that goes to the network, and it goes for exactly one
+    request. The proposal comes from the downloader's own ``propose_roles`` so
+    that the window and the command line cannot disagree about what a station
+    can offer.
+    """
+    module = downloader(paths)
+    if module is None:
+        raise RuntimeError("scripts/download_usgs.py could not be read")
+    from ..usgs import UsgsClient
+
+    client = UsgsClient(str(paths.root / "DATA" / ".raw_cache"))
+    records, url, from_cache = client.time_series_metadata(site)
+    proposal, problems = module.propose_roles(records)
+    return records, proposal, problems, url, from_cache
+
+
+def advertised_years(records: Sequence[dict], chosen: dict[str, str]) -> tuple[int, ...]:
+    """The years the four chosen series claim to overlap in.
+
+    An upper bound and nothing more. ``begin`` is what the archive advertises for
+    a series, and this project already knows it overstates: at the primary
+    structure the gate series reports a begin of 2007 while stage is absent until
+    2017, which is the whole reason ``coverage_census.csv`` exists. So this bounds
+    the year boxes and the fetch reports, year by year, what was really there.
+    """
+    by_id = {str(record.get("id") or ""): record for record in records}
+    starts: list[int] = []
+    stops: list[int] = []
+    for tsid in chosen.values():
+        record = by_id.get(tsid)
+        if record is None:
+            return ()
+        begin, end = str(record.get("begin") or "")[:4], str(record.get("end") or "")[:4]
+        if not (begin.isdigit() and end.isdigit()):
+            return ()
+        starts.append(int(begin))
+        stops.append(int(end))
+    if not starts or max(starts) > min(stops):
+        return ()
+    return tuple(range(max(starts), min(stops) + 1))
+
+
+def years_as_text(years: Sequence[int]) -> str:
+    """``(2018, …, 2025)`` -> ``2018–2025``; anything gappy is listed in full."""
+    ordered = sorted(set(int(year) for year in years))
+    if not ordered:
+        return ""
+    if len(ordered) == 1:
+        return str(ordered[0])
+    if ordered[-1] - ordered[0] + 1 == len(ordered):
+        return f"{ordered[0]}–{ordered[-1]}"
+    return ", ".join(str(year) for year in ordered)

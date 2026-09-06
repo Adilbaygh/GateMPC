@@ -41,14 +41,19 @@ class ProjectPaths:
     def discover(cls, start: Path | str | None = None) -> "ProjectPaths":
         """Walk up from ``start`` (default: this file) until the markers are found.
 
-        Falls back to the third parent of this file, which is the layout the
-        repository ships with (``<root>/src/gatempc/gui/data.py``).
+        Falls back to the second parent of this file, which is the root in the
+        layout the repository ships with: ``<root>/src/gatempc/results.py``. The
+        count was three while this module was ``<root>/src/gatempc/gui/data.py``,
+        and moving the file did not move the count with it — so the fallback
+        pointed one level ABOVE the repository, and a laboratory run reaching it
+        would have created ``build/`` outside the project. A clone never reaches
+        the fallback, since the markers are found; an installed package does.
         """
         here = Path(start).resolve() if start is not None else Path(__file__).resolve()
         for candidate in (here, *here.parents):
             if candidate.is_dir() and all((candidate / m).is_dir() for m in ROOT_MARKERS):
                 return cls(candidate)
-        return cls(Path(__file__).resolve().parents[3])
+        return cls(Path(__file__).resolve().parents[2])
 
     @property
     def results(self) -> Path:

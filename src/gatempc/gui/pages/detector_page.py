@@ -152,7 +152,7 @@ class DetectorPanel(QWidget):
 
         # -- package
         self.folds = lab.available_folds(context.paths)
-        self.registry = lab.registered_sites(context.paths)
+        self.registry = lab.known_sites(context.paths)
         self.site_year = w.combo(self._fold_items())
         self.package_note = w.paragraph("")
         if not self.folds:
@@ -211,6 +211,8 @@ class DetectorPanel(QWidget):
         self.stop_fetch_button = QPushButton(context.pick("Тўхтатиш", "Stop"))
         self.stop_fetch_button.setEnabled(False)
         self.stop_fetch_button.clicked.connect(self.stop_fetch)
+        self.add_button = QPushButton(context.pick("Станция қўшиш…", "Add a station…"))
+        self.add_button.clicked.connect(self.add_station)
 
         self.fetch_row = QWidget()
         self.fetch_row.setObjectName("Page")
@@ -220,6 +222,7 @@ class DetectorPanel(QWidget):
         fetch_layout.addWidget(self.fetchable, 1)
         fetch_layout.addWidget(self.fetch_button, 0)
         fetch_layout.addWidget(self.stop_fetch_button, 0)
+        fetch_layout.addWidget(self.add_button, 0)
 
         self.fetch_note = w.paragraph("")
         self.fetch_console = QPlainTextEdit()
@@ -260,7 +263,7 @@ class DetectorPanel(QWidget):
         self.package_form = w.form(
             [
                 (context.pick("Сайт ва йил", "Site and year"), self.site_year),
-                (context.pick("Яна юклаб олиш", "Also available to fetch"),
+                (context.pick("Станция юклаб олиш", "Fetch a station"),
                  self.fetch_row),
             ],
             columns=1,
@@ -338,13 +341,39 @@ class DetectorPanel(QWidget):
         return items
 
     def _fetchable_items(self) -> list[tuple[str, object]]:
-        """Registered sites the reader does not have yet."""
+        """Every registered site, the ones the reader has not got listed first.
+
+        Not only the missing ones. A run that was stopped, or that ended on the
+        hourly quota, leaves part of a package behind; a chooser that then dropped
+        the site would leave no way to finish it from the window — which is exactly
+        the dead end the free-text field used to be. Choosing a site already held
+        is cheap: the downloader keeps what it fetched in its cache and asks the
+        API only for what is missing.
+        """
+        context = self.context
         have = {site for _package, site, _year in self.folds}
-        return [(f"{site}  ·  {name}" if name else site, site)
-                for site, name in sorted(self.registry.items()) if site not in have]
+        items: list[tuple[str, object]] = []
+        for site, entry in sorted(self.registry.items(),
+                                  key=lambda pair: (pair[0] in have, pair[0])):
+            label = f"{site}  ·  {entry['name']}" if entry["name"] else site
+            # The years belong on the label. A fetch takes the registered years and
+            # no others, and a reader who cannot see them has no way to know what a
+            # station brings — or to tell that the choice was not left open.
+            years = lab.years_as_text(entry["years"])
+            if years:
+                label += f"  ·  {years}"
+            # A station the reader assigned is marked as such wherever it appears.
+            # Its four roles are one person's reading of a free-text label, and
+            # that is not the same standing as the two the study checked.
+            if entry.get("source") == "you":
+                label += context.pick("  ·  ўзингиз қўшган", "  ·  added by you")
+            if site in have:
+                label += context.pick("  ·  сизда бор", "  ·  you have it")
+            items.append((label, site))
+        return items
 
     def _refresh_fetch(self) -> None:
-        """Show the offer only when there is something to offer, and say the terms."""
+        """State the terms of a fetch, or say why none can be offered."""
         context = self.context
         offered = self.fetchable.count() > 0
         self.fetch_row.setVisible(offered)
@@ -358,21 +387,36 @@ class DetectorPanel(QWidget):
                     "Юклаш USGS API'сига мурожаат қилади — 2026-09-05 да ўлчанганда "
                     "соатига тахминан 140 сўровга рухсат берилган — шунинг учун у "
                     "секин боради, ва натижа `build/lab/` га ёзилади, эълон "
-                    "қилинган тўпламга эмас.",
+                    "қилинган тўпламга эмас. «Сизда бор» деб белгиланганини "
+                    "танласангиз юклаш қайтадан юритилади: кэшдагиси иккинчи марта "
+                    "олинмайди, шунинг учун ярим қолган юриш шу йўл билан "
+                    "тугалланади. Йиллар рўйхатда кўрсатилган — улар танланмайди, "
+                    "чунки булар архивда тўртта қатор ҳам мавжуд бўлган йиллар; "
+                    "қолган йилларда затвор очилиши ва бьеф сатҳлари умуман йўқ, "
+                    "буни тўпламдаги `coverage_census.csv` йилма-йил кўрсатади.",
                     "The list holds the stations `download_usgs.py` has been taught. "
                     "Adding one is not a one-command job: the script cannot tell "
                     "which of two identical stage series is the headwater, so the "
                     "roles of the four series are fixed by hand. A fetch goes to the "
                     "USGS API — measured on 2026-09-05 at roughly 140 requests an "
                     "hour — so it is paced, and what it writes goes to `build/lab/`, "
-                    "never into the published package.",
+                    "never into the published package. Choosing one marked “you have "
+                    "it” runs the download again: nothing already cached is fetched "
+                    "twice, so this is also how a run that stopped halfway is "
+                    "finished. The years are shown in the list and are not a choice: "
+                    "they are the years the archive carries all four series for. In "
+                    "the others the gate opening and the two stages are absent "
+                    "entirely, which `coverage_census.csv` in the package reports "
+                    "year by year.",
                 )
             )
         else:
             self.fetch_note.setText(
                 context.pick(
-                    "Юклагич таниган ҳамма станция аллақачон бор.",
-                    "Every station the downloader knows is already here.",
+                    "`scripts/download_usgs.py` топилмади, шунинг учун бу ердан "
+                    "ҳеч нарса юклаб бўлмайди.",
+                    "`scripts/download_usgs.py` was not found, so nothing can be "
+                    "fetched from here.",
                 )
             )
         self.fetch_note.setVisible(self.from_package.isChecked())
@@ -388,9 +432,14 @@ class DetectorPanel(QWidget):
             index = self.site_year.findData(chosen)
             if index >= 0:
                 self.site_year.setCurrentIndex(index)
+        site = self.fetchable.currentData()
         self.fetchable.clear()
         for label, value in self._fetchable_items():
             self.fetchable.addItem(label, value)
+        if site is not None:
+            index = self.fetchable.findData(site)
+            if index >= 0:
+                self.fetchable.setCurrentIndex(index)
         if self.folds:
             self.package_note.setText("")
         self._refresh_fetch()
@@ -458,9 +507,38 @@ class DetectorPanel(QWidget):
         site = self.fetchable.currentData()
         if not site:
             return
-        out = lab.lab_directory(context.paths) / f"package_{site}"
+        try:
+            out = lab.lab_directory(context.paths) / f"package_{site}"
+        except OSError as error:
+            # A clone opened from a read-only location, most likely. Say so rather
+            # than dying inside a signal handler with nothing on screen.
+            self.fetch_console.setVisible(True)
+            self.fetch_console.setPlainText(
+                context.pick(
+                    f"`build/lab` папкасини яратиб бўлмади: {error}\n"
+                    f"Юклаб олинган нарса лойиҳа папкасининг ичига ёзилади, "
+                    f"шунинг учун у ёзиладиган жойда бўлиши керак.",
+                    f"`build/lab` could not be created: {error}\n"
+                    f"A fetch is written inside the project folder, so that folder "
+                    f"has to be writable.",
+                )
+            )
+            return
         command = [sys.executable, str(context.paths.scripts / "download_usgs.py"),
                    "--sites", str(site), "--out", str(out)]
+        # A station the reader added carries its own assignment; the script has no
+        # entry for it and would refuse the site without one. The published sites
+        # need nothing here, and must not be given anything: passing --series for
+        # one of them is refused by the script itself.
+        entry = self.registry.get(str(site), {})
+        if entry.get("source") == "you":
+            series = ",".join(f"{role}={entry['series'][role]}"
+                              for role in ("gate_opening", "headwater",
+                                           "tailwater", "discharge")
+                              if role in entry.get("series", {}))
+            command += ["--series", series,
+                        "--years", lab.years_as_text(entry["years"]).replace("–", "-"),
+                        "--site-name", entry.get("name", "") or f"USGS {site}"]
         self.fetch_console.setVisible(True)
         self.fetch_console.clear()
         self.fetch_console.appendPlainText("$ " + describe(command, context.paths.root))
@@ -481,6 +559,19 @@ class DetectorPanel(QWidget):
         runner.finished_with.connect(self._fetch_finished)
         self.fetch_runner = runner
         runner.start()
+
+    def add_station(self) -> None:
+        """Look a station up, confirm its four series, and remember the assignment."""
+        from ..add_station import ask_for_a_station
+
+        site = ask_for_a_station(self.context, self)
+        if not site:
+            return
+        self.registry = lab.known_sites(self.context.paths)
+        self._reload_packages()
+        index = self.fetchable.findData(site)
+        if index >= 0:
+            self.fetchable.setCurrentIndex(index)
 
     def stop_fetch(self) -> None:
         if self.fetch_runner is not None:

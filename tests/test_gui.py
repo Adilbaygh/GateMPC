@@ -56,6 +56,19 @@ def test_project_root_is_found_from_the_gui_package():
         assert (paths.root / marker).is_dir()
 
 
+def test_the_root_fallback_lands_on_the_repository_not_above_it(tmp_path):
+    """``discover`` falls back by counting parents of its own file; the count must fit.
+
+    A directory with none of the markers walks all the way to the filesystem root
+    and reaches the fallback. It has to name the repository: the laboratory writes
+    ``build/lab`` under whatever this returns, and one parent too far would put a
+    fetched data package outside the project entirely.
+    """
+    paths = gdata.ProjectPaths.discover(tmp_path)
+    assert paths.root == ROOT
+    assert (paths.root / "src" / "gatempc" / "results.py").is_file()
+
+
 def test_relative_paths_are_written_with_forward_slashes():
     paths = gdata.ProjectPaths.discover()
     assert paths.relative(paths.results / "gate_law.json") == "results/gate_law.json"
@@ -429,9 +442,51 @@ def test_the_window_offers_exactly_the_sites_the_downloader_knows():
             continue
         in_source = {ast.literal_eval(key) for key in node.value.keys if key is not None}
     assert in_source, "SITES was not found in download_usgs.py"
-    assert set(lab.registered_sites(paths)) == in_source
-    for site, name in lab.registered_sites(paths).items():
-        assert name.strip(), f"{site} is offered without a name"
+    registry = lab.registered_sites(paths)
+    assert set(registry) == in_source
+    for site, entry in registry.items():
+        assert entry["name"].strip(), f"{site} is offered without a name"
+        assert entry["years"], f"{site} is offered without a year"
+        assert all(isinstance(year, int) for year in entry["years"]), site
+
+
+def test_every_registered_year_is_a_year_the_archive_carries_all_four_series():
+    """The years are not a choice, so the reason they are not has to hold.
+
+    The page tells the reader that a fetch takes the registered years because
+    those are the years with all four series in them. ``coverage_census.csv``
+    spans the whole record, not only the folds, so it is where that claim is
+    checked: a registered year whose census row reports no timestamp carrying all
+    four would make the page's explanation false.
+    """
+    from gatempc.gui import lab
+
+    paths = gdata.ProjectPaths.discover()
+    census = paths.data_package / "coverage_census.csv"
+    if not census.is_file():
+        pytest.skip("the data package is not built")
+    import csv
+
+    with census.open(encoding="utf-8", newline="") as handle:
+        complete = {(row["site"], int(row["year"])): int(row["timestamps_with_all_four"])
+                    for row in csv.DictReader(handle)}
+    for site, entry in lab.registered_sites(paths).items():
+        for year in entry["years"]:
+            counted = complete.get((site, year))
+            assert counted is not None, f"{site} {year} is fetched but not in the census"
+            assert counted > 0, (
+                f"{site} {year} is registered, but the census reports no timestamp "
+                f"there carrying all four series"
+            )
+
+
+def test_a_year_range_reads_as_a_range_and_a_gap_does_not():
+    from gatempc.gui import lab
+
+    assert lab.years_as_text([2018, 2019, 2020]) == "2018–2020"
+    assert lab.years_as_text([2026]) == "2026"
+    assert lab.years_as_text([2018, 2020]) == "2018, 2020"
+    assert lab.years_as_text([]) == ""
 
 
 def test_a_fetched_package_is_kept_apart_from_the_published_one():
@@ -624,3 +679,92 @@ def test_no_page_docstring_hard_codes_its_number():
         if numbered.search(source):
             offenders.append(page.module)
     assert not offenders, f"page docstrings that carry a number: {offenders}"
+
+
+# ------------------------------------------------------- stations you added
+
+
+@pytest.fixture
+def sandbox(tmp_path):
+    """A project root of its own, holding the real downloader.
+
+    The store of added stations lives under the project root, so a test that
+    writes one must not write into the repository it is testing.
+    """
+    import shutil
+
+    real = gdata.ProjectPaths.discover()
+    root = tmp_path / "project"
+    (root / "scripts").mkdir(parents=True)
+    shutil.copy(real.scripts / "download_usgs.py", root / "scripts")
+    return gdata.ProjectPaths(root)
+
+
+def test_a_station_you_added_is_kept_apart_from_the_registry(sandbox):
+    """Two kinds of station, and the window has to be able to tell them apart.
+
+    The registry's four series were resolved once by the study; an added
+    station's were assigned by whoever ran the dialog, from a free-text label.
+    They can both be fetched, they cannot both be described the same way.
+    """
+    from gatempc.gui import lab
+
+    assert {entry["source"] for entry in lab.known_sites(sandbox).values()} == {"registry"}
+    lab.write_station(sandbox, "09429000", "Palo Verde Canal near Blythe, CA",
+                      [2024, 2025], {"gate_opening": "a", "headwater": "b",
+                                     "tailwater": "c", "discharge": "d"})
+    known = lab.known_sites(sandbox)
+    assert known["09429000"]["source"] == "you"
+    assert known["09429000"]["years"] == (2024, 2025)
+    assert set(lab.registered_sites(sandbox)) == {"09522700", "09428500"}, (
+        "the script's registry must not learn anything from build/lab"
+    )
+    assert lab.stations_path(sandbox).is_relative_to(sandbox.root / "build")
+
+
+def test_a_station_you_added_never_shadows_a_published_one(sandbox):
+    """A stale assignment in build/lab must not quietly replace a published site."""
+    from gatempc.gui import lab
+
+    lab.write_station(sandbox, "09522700", "not the real one", [1999],
+                      {"gate_opening": "x", "headwater": "x",
+                       "tailwater": "x", "discharge": "x"})
+    entry = lab.known_sites(sandbox)["09522700"]
+    assert entry["source"] == "registry"
+    assert entry["years"] == tuple(range(2018, 2026))
+
+
+def test_a_broken_station_store_costs_a_lookup_and_nothing_else(sandbox):
+    from gatempc.gui import lab
+
+    path = lab.stations_path(sandbox)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("{ this is not json", encoding="utf-8")
+    assert lab.read_stations(sandbox) == {}
+    path.write_text('{"09429000": {"years": "2024"}}', encoding="utf-8")
+    assert lab.read_stations(sandbox) == {}
+
+
+def test_the_years_offered_are_the_overlap_of_what_the_series_advertise():
+    """And only that: the advertised extent is an upper bound, never a promise."""
+    from gatempc.gui import lab
+
+    records = [
+        {"id": "a", "begin": "2022-10-06T07:00:00", "end": "2026-09-06T00:00:00"},
+        {"id": "b", "begin": "2018-01-01T00:00:00", "end": "2026-09-06T00:00:00"},
+        {"id": "c", "begin": "2020-01-01T00:00:00", "end": "2025-12-31T00:00:00"},
+        {"id": "d", "begin": "1950-10-01T08:00:00", "end": "2026-09-05T00:00:00"},
+    ]
+    chosen = {"gate_opening": "a", "headwater": "b", "tailwater": "c", "discharge": "d"}
+    assert lab.advertised_years(records, chosen) == (2022, 2023, 2024, 2025)
+    assert lab.advertised_years(records, dict(chosen, discharge="missing")) == ()
+    apart = [{"id": "a", "begin": "1990-01-01", "end": "1995-01-01"},
+             {"id": "b", "begin": "2020-01-01", "end": "2026-01-01"}]
+    assert lab.advertised_years(apart, {"x": "a", "y": "b"}) == ()
+
+
+def test_the_fetch_passes_an_added_station_its_own_assignment():
+    """The script has no entry for such a site and refuses it without --series."""
+    page = (GUI / "pages" / "detector_page.py").read_text(encoding="utf-8")
+    assert 'entry.get("source") == "you"' in page
+    assert '"--series"' in page and '"--years"' in page

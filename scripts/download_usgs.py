@@ -82,6 +82,17 @@ SITES: dict[str, dict[str, object]] = {
 PCODES = ("45592", "00065", "00060")
 ROLE_ORDER = ("gate_opening", "headwater", "tailwater", "discharge")
 
+#: The parameter code each role is published under. Fixed by the archive: the two
+#: stages share 00065 and are told apart only by their sublocation label, which is
+#: why the roles cannot be inferred from the codes alone.
+ROLE_PCODE = {"gate_opening": "45592", "headwater": "00065",
+              "tailwater": "00065", "discharge": "00060"}
+
+#: Where the published package goes. Named so that the exploratory flags below can
+#: refuse to write here: that directory is what SHA256SUMS pins and what the
+#: manuscript's numbers were computed from.
+DEFAULT_OUT = os.path.join(ROOT, "DATA", "USGS_canal_gates_v1")
+
 OBS_COLUMNS = ["time_utc"]
 for _role in ROLE_ORDER:
     OBS_COLUMNS += [_role, _role + "_approval"]
@@ -132,6 +143,249 @@ def role_of(site: str, tsid: str) -> str | None:
         if tsid.startswith(prefix):
             return role
     return None
+
+
+# ------------------------------------------------------- adding another station
+
+
+def parse_series(text: str) -> dict[str, tuple[str, str, str]]:
+    """``gate_opening=aa73,headwater=373d,…`` -> a ``SITES`` series mapping.
+
+    All four roles are required, because a package missing one of them cannot
+    answer the question this repository exists to ask. The value is an id prefix,
+    matched with ``startswith`` in :func:`role_of` exactly as the registered sites
+    are, so a few characters are enough as long as they are unique at that site.
+    """
+    mapping: dict[str, tuple[str, str, str]] = {}
+    seen: set[str] = set()
+    for part in text.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        role, _, prefix = part.partition("=")
+        role, prefix = role.strip(), prefix.strip()
+        if role not in ROLE_ORDER:
+            raise ValueError(f"unknown role {role!r}; expected one of "
+                             f"{', '.join(ROLE_ORDER)}")
+        if role in seen:
+            raise ValueError(f"role {role} was given twice")
+        if not prefix:
+            raise ValueError(f"role {role} has no time-series id")
+        seen.add(role)
+        mapping[prefix] = (role, ROLE_PCODE[role], "")
+    missing = [role for role in ROLE_ORDER if role not in seen]
+    if missing:
+        raise ValueError("no time-series id for: " + ", ".join(missing))
+    return mapping
+
+
+def parse_years(text: str) -> list[int]:
+    """``2018-2025`` or ``2024,2026`` -> a sorted list of years."""
+    years: set[int] = set()
+    for part in text.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        first, separator, last = part.partition("-")
+        try:
+            start = int(first)
+            stop = int(last) if separator else start
+        except ValueError:
+            raise ValueError(f"not a year or a year range: {part!r}") from None
+        if stop < start:
+            raise ValueError(f"the range runs backwards: {part!r}")
+        if stop - start > 40:
+            raise ValueError(f"the range is longer than the archive: {part!r}")
+        years.update(range(start, stop + 1))
+    if not years:
+        raise ValueError("no years given")
+    return sorted(years)
+
+
+#: Words an operating office has been seen to use for each side of a gate. The
+#: two stages share parameter code 00065 and are told apart only by this
+#: free-text label, so the match is a proposal for a person to check, never an
+#: answer. "H1 (Headwater)" and "H2 (Tailwater)" are what both published sites
+#: say; nothing obliges another office to say either.
+STAGE_WORDS = {
+    "headwater": ("headwater", "head water", "h1", "upstream", "pool", "forebay"),
+    "tailwater": ("tailwater", "tail water", "h2", "downstream", "tailbay"),
+}
+
+
+def one_of(records: list[dict], what: str) -> tuple[str, str]:
+    """Pick one series out of the candidates for a role, or say why none was picked.
+
+    Returns ``(id, problem)``; either may be empty and both may be filled, because
+    a proposal worth making can still be worth questioning.
+
+    ``primary`` is the archive's own answer to "which of these is the one", so it
+    is used where it settles the question and reported exactly where it does not.
+    Every candidate carrying it is not the same fact as none of them carrying it,
+    and the first version of this said "none is marked Primary" at a site whose
+    two discharge series are both marked Primary. A message that misreports the
+    archive is worse than no message: it is the thing the reader will quote.
+    """
+    if not records:
+        return "", f"no {what}"
+    if len(records) == 1:
+        return str(records[0].get("id") or ""), ""
+    primary = [record for record in records
+               if str(record.get("primary") or "").lower() == "primary"]
+    if len(primary) == 1:
+        return (str(primary[0].get("id") or ""),
+                f"{len(records)} {what}; the only one marked Primary was proposed — "
+                f"check that it is the one you want")
+    marked = (f", all {len(primary)} of them marked Primary"
+              if len(primary) == len(records)
+              else f", {len(primary)} of them marked Primary" if primary
+              else " and none marked Primary")
+    return "", (f"{len(records)} {what}{marked}; choose one yourself from the table "
+                f"above")
+
+
+def propose_roles(records: list[dict]) -> tuple[dict[str, str], list[str]]:
+    """Guess which series is which, and say where the guess has no basis.
+
+    Returns ``(proposal, problems)``. A role appears in the proposal only when
+    exactly one series can carry it; everything else lands in ``problems`` as a
+    sentence a reader can act on. Nothing here decides anything: the proposal is
+    printed for a person to accept, and the two stages are the reason — getting
+    them the wrong way round inverts the head difference and nothing complains.
+    """
+    by_code: dict[str, list[dict]] = {}
+    for record in records:
+        by_code.setdefault(str(record.get("parameter_code") or ""), []).append(record)
+
+    def identifier(record: dict) -> str:
+        return str(record.get("id") or "")
+
+    proposal: dict[str, str] = {}
+    problems: list[str] = []
+
+    gates = by_code.get("45592", [])
+    if not gates:
+        problems.append("no gate opening series (parameter code 45592): this site "
+                        "cannot be used by the detector at all")
+    else:
+        chosen, problem = one_of(gates, "gate opening series")
+        if chosen:
+            proposal["gate_opening"] = chosen
+        if problem:
+            problems.append(problem)
+
+    flows = by_code.get("00060", [])
+    if not flows:
+        problems.append("no discharge series (parameter code 00060)")
+    else:
+        chosen, problem = one_of(flows, "discharge series")
+        if chosen:
+            proposal["discharge"] = chosen
+        if problem:
+            problems.append(problem)
+
+    stages = by_code.get("00065", [])
+    if len(stages) < 2:
+        problems.append(f"{len(stages)} stage series (parameter code 00065); the "
+                        f"detector needs two, a headwater and a tailwater")
+    else:
+        for role, words in STAGE_WORDS.items():
+            hits = [r for r in stages
+                    if any(word in str(r.get("sublocation_identifier") or "").lower()
+                           for word in words)]
+            if len(hits) == 1:
+                proposal[role] = identifier(hits[0])
+        if "headwater" not in proposal or "tailwater" not in proposal:
+            problems.append("the stage series are not labelled clearly enough to "
+                            "tell the headwater from the tailwater; read the "
+                            "sublocation column and decide")
+        elif proposal["headwater"] == proposal["tailwater"]:
+            problems.append("one stage series matched both sides; decide yourself")
+    return proposal, problems
+
+
+def unresolved_series(sites: list[str], meta_rows: list[list[str]]) -> str:
+    """Check every role resolves to exactly one real series, before anything is fetched.
+
+    Without this the run accepts ids that match nothing at all. It then writes an
+    empty metadata layer, an empty observation file per year and a checksummed
+    package, prints "package written to …", and exits successfully — having spent
+    the hourly quota to produce nothing. That is exactly the failure this
+    repository's client tests were written against: a pipeline must never be able
+    to turn a request that found nothing into a plausible-looking empty result.
+    The hole opened as soon as the ids stopped being typed into SITES by hand.
+    """
+    for site in sites:
+        matched: dict[str, list[str]] = {role: [] for role in ROLE_ORDER}
+        for row in meta_rows:
+            if row[0] != site:
+                continue
+            role = role_of(site, row[1])
+            if role is not None:
+                matched[role].append(row[1])
+        empty = [role for role in ROLE_ORDER if not matched[role]]
+        if empty:
+            return (f"{site}: nothing in the archive matches " + ", ".join(empty)
+                    + ". Look the site up with --list-series and use the "
+                      "time_series_id values it prints; nothing was written.")
+        crowded = [f"{role} matches {len(matched[role])} series"
+                   for role in ROLE_ORDER if len(matched[role]) > 1]
+        if crowded:
+            return (f"{site}: " + "; ".join(crowded)
+                    + ". Give more characters of the id; nothing was written.")
+    return ""
+
+
+def list_series(client: UsgsClient, sites: list[str]) -> int:
+    """Print every time series a site publishes, with no role assigned to any.
+
+    This is the lookup that has to happen before an unregistered site can be
+    fetched, and it deliberately stops at printing. Which of two identical stage
+    series is the headwater is written in ``sublocation_identifier``, a free-text
+    field worded by the operating office — "H1 (Headwater)" at both sites in the
+    published package, but nothing obliges another office to say the same thing,
+    or anything at all. So the table is read by a person, who then names the four
+    ids in ``--series``.
+    """
+    for site in sites:
+        records, url, from_cache = client.time_series_metadata(site)
+        print(f"\n# {site} — {len(records)} series"
+              + ("  [from cache]" if from_cache else ""))
+        print(f"# {url}")
+        if not records:
+            print("no time series at this site")
+            continue
+        print(f"{'time_series_id':34}  {'pcode':6}  {'parameter':24}  "
+              f"{'sublocation':22}  {'unit':7}  {'primary':8}  {'begin':10}  {'end':10}")
+        for record in sorted(records, key=lambda r: (
+                str(r.get("parameter_code") or ""),
+                str(r.get("sublocation_identifier") or ""))):
+            print(f"{str(record.get('id') or '')[:34]:34}  "
+                  f"{str(record.get('parameter_code') or ''):6}  "
+                  f"{str(record.get('parameter_name') or '')[:24]:24}  "
+                  f"{str(record.get('sublocation_identifier') or '')[:22]:22}  "
+                  f"{str(record.get('unit_of_measure') or ''):7}  "
+                  f"{str(record.get('primary') or '')[:8]:8}  "
+                  f"{str(record.get('begin') or '')[:10]:10}  "
+                  f"{str(record.get('end') or '')[:10]:10}")
+
+        # The reader is not left to assemble the flag from the table by hand. Where
+        # the four roles resolve, the line below is ready to paste; where they do
+        # not, the reason is named. A printed template with <id> in it invites
+        # being pasted verbatim, which is how this site was first "fetched".
+        proposal, problems = propose_roles(records)
+        print()
+        for problem in problems:
+            print(f"# ! {problem}")
+        if len(proposal) == len(ROLE_ORDER):
+            flag = ",".join(f"{role}={proposal[role]}" for role in ROLE_ORDER)
+            print("# check the two stages against the sublocation column above, then:")
+            print(f"#   --sites {site} --series {flag} \\")
+            print(f"#     --years <YYYY-YYYY> --out build/lab/package_{site}")
+        else:
+            print("# this site cannot be fetched: the four series it needs are not "
+                  "all there.")
+    return 0
 
 
 def write_csv(path: str, columns: list[str], rows: list[list[str]]) -> None:
@@ -474,27 +728,96 @@ USGS OGC API, collection `continuous`:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--out", default=os.path.join(ROOT, "DATA", "USGS_canal_gates_v1"))
+    ap.add_argument("--out", default=DEFAULT_OUT)
     ap.add_argument("--cache-dir", default=os.path.join(ROOT, "DATA", ".raw_cache"))
     ap.add_argument("--sites", default=",".join(SITES))
     ap.add_argument("--verify", action="store_true",
                     help="recompute checksums and compare with SHA256SUMS")
+    ap.add_argument("--list-series", action="store_true",
+                    help="print the time series each --sites publishes, and stop")
+    ap.add_argument("--series", default="",
+                    help="role=time_series_id for a site the registry does not "
+                         "hold, comma separated; all four roles are required")
+    ap.add_argument("--years", default="",
+                    help="years to fetch, e.g. 2024-2026; needs an --out of its own")
+    ap.add_argument("--site-name", default="",
+                    help="a label for an added site, recorded in its provenance")
     args = ap.parse_args()
 
     sites = [s.strip() for s in args.sites.split(",") if s.strip()]
+
+    # Looking is not fetching: this works for any site number and writes nothing.
+    if args.list_series:
+        return list_series(UsgsClient(args.cache_dir), sites)
+
+    # The exploratory flags may not touch the published package. That directory is
+    # what SHA256SUMS pins and what the manuscript's numbers were computed from; a
+    # package built from years somebody chose, or from roles somebody assigned by
+    # reading a free-text label, is a different object and belongs somewhere else.
+    exploratory = bool(args.series or args.years or args.site_name)
+    if exploratory and os.path.abspath(args.out) == os.path.abspath(DEFAULT_OUT):
+        return _fail("--series, --years and --site-name need an --out of their own; "
+                     "they must not write into the published package")
+
+    if args.series:
+        if len(sites) != 1:
+            return _fail("--series describes one site; give exactly one --sites")
+        added = sites[0]
+        if added in SITES:
+            return _fail(f"{added} is already in the registry; --series would change "
+                         f"what a published site means, so it is refused")
+        if not args.years:
+            return _fail("--series needs --years: the archive holds years in which "
+                         "the four series do not all exist, and this script cannot "
+                         "tell which those are without asking for them")
+        try:
+            series = parse_series(args.series)
+            years = parse_years(args.years)
+        except ValueError as error:
+            return _fail(str(error))
+        # Registered here rather than threaded through every builder, so that SITES
+        # stays the one place that answers "what is this site" for the whole run.
+        SITES[added] = {
+            "name": args.site_name or f"USGS {added}",
+            "role": "added at the command line; the four series were assigned by "
+                    "the person who ran it, not by the study",
+            "years": years,
+            "series": series,
+        }
+    elif args.years:
+        try:
+            years = parse_years(args.years)
+        except ValueError as error:
+            return _fail(str(error))
+        for site in sites:
+            if site not in SITES:
+                return _fail(f"unknown site {site}; --years does not add one, "
+                             f"--series does")
+            SITES[site] = dict(SITES[site], years=years)  # type: ignore[arg-type]
+
     for s in sites:
         if s not in SITES:
-            return _fail(f"unknown site {s}; known: {', '.join(SITES)}")
+            return _fail(f"unknown site {s}; known: {', '.join(SITES)}. "
+                         f"To add another, look it up with --list-series and name "
+                         f"its four series with --series.")
 
     if args.verify:
         return verify(args.out)
 
-    os.makedirs(os.path.join(args.out, "observations"), exist_ok=True)
     client = UsgsClient(args.cache_dir)
     provenance: list[dict[str, object]] = []
 
     try:
+        # One request, and the whole assignment stands or falls on it. Nothing is
+        # created on disk until every role has been matched to exactly one series
+        # that the archive actually holds, so a wrong id costs a single request
+        # instead of a quota's worth of empty files.
         meta_rows = build_metadata(client, sites, provenance)
+        unresolved = unresolved_series(sites, meta_rows)
+        if unresolved:
+            return _fail(unresolved)
+
+        os.makedirs(os.path.join(args.out, "observations"), exist_ok=True)
         write_csv(os.path.join(args.out, "time_series_metadata.csv"),
                   TSMETA_COLUMNS, meta_rows)
         print(f"time_series_metadata.csv: {len(meta_rows)} series")
@@ -560,18 +883,66 @@ def main() -> int:
         "series_roles": {s: {tsid: role for tsid, (role, _p, _u)
                              in SITES[s]["series"].items()}     # type: ignore[union-attr]
                          for s in sites},
+        # Who decided which series is the headwater. In the published package that
+        # was the study, reading sublocation_identifier once and writing it down;
+        # anywhere else it is whoever typed --series, and a reader of the result is
+        # entitled to know which of the two they are holding.
+        "series_roles_assigned_by": ("the person who ran the script" if exploratory
+                                     else "the study, from sublocation_identifier"),
         "layers": sorted(provenance, key=lambda e: (str(e["layer"]),
                                                     str(e.get("parameter_code", "")))),
     }, os.path.join(args.out, "provenance.json"))
 
     with open(os.path.join(args.out, "README.md"), "w", encoding="utf-8",
               newline="\n") as fh:
-        fh.write(README)
+        fh.write(lab_readme(sites, args.out) if exploratory else README)
 
     print(f"\n{len(data_files)} data files checksummed; "
           f"{client.requests_made} HTTP requests this run")
     print(f"package written to {args.out}")
     return 0
+
+
+def lab_readme(sites: list[str], out: str) -> str:
+    """The README for a package built with the exploratory flags.
+
+    It says the one thing that matters about such a package: it is not the one the
+    paper's numbers came from, and the four series were named by a person. Getting
+    the two stages the wrong way round inverts the head difference without raising
+    anything, so the warning is at the top rather than in a footnote.
+    """
+    rows = []
+    for site in sites:
+        entry = SITES[site]
+        roles = ", ".join(f"{role}={tsid}" for tsid, (role, _p, _u)
+                          in sorted(entry["series"].items(),   # type: ignore[union-attr]
+                                    key=lambda item: ROLE_ORDER.index(item[1][0])))
+        years = ", ".join(str(y) for y in entry["years"])       # type: ignore[union-attr]
+        rows.append(f"| USGS {site} | {entry['name']} | {years} | {roles} |")
+    return LAB_README.format(rows="\n".join(rows), out=out.replace("\\", "/"))
+
+
+LAB_README = """\
+# USGS canal observations — built with GateMPC's downloader
+
+**This is not the GateMPC data package.** It was produced by
+`scripts/download_usgs.py` with `--series` or `--years`, so its contents were
+chosen by whoever ran that command, not by the study. In particular the four
+series below were assigned to their roles by a person reading the archive's
+free-text `sublocation_identifier` labels. If the headwater and the tailwater
+are the wrong way round, the head difference changes sign and every number
+computed from this package is wrong without anything failing. Check them.
+
+| Site | Name | Years | Series roles |
+|---|---|---|---|
+{rows}
+
+The layers, the column meanings and the checksum contract are the same as the
+published package; its `DATA/USGS_canal_gates_v1/README.md` documents them. This
+one verifies the same way:
+
+    python scripts/download_usgs.py --verify --out {out}
+"""
 
 
 def collect_data_files(out: str) -> list[str]:
