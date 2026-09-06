@@ -1,4 +1,4 @@
-# Citation File Format 1.2.0 — https://citation-file-format.github.io
+# Citation File Format 1.0.0 — https://citation-file-format.github.io
 #
 # CC0 attaches no conditions to the data package, and MIT asks only that the notice be
 # kept. Citing this work is therefore a request, not a requirement. This file is here so
@@ -12,8 +12,18 @@
 #   * one ORCID, for E. Urazimbetova, which has not been supplied;
 #   * `preferred-citation`, which is added once the paper has a DOI. Until then there is
 #     no article to point at, and inventing one would be worse than pointing at nothing.
+#
+# `doi` below is the VERSIONED DOI of v1.0.0 -- the snapshot the paper cites -- and
+# not the concept DOI 10.5281/zenodo.22549213, which follows the latest version and
+# is in README.md instead. CFF 1.0.x has room for one DOI, and the paper names a
+# version, so the versioned one is the one that belongs here.
+#
+# It was minted FROM the v1.0.0 tag and so arrived after it. The tag is deliberately
+# not moved: the manuscript cites commit 197dcf5 by name and Zenodo archived that
+# commit. The archived copy of this file therefore has no `doi` key and this one
+# does, which is what archiving a release always looks like.
 
-cff-version: 1.2.0
+cff-version: 1.0.0
 message: "If this software or data package is useful to you, please cite it as below."
 title: "GateMPC: identifying a canal gate law from an open archive, and what it costs predictive control"
 abstract: >-
@@ -29,6 +39,7 @@ abstract: >-
 type: software
 version: "1.0.0"
 date-released: "2026-09-06"
+doi: "10.5281/zenodo.22549214"
 
 authors:
   - family-names: Kudaybergenov

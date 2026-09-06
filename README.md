@@ -172,6 +172,11 @@ CC0 attaches no conditions. Separately from the licence, and as a request rather
 requirement: if this work is useful to you, please cite the paper and this repository.
 [`CITATION.cff`](CITATION.cff) has the details.
 
+Release `v1.0.0` — commit `197dcf5`, the snapshot the paper was built from — is archived
+at Zenodo under DOI [10.5281/zenodo.22549214](https://doi.org/10.5281/zenodo.22549214).
+The concept DOI [10.5281/zenodo.22549213](https://doi.org/10.5281/zenodo.22549213)
+resolves to the latest version, whichever that is.
+
 ---
 
 ## Platform support
