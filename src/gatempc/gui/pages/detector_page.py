@@ -33,6 +33,16 @@ from ..theme import COLORS
 from ..workers import FunctionRunner
 from . import Context
 
+#: Where a reader looks a site number up. Opened and read on 2026-09-06: the page
+#: titles itself "Explore - USGS Water Data for the Nation" and searches monitoring
+#: locations by area and by type of data.
+USGS_EXPLORE = "https://waterdata.usgs.gov/explore/"
+
+#: One station's own page; the site number and a trailing slash complete it. Checked
+#: on 2026-09-06 with 09522700, which answers "WELLTON-MOHAWK MAIN CANAL NEAR YUMA,
+#: AZ". The number carries the agency prefix in this address, not in the field below.
+USGS_LOCATION = "https://waterdata.usgs.gov/monitoring-location/USGS-"
+
 #: How each branch of the pre-registered rule is coloured and named.
 BRANCH_STYLE = {
     "same_form": ("circular", "Доиравийлик — айнан ўша шаклда",
@@ -154,6 +164,38 @@ class DetectorPanel(QWidget):
                 )
             )
 
+        # A site number is not something a reader can guess, and until this was
+        # written the field asked for one behind a placeholder and nothing else. The
+        # first link is where the numbers actually are. The second is a station that
+        # carries what the detector needs, taken from the reader's own package rather
+        # than named here, so the example cannot outlive the data it points at.
+        example = available[0][0] if available else ""
+        example_uz = example_en = ""
+        if example:
+            page = f"{USGS_LOCATION}{example}/"
+            example_uz = (f" Ярайдигани қандай кўринишини кўриш учун тўпламдаги "
+                          f"станцияни очинг: <a href=\"{page}\">{example}</a>.")
+            example_en = (f" To see what a usable one looks like, open a station from "
+                          f"the package: <a href=\"{page}\">{example}</a>.")
+        self.site_help = w.paragraph(
+            context.pick(
+                "Сайт рақами — USGS станциясининг рақами. Уни "
+                f"<a href=\"{USGS_EXPLORE}\">USGS Water Data — Explore</a> саҳифасида "
+                "ҳудуд ва маълумот тури бўйича излаб топасиз. Детектор учун станция "
+                "тўртта узлуксиз қаторни эълон қилиши шарт: затвор очилиши, юқори "
+                "бьеф сатҳи, қуйи бьеф сатҳи ва сарф. Камёби — затвор очилиши: "
+                "аксарият станцияларда бундай қатор йўқ." + example_uz,
+                "A site number is a USGS station number. You find one on "
+                f"<a href=\"{USGS_EXPLORE}\">USGS Water Data — Explore</a>, which "
+                "searches monitoring locations by area and by type of data. A station "
+                "is usable here only if it publishes four continuous series: the gate "
+                "opening, the headwater stage, the tailwater stage and the discharge. "
+                "The gate opening is the rare one; most stations do not have it."
+                + example_en,
+            )
+        )
+        self.site_help.linkActivated.connect(w.open_url)
+
         self.new_site = QLineEdit()
         self.new_site.setPlaceholderText(
             context.pick(
@@ -257,6 +299,7 @@ class DetectorPanel(QWidget):
             )
         )
 
+        card.add(self.site_help)
         card.add(self.package_form)
         card.add(self.package_note)
         card.add(self.file_intro)
@@ -266,6 +309,7 @@ class DetectorPanel(QWidget):
 
     def _mode_changed(self) -> None:
         from_package = self.from_package.isChecked()
+        self.site_help.setVisible(from_package)
         self.package_form.setVisible(from_package)
         self.package_note.setVisible(from_package and bool(self.package_note.text()))
         self.file_intro.setVisible(not from_package)

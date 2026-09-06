@@ -235,6 +235,43 @@ def test_the_qt_free_layer_imports_without_pyqt():
     )
 
 
+#: Every web address the interface offers the reader, and nothing else. A link is a
+#: claim like any other number in this project: it was opened and read before it was
+#: written down, and the constant that carries it records when. Adding one here is
+#: deliberate; a link that appears in a page without passing through this set fails.
+CHECKED_LINKS = {
+    # "Explore - USGS Water Data for the Nation", read 2026-09-06.
+    "https://waterdata.usgs.gov/explore/",
+    # A station's own page; the site number completes it. Checked 2026-09-06 with
+    # 09522700 → "WELLTON-MOHAWK MAIN CANAL NEAR YUMA, AZ".
+    "https://waterdata.usgs.gov/monitoring-location/USGS-",
+}
+
+URL = re.compile(r"https?://[^\s\"'<>)]+")
+
+
+def test_every_link_the_interface_offers_has_been_checked():
+    """A dead or invented link in the window is the same defect as an invented number."""
+    found: set[str] = set()
+    for source in gui_sources():
+        found.update(URL.findall(source.read_text(encoding="utf-8")))
+    unknown = sorted(found - CHECKED_LINKS)
+    assert not unknown, f"link in the interface that nobody checked: {unknown}"
+
+
+def test_a_link_in_a_page_is_opened_on_purpose():
+    """``paragraph`` leaves ``openExternalLinks`` off, so an ``href`` is inert alone.
+
+    Any page that writes one has to connect ``linkActivated`` itself. Without this
+    the link would render, invite a click and do nothing at all.
+    """
+    for source in gui_sources():
+        text = source.read_text(encoding="utf-8")
+        if 'href=' not in text:
+            continue
+        assert "linkActivated" in text, f"{source.name} shows a link it never opens"
+
+
 def test_every_folder_the_file_menu_opens_says_what_is_in_it():
     """A menu item named after a folder tells the reader nothing they can act on.
 

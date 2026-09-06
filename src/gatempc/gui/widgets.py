@@ -55,6 +55,18 @@ def open_file(path: Path) -> None:
     QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
 
 
+def open_url(address: str) -> None:
+    """Hand a web address to the reader's own browser.
+
+    The window itself never goes to the network — the detector's fetch button
+    prints the command rather than running it. Handing a page to the browser is a
+    different act: the reader sees where they are going, and the window stays
+    offline. ``paragraph`` leaves ``openExternalLinks`` off, so a page has to
+    connect ``linkActivated`` to this on purpose and no link opens by accident.
+    """
+    QDesktopServices.openUrl(QUrl(address))
+
+
 def copy_to_clipboard(text: str) -> None:
     clipboard = QGuiApplication.clipboard()
     if clipboard is not None:
