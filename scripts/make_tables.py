@@ -272,7 +272,7 @@ def t4_parameters():
         "computed by the code from the cited ones.",
         ["Parameter", "Value", "Unit", "Source"], rows,
         ["results/control_comparison.json", "results/model_error_envelope.json"],
-        section="Section 2.8")
+        section="Section 2.9")
 
 
 # ------------------------------------------------------------------ section 3
