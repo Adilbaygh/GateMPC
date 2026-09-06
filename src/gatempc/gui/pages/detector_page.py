@@ -221,27 +221,56 @@ class DetectorPanel(QWidget):
             ],
             columns=2,
         )
-        card.add(self.package_form)
-        card.add(self.package_note)
-        card.add(self.file_form)
-        card.add(
-            w.paragraph(
-                context.pick(
-                    "Файл 15 дақиқалик тўрда бўлиши шарт эмас, лекин вақт устуни "
-                    "<code>ГГГГ-ОО-КК</code> билан бошланиши керак — кунлик "
-                    "гуруҳлаш шунга таянади.",
-                    "The file need not be on a 15-minute grid, but the time column has to "
-                    "start with <code>YYYY-MM-DD</code>: the daily grouping relies on it.",
-                )
+        # What the file has to look like, said BEFORE the dialog opens. Until this
+        # was written the five column pickers only appeared after a file had been
+        # chosen, so a reader learned what was wanted by being told his file was
+        # wrong. The sample row is the shortest honest specification there is.
+        self.file_intro = w.paragraph(
+            context.pick(
+                "Файл — оддий CSV, сарлавҳа қатори билан. <b>Ҳар бир қатор — битта "
+                "вақт нуқтаси</b>, ва ўша қаторда бешта ўлчов ёнма-ён туради: вақт, "
+                "затвор очилиши, юқори бьеф сатҳи, қуйи бьеф сатҳи, сарф. Устунлар "
+                "қандай номланиши муҳим эмас — файл очилгач қайси устун қайси "
+                "ўлчовлигини ўзингиз кўрсатасиз, ва бирликларни ҳам ўзингиз "
+                "танлайсиз.<br><br>"
+                "<code>time,gate_opening,headwater,tailwater,discharge</code><br>"
+                "<code>2024-03-01 00:00,1.42,63.71,61.55,9.83</code>",
+                "The file is a plain CSV with a header row. <b>One row is one instant "
+                "in time</b>, carrying five readings side by side: the time, the gate "
+                "opening, the headwater stage, the tailwater stage and the discharge. "
+                "The column names do not matter — once the file is open you say which "
+                "column is which, and you choose the units as well.<br><br>"
+                "<code>time,gate_opening,headwater,tailwater,discharge</code><br>"
+                "<code>2024-03-01 00:00,1.42,63.71,61.55,9.83</code>",
             )
         )
+        self.file_note = w.paragraph(
+            context.pick(
+                "Файл 15 дақиқалик тўрда бўлиши шарт эмас, лекин вақт устуни "
+                "<code>ГГГГ-ОО-КК</code> билан бошланиши керак — кунлик "
+                "гуруҳлаш шунга таянади. Бешта ўлчовдан биттаси бўш бўлган қатор "
+                "ташланади, ва нечтаси ташлангани натижа билан бирга кўрсатилади.",
+                "The file need not be on a 15-minute grid, but the time column has to "
+                "start with <code>YYYY-MM-DD</code>: the daily grouping relies on it. "
+                "A row with a blank in any of the five is skipped, and how many were "
+                "skipped is reported with the result.",
+            )
+        )
+
+        card.add(self.package_form)
+        card.add(self.package_note)
+        card.add(self.file_intro)
+        card.add(self.file_form)
+        card.add(self.file_note)
         return card
 
     def _mode_changed(self) -> None:
         from_package = self.from_package.isChecked()
         self.package_form.setVisible(from_package)
         self.package_note.setVisible(from_package and bool(self.package_note.text()))
+        self.file_intro.setVisible(not from_package)
         self.file_form.setVisible(not from_package)
+        self.file_note.setVisible(not from_package)
 
     def choose_file(self) -> None:
         context = self.context

@@ -248,20 +248,25 @@ def t4_parameters():
     d, ref = cc["design"], env["reference"]
     pool, gate = d["pool"], d["gate"]
     rows = [
-        ["Pool length", f"{pool['length_m']:.0f}", "m", "[C98] Table 3, in km"],
-        ["Bottom width", f"{pool['bottom_width_m']:.0f}", "m", "[C98] Table 3"],
-        ["Side slope", f"{pool['side_slope']:.1f}", "H:V", "[C98] Table 3"],
-        ["Target depth", f"{pool['target_depth_m']:.1f}", "m", "[C98] Table 3"],
-        ["Drop across the gate", f"{ref['dh_ref_m']:.1f}", "m", "[C98] Table 1"],
-        ["Gate width", f"{ref['w_asce_m']:.0f}", "m", "[C98] Table 3"],
-        ["Gate height", f"{gate['a_max_m']:.1f}", "m", "[C98] Table 3"],
-        ["Discharge coefficient", f"{ref['cd_asce']:.2f}", "—", "[B25] Table 5"],
+        ["Pool length", f"{pool['length_m']:.0f}", "m", "[@clemmens1998] Table 3, in km"],
+        ["Bottom width", f"{pool['bottom_width_m']:.0f}", "m", "[@clemmens1998] Table 3"],
+        ["Side slope", f"{pool['side_slope']:.1f}", "H:V", "[@clemmens1998] Table 3"],
+        ["Target depth", f"{pool['target_depth_m']:.1f}", "m", "[@clemmens1998] Table 3"],
+        ["Drop across the gate", f"{ref['dh_ref_m']:.1f}", "m", "[@clemmens1998] Table 1"],
+        ["Gate width", f"{ref['w_asce_m']:.0f}", "m", "[@clemmens1998] Table 3"],
+        ["Gate height", f"{gate['a_max_m']:.1f}", "m", "[@clemmens1998] Table 3"],
+        # NOT the benchmark's own value. [C98] p. 24 leaves the gate relation open --
+        # "the committee was less specific with the form of the relationship" -- so
+        # 0.61 is the value the linear-model study of the same test cases uses. The
+        # table says so rather than letting a reader assume it came with [C98].
+        ["Discharge coefficient", f"{ref['cd_asce']:.2f}", "—",
+         "[@bonet2025] Table 5; not fixed by [@clemmens1998]"],
         ["Storage area A_s", f"{pool['storage_area_m2']:,.0f}", "m²",
          "derived: length × top width"],
         ["Delay τ", f"{pool['delay_s']:.0f}", "s", "derived: L/(v+c)"],
-        ["Regulation step", f"{d['dt_s']:.0f}", "s", "[C98] p. 24"],
+        ["Regulation step", f"{d['dt_s']:.0f}", "s", "[@clemmens1998] p. 24"],
         ["Reference discharge", f"{ref['q_ref_m3s']:.1f}", "m³/s",
-         "[C98] Table 6"],
+         "[@clemmens1998] Table 6"],
         ["Matching opening a_ref", f"{ref['a_ref_m']:.4f}", "m", "derived"],
         ["Γ_syn = C_d W √(2g)", f"{ref['gamma_syn']:.4f}", "m^1.5/s", "derived"],
     ]
