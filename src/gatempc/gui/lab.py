@@ -200,3 +200,69 @@ def package_site_years(paths: gdata.ProjectPaths,
         if site and year.isdigit():
             found.append((site, int(year)))
     return sorted(found)
+
+
+def lab_packages(paths: gdata.ProjectPaths) -> list[Path]:
+    """Packages a fetch started from the window wrote.
+
+    They land under :func:`lab_directory` for the same reason everything else from
+    a form does: a package fetched here is not the published one, and must not be
+    able to look like it or to overwrite it.
+    """
+    directory = paths.root / "build" / "lab"
+    if not directory.is_dir():
+        return []
+    return sorted(path for path in directory.glob("package_*")
+                  if (path / "observations").is_dir())
+
+
+def available_folds(paths: gdata.ProjectPaths) -> list[tuple[Path, str, int]]:
+    """Every site-year the window can read, and which package each came from.
+
+    The published package first, then anything fetched from the window. The
+    package travels with the site and year because the two kinds live in
+    different directories and the reader is entitled to know which is which.
+    """
+    found = [(paths.data_package, site, year)
+             for site, year in package_site_years(paths)]
+    for package in lab_packages(paths):
+        found += [(package, site, year)
+                  for site, year in package_site_years(paths, package)]
+    return found
+
+
+def registered_sites(paths: gdata.ProjectPaths) -> dict[str, str]:
+    """The sites ``download_usgs.py`` knows how to fetch, read from that script.
+
+    A station's four series are bound to their roles by hand: which of two
+    identical stage series is the headwater is not something the downloader can
+    work out, so it refuses a site it has not been taught —
+
+        for s in sites:
+            if s not in SITES:
+                return _fail(f"unknown site {s}; known: {', '.join(SITES)}")
+
+    — and the window must therefore offer exactly what the script accepts. The
+    registry is read from the script rather than copied here: two lists that can
+    disagree are worse than one that cannot. A missing or broken script gives an
+    empty registry and the page hides the offer, rather than taking the window
+    down with it.
+    """
+    import importlib.util
+
+    script = paths.scripts / "download_usgs.py"
+    if not script.is_file():
+        return {}
+    spec = importlib.util.spec_from_file_location("gatempc_downloader", script)
+    if spec is None or spec.loader is None:
+        return {}
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        return {}
+    registry = getattr(module, "SITES", None)
+    if not isinstance(registry, dict):
+        return {}
+    return {str(site): str(entry.get("name", "") if isinstance(entry, dict) else "")
+            for site, entry in registry.items()}

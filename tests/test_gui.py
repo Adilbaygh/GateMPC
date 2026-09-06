@@ -408,6 +408,50 @@ def test_the_laboratory_is_qt_free():
     assert not QT_IMPORT.search(source), "lab.py imports Qt at module level"
 
 
+def test_the_window_offers_exactly_the_sites_the_downloader_knows():
+    """The detector may only offer to fetch a site the script will accept.
+
+    ``download_usgs.py`` refuses an unregistered site, because the roles of a
+    station's four series were resolved by hand. A page that let a reader ask for
+    any number was promising a run that fails in a terminal the reader was never
+    told to open. The registry the window shows is read from the script; this test
+    reads it a second way, from the source, so the two cannot drift apart.
+    """
+    from gatempc.gui import lab
+
+    paths = gdata.ProjectPaths.discover()
+    tree = ast.parse((paths.scripts / "download_usgs.py").read_text(encoding="utf-8"))
+    in_source: set[str] = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.AnnAssign) or not isinstance(node.target, ast.Name):
+            continue
+        if node.target.id != "SITES" or not isinstance(node.value, ast.Dict):
+            continue
+        in_source = {ast.literal_eval(key) for key in node.value.keys if key is not None}
+    assert in_source, "SITES was not found in download_usgs.py"
+    assert set(lab.registered_sites(paths)) == in_source
+    for site, name in lab.registered_sites(paths).items():
+        assert name.strip(), f"{site} is offered without a name"
+
+
+def test_a_fetched_package_is_kept_apart_from_the_published_one():
+    """A fold the reader fetched and a published fold must not be confused.
+
+    ``available_folds`` therefore carries the package with each site-year, and the
+    page reads the fold from that package rather than from the published one.
+    """
+    from gatempc.gui import lab
+
+    paths = gdata.ProjectPaths.discover()
+    for package, site, year in lab.available_folds(paths):
+        assert (package / "observations" / f"{site}_{year}.csv").is_file()
+        assert package == paths.data_package or package.is_relative_to(paths.root / "build")
+    page = (GUI / "pages" / "detector_page.py").read_text(encoding="utf-8")
+    assert "load_fold(str(package)" in page, (
+        "the detector reads a fold from a fixed package again"
+    )
+
+
 def test_a_readers_own_csv_becomes_samples(tmp_path):
     from gatempc.gui import lab
 

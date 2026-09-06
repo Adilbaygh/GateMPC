@@ -11,6 +11,7 @@ measurement; changing them is allowed and is recorded in the saved result.
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 from PyQt6.QtCore import Qt
@@ -20,6 +21,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLineEdit,
     QMessageBox,
+    QPlainTextEdit,
     QPushButton,
     QRadioButton,
     QVBoxLayout,
@@ -30,7 +32,7 @@ from ... import results as gdata
 from .. import lab
 from .. import widgets as w
 from ..theme import COLORS
-from ..workers import FunctionRunner
+from ..workers import FunctionRunner, ScriptRunner, describe
 from . import Context
 
 #: Where a reader looks a site number up. Opened and read on 2026-09-06: the page
@@ -73,6 +75,7 @@ class DetectorPanel(QWidget):
         self.setObjectName("Page")
         self.context = context
         self.runner: FunctionRunner | None = None
+        self.fetch_runner: ScriptRunner | None = None
         self.result: dict | None = None
         self.source_label = ""
 
@@ -148,72 +151,83 @@ class DetectorPanel(QWidget):
         card.add_layout(row)
 
         # -- package
-        available = lab.package_site_years(context.paths)
-        self.site_year = w.combo(
-            [(f"{site}  ·  {year}", (site, year)) for site, year in available]
-        )
+        self.folds = lab.available_folds(context.paths)
+        self.registry = lab.registered_sites(context.paths)
+        self.site_year = w.combo(self._fold_items())
         self.package_note = w.paragraph("")
-        if not available:
+        if not self.folds:
             self.package_note.setText(
                 context.pick(
                     "Маълумот тўплами топилмади. «Қайта юритиш» саҳифасидан "
-                    "`download_usgs.py` ни юритинг, ёки бошқа сайтни олиш учун "
-                    "қуйидаги майдонга сайт рақамини ёзинг.",
+                    "`download_usgs.py` ни юритинг, ёки қуйидаги рўйхатдан "
+                    "станция танлаб юклаб олинг.",
                     "No data package was found. Run `download_usgs.py` from the "
-                    "“Reproduce” page, or type a site number below to fetch another one.",
+                    "“Reproduce” page, or pick a station below and fetch it.",
                 )
             )
 
         # A site number is not something a reader can guess, and until this was
-        # written the field asked for one behind a placeholder and nothing else. The
+        # written the page asked for one behind a placeholder and nothing else. The
         # first link is where the numbers actually are. The second is a station that
         # carries what the detector needs, taken from the reader's own package rather
         # than named here, so the example cannot outlive the data it points at.
-        example = available[0][0] if available else ""
+        example = self.folds[0][1] if self.folds else ""
         example_uz = example_en = ""
         if example:
             page = f"{USGS_LOCATION}{example}/"
-            example_uz = (f" Ярайдигани қандай кўринишини кўриш учун тўпламдаги "
-                          f"станцияни очинг: <a href=\"{page}\">{example}</a>.")
-            example_en = (f" To see what a usable one looks like, open a station from "
-                          f"the package: <a href=\"{page}\">{example}</a>.")
+            example_uz = (f" Станциянинг ўз саҳифаси қандай кўринишини кўринг: "
+                          f"<a href=\"{page}\">{example}</a>.")
+            example_en = (f" To see a station's own page, open "
+                          f"<a href=\"{page}\">{example}</a>.")
         self.site_help = w.paragraph(
             context.pick(
-                "Сайт рақами — USGS станциясининг рақами. Уни "
+                "Бу рақамлар — USGS станцияларининг рақамлари; станцияни "
                 f"<a href=\"{USGS_EXPLORE}\">USGS Water Data — Explore</a> саҳифасида "
-                "ҳудуд ва маълумот тури бўйича излаб топасиз. Детектор учун станция "
-                "тўртта узлуксиз қаторни эълон қилиши шарт: затвор очилиши, юқори "
-                "бьеф сатҳи, қуйи бьеф сатҳи ва сарф. Камёби — затвор очилиши: "
-                "аксарият станцияларда бундай қатор йўқ." + example_uz,
-                "A site number is a USGS station number. You find one on "
-                f"<a href=\"{USGS_EXPLORE}\">USGS Water Data — Explore</a>, which "
-                "searches monitoring locations by area and by type of data. A station "
-                "is usable here only if it publishes four continuous series: the gate "
-                "opening, the headwater stage, the tailwater stage and the discharge. "
-                "The gate opening is the rare one; most stations do not have it."
-                + example_en,
+                "ҳудуд ва маълумот тури бўйича қидириб топасиз. Детектор учун "
+                "станция тўртта узлуксиз қаторни эълон қилиши шарт: затвор очилиши, "
+                "юқори бьеф сатҳи, қуйи бьеф сатҳи ва сарф. Камёби — затвор "
+                "очилиши: аксарият станцияларда бундай қатор йўқ." + example_uz
+                + " <b>Ўз иншоотингизни текшириш учун «Ўз файлимдан» режимига "
+                  "ўтинг.</b>",
+                "These are USGS station numbers; you can search for a station on "
+                f"<a href=\"{USGS_EXPLORE}\">USGS Water Data — Explore</a>, by area "
+                "and by type of data. A station is usable here only if it publishes "
+                "four continuous series: the gate opening, the headwater stage, the "
+                "tailwater stage and the discharge. The gate opening is the rare one; "
+                "most stations do not have it." + example_en
+                + " <b>To check a structure of your own, switch to “From my own "
+                  "file”.</b>",
             )
         )
         self.site_help.linkActivated.connect(w.open_url)
 
-        self.new_site = QLineEdit()
-        self.new_site.setPlaceholderText(
-            context.pick(
-                "бошқа USGS сайт рақами, масалан 09429000",
-                "another USGS site number, for example 09429000",
-            )
-        )
-        self.new_site.setMinimumWidth(150)
-        fetch = QPushButton(context.pick("Юклаб олиш…", "Fetch…"))
-        fetch.clicked.connect(self._explain_fetch)
+        # Not a free-text field. The downloader refuses a site it has not been
+        # taught, so a box that accepts any number promises what the project cannot
+        # deliver: typing one produced "unknown site …" in a terminal the reader was
+        # never told to open. The chooser offers exactly what the script accepts.
+        self.fetchable = w.combo(self._fetchable_items())
+        self.fetch_button = QPushButton(context.pick("Юклаб олиш", "Fetch"))
+        self.fetch_button.clicked.connect(self.fetch)
+        self.stop_fetch_button = QPushButton(context.pick("Тўхтатиш", "Stop"))
+        self.stop_fetch_button.setEnabled(False)
+        self.stop_fetch_button.clicked.connect(self.stop_fetch)
 
-        fetch_row = QWidget()
-        fetch_row.setObjectName("Page")
-        fetch_layout = QHBoxLayout(fetch_row)
+        self.fetch_row = QWidget()
+        self.fetch_row.setObjectName("Page")
+        fetch_layout = QHBoxLayout(self.fetch_row)
         fetch_layout.setContentsMargins(0, 0, 0, 0)
         fetch_layout.setSpacing(8)
-        fetch_layout.addWidget(self.new_site, 1)
-        fetch_layout.addWidget(fetch, 0)
+        fetch_layout.addWidget(self.fetchable, 1)
+        fetch_layout.addWidget(self.fetch_button, 0)
+        fetch_layout.addWidget(self.stop_fetch_button, 0)
+
+        self.fetch_note = w.paragraph("")
+        self.fetch_console = QPlainTextEdit()
+        self.fetch_console.setObjectName("Console")
+        self.fetch_console.setReadOnly(True)
+        self.fetch_console.setMaximumBlockCount(2000)
+        self.fetch_console.setMinimumHeight(130)
+        self.fetch_console.setVisible(False)
 
         # -- own file
         self.file_path = QLineEdit()
@@ -246,7 +260,8 @@ class DetectorPanel(QWidget):
         self.package_form = w.form(
             [
                 (context.pick("Сайт ва йил", "Site and year"), self.site_year),
-                (context.pick("Тўпламда йўқ сайт", "A site not in the package"), fetch_row),
+                (context.pick("Яна юклаб олиш", "Also available to fetch"),
+                 self.fetch_row),
             ],
             columns=1,
         )
@@ -302,16 +317,94 @@ class DetectorPanel(QWidget):
         card.add(self.site_help)
         card.add(self.package_form)
         card.add(self.package_note)
+        card.add(self.fetch_note)
+        card.add(self.fetch_console)
         card.add(self.file_intro)
         card.add(self.file_form)
         card.add(self.file_note)
+        self._refresh_fetch()
         return card
+
+    # -- the site list and what may still be fetched ------------------------------
+
+    def _fold_items(self) -> list[tuple[str, object]]:
+        """One entry per site-year, marked with the package it came from."""
+        context = self.context
+        items: list[tuple[str, object]] = []
+        for package, site, year in self.folds:
+            own = package != context.paths.data_package
+            mark = context.pick("  ·  ўзингиз юклаган", "  ·  fetched by you") if own else ""
+            items.append((f"{site}  ·  {year}{mark}", (package, site, year)))
+        return items
+
+    def _fetchable_items(self) -> list[tuple[str, object]]:
+        """Registered sites the reader does not have yet."""
+        have = {site for _package, site, _year in self.folds}
+        return [(f"{site}  ·  {name}" if name else site, site)
+                for site, name in sorted(self.registry.items()) if site not in have]
+
+    def _refresh_fetch(self) -> None:
+        """Show the offer only when there is something to offer, and say the terms."""
+        context = self.context
+        offered = self.fetchable.count() > 0
+        self.fetch_row.setVisible(offered)
+        if offered:
+            self.fetch_note.setText(
+                context.pick(
+                    "Рўйхатда `download_usgs.py` таниган станциялар турибди. "
+                    "Янгисини қўшиш бир буйруқлик иш эмас: иккита бир хил сатҳ "
+                    "қаторидан қайси бири юқори бьеф эканини скрипт аниқлай "
+                    "олмайди, шунинг учун тўртта сериянинг роли қўлда белгиланади. "
+                    "Юклаш USGS API'сига мурожаат қилади — 2026-09-05 да ўлчанганда "
+                    "соатига тахминан 140 сўровга рухсат берилган — шунинг учун у "
+                    "секин боради, ва натижа `build/lab/` га ёзилади, эълон "
+                    "қилинган тўпламга эмас.",
+                    "The list holds the stations `download_usgs.py` has been taught. "
+                    "Adding one is not a one-command job: the script cannot tell "
+                    "which of two identical stage series is the headwater, so the "
+                    "roles of the four series are fixed by hand. A fetch goes to the "
+                    "USGS API — measured on 2026-09-05 at roughly 140 requests an "
+                    "hour — so it is paced, and what it writes goes to `build/lab/`, "
+                    "never into the published package.",
+                )
+            )
+        else:
+            self.fetch_note.setText(
+                context.pick(
+                    "Юклагич таниган ҳамма станция аллақачон бор.",
+                    "Every station the downloader knows is already here.",
+                )
+            )
+        self.fetch_note.setVisible(self.from_package.isChecked())
+
+    def _reload_packages(self) -> None:
+        """Rebuild both choosers after a fetch, keeping the reader's selection."""
+        chosen = self.site_year.currentData()
+        self.folds = lab.available_folds(self.context.paths)
+        self.site_year.clear()
+        for label, value in self._fold_items():
+            self.site_year.addItem(label, value)
+        if chosen is not None:
+            index = self.site_year.findData(chosen)
+            if index >= 0:
+                self.site_year.setCurrentIndex(index)
+        self.fetchable.clear()
+        for label, value in self._fetchable_items():
+            self.fetchable.addItem(label, value)
+        if self.folds:
+            self.package_note.setText("")
+        self._refresh_fetch()
+        self._mode_changed()
 
     def _mode_changed(self) -> None:
         from_package = self.from_package.isChecked()
         self.site_help.setVisible(from_package)
         self.package_form.setVisible(from_package)
         self.package_note.setVisible(from_package and bool(self.package_note.text()))
+        self.fetch_note.setVisible(from_package)
+        self.fetch_console.setVisible(
+            from_package and bool(self.fetch_console.toPlainText())
+        )
         self.file_intro.setVisible(not from_package)
         self.file_form.setVisible(not from_package)
         self.file_note.setVisible(not from_package)
@@ -348,29 +441,83 @@ class DetectorPanel(QWidget):
                     box.setCurrentIndex(index)
                     break
 
-    def _explain_fetch(self) -> None:
+    # -- fetching a registered site ------------------------------------------------
+
+    def fetch(self) -> None:
+        """Run the published downloader, in the window, with its output on screen.
+
+        Not silently: the command line is printed before it runs, every line the
+        script writes appears as it is written, and Stop is live throughout. That
+        is what the reader is owed for a run that goes to the network — the earlier
+        dialog handed over a command and told the reader to reopen the page, which
+        answered neither *is it running* nor *how far has it got*.
+        """
         context = self.context
-        site = self.new_site.text().strip()
+        if self.fetch_runner is not None:
+            return
+        site = self.fetchable.currentData()
         if not site:
             return
-        command = (f"python scripts/download_usgs.py --sites {site} "
-                   f"--out build/lab/package_{site}")
-        QMessageBox.information(
-            self,
-            context.pick("Сайтни юклаб олиш", "Fetching a site"),
+        out = lab.lab_directory(context.paths) / f"package_{site}"
+        command = [sys.executable, str(context.paths.scripts / "download_usgs.py"),
+                   "--sites", str(site), "--out", str(out)]
+        self.fetch_console.setVisible(True)
+        self.fetch_console.clear()
+        self.fetch_console.appendPlainText("$ " + describe(command, context.paths.root))
+        self.fetch_console.appendPlainText(
             context.pick(
-                "Янги сайтни юклаш тармоққа мурожаат қилади ва USGS квотасини "
-                "сарфлайди, шунинг учун у ойнадан жимгина бажарилмайди. Қуйидаги "
-                "буйруқни юритинг, кейин тўплам папкаси сифатида ўша йўлни "
-                "кўрсатинг:\n\n"
-                f"{command}\n\n"
-                "Юклаб бўлингач, бу саҳифани қайта очинг.",
-                "Fetching a new site goes to the network and spends USGS quota, so the "
-                "window does not do it silently. Run this command, then point the package "
-                "directory at that path:\n\n"
-                f"{command}\n\n"
-                "Reopen this page once it has finished.",
-            ),
+                "Ҳар бир қатлам ва ҳар бир сайт-йил учун битта сатр чиқади. "
+                "Тўхтатсангиз, юклаб бўлинганлари кэшда қолади ва қайта юритиш "
+                "фақат етишмаётганини олади.",
+                "One line appears per layer and per site-year. If you stop it, what "
+                "was fetched stays in the cache and running it again takes only what "
+                "is missing.",
+            )
+        )
+        self.fetch_button.setEnabled(False)
+        self.stop_fetch_button.setEnabled(True)
+        runner = ScriptRunner(command, context.paths.root)
+        runner.line.connect(self._fetch_line)
+        runner.finished_with.connect(self._fetch_finished)
+        self.fetch_runner = runner
+        runner.start()
+
+    def stop_fetch(self) -> None:
+        if self.fetch_runner is not None:
+            self.fetch_runner.cancel()
+
+    def _fetch_line(self, line: str) -> None:
+        self.fetch_console.appendPlainText(line)
+        bar = self.fetch_console.verticalScrollBar()
+        if bar is not None:
+            bar.setValue(bar.maximum())
+
+    def _fetch_finished(self, code: int) -> None:
+        context = self.context
+        runner = self.fetch_runner
+        self.fetch_runner = None
+        if runner is not None:
+            runner.wait()
+            runner.deleteLater()
+        self.fetch_button.setEnabled(True)
+        self.stop_fetch_button.setEnabled(False)
+        if code == 0:
+            self._reload_packages()
+            self.fetch_console.appendPlainText(
+                context.pick(
+                    "--- юкланди; сайт-йил рўйхати янгиланди ---",
+                    "--- fetched; the site-year list has been rebuilt ---",
+                )
+            )
+            return
+        # A failure keeps whatever arrived: the site list is rebuilt either way so
+        # that a partial package is offered rather than silently ignored.
+        self._reload_packages()
+        self.fetch_console.appendPlainText(
+            context.pick(
+                f"--- тугамади (чиқиш коди {code}); юқоридаги сабабни ўқинг ---",
+                f"--- did not finish (exit code {code}); the reason is above ---",
+            )
         )
 
     # -- thresholds --------------------------------------------------------------
@@ -480,8 +627,11 @@ class DetectorPanel(QWidget):
                 )
             from ...archive import load_fold
 
-            site, year = chosen
-            samples, approvals = load_fold(str(context.paths.data_package), site, year,
+            # The package travels with the site-year: a fold fetched from this page
+            # lives under build/lab, not in the published package, and reading the
+            # wrong directory would silently answer about the wrong data.
+            package, site, year = chosen
+            samples, approvals = load_fold(str(package), site, year,
                                            with_approval=True)
             approved = [s for s, flag in zip(samples, approvals) if flag]
             return samples, approved, f"{site} {year}", ""
@@ -697,3 +847,8 @@ class DetectorPanel(QWidget):
         if runner is not None:
             runner.wait(3000)
             self.runner = None
+        fetch = self.fetch_runner
+        if fetch is not None:
+            fetch.cancel()
+            fetch.wait(3000)
+            self.fetch_runner = None
