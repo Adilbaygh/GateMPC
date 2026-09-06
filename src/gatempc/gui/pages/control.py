@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from PyQt6.QtWidgets import QWidget
 
-from .. import data as gdata
+from ... import results as gdata
 from .. import widgets as w
 from . import Context
 

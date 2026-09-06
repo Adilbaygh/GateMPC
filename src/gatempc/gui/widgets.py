@@ -1,8 +1,8 @@
 """The small set of widgets every page is built from.
 
 The one that matters is :class:`NumberCard`. It cannot be constructed without a source
-string, which is how the promise made in ``data.py`` — no number on screen without the
-file it came from — is kept structurally rather than by discipline.
+string, which is how the promise made in ``gatempc.results`` — no number on screen
+without the file it came from — is kept structurally rather than by discipline.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from . import data as gdata
+from .. import results as gdata
 from . import i18n
 from .theme import COLORS
 

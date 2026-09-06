@@ -1,15 +1,15 @@
-"""Everything the GUI reads, with no Qt in sight.
+"""Reading what the scripts published, with the source of every number attached.
 
-The rule this module exists to enforce: a number that appears on screen carries the
-file and the key it came from. Pages therefore never index into a dictionary by hand;
-they ask for a *reference* such as ``gate_law:full_fit.alpha`` and get back both the
-value and the string ``results/gate_law.json -> full_fit.alpha``. If a result file is
-missing or a key was renamed, the page shows that instead of a plausible-looking
-number.
+The rule this module exists to enforce: a number shown to anyone carries the file and
+the key it came from. A caller never indexes into a dictionary by hand; it asks for a
+*reference* such as ``gate_law:full_fit.alpha`` and gets back both the value and the
+string ``results/gate_law.json -> full_fit.alpha``. If a result file is missing or a
+key was renamed, the caller reports that instead of a plausible-looking number.
 
-Keeping this file free of PyQt6 has two payoffs: the tests run without a display, and
-``python -c "import gatempc.gui.data"`` works on a reviewer's machine that never
-installs a GUI toolkit.
+Two things read results this way: the results explorer, and the script that builds the
+manuscript. That is why this lives in the package rather than under ``gui`` — it began
+there, and the name was a small lie as soon as the manuscript started reading the same
+files. Nothing here imports Qt, so it works on a machine with no GUI toolkit at all.
 
 Paths are built with pathlib only, so the same code runs on Windows, macOS and Linux.
 """

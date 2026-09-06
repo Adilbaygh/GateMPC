@@ -15,7 +15,7 @@ import os
 import sys
 from pathlib import Path
 
-from . import data as gdata
+from .. import results as gdata
 from . import i18n, pages
 
 INSTALL_HINT = """\

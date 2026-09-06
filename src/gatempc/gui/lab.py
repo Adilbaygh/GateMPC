@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
 
-from . import data as gdata
+from .. import results as gdata
 
 FT = 0.3048          # exact, by definition
 FT3 = FT ** 3        # exact

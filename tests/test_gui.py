@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 
-from gatempc.gui import data as gdata
+from gatempc import results as gdata
 from gatempc.gui import i18n, preregistration
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,8 +26,13 @@ REFERENCE = re.compile(
 )
 
 
+#: Every source that may name a result file: the explorer, and the reader itself.
+RESULTS_READER = ROOT / "src" / "gatempc" / "results.py"
+
+
 def gui_sources() -> list[Path]:
-    return sorted(p for p in GUI.rglob("*.py") if "__pycache__" not in p.parts)
+    found = [p for p in GUI.rglob("*.py") if "__pycache__" not in p.parts]
+    return sorted(found + [RESULTS_READER])
 
 
 def collect_references() -> set[str]:
@@ -218,10 +223,15 @@ QT_IMPORT = re.compile(r"^(?:import|from)\s+PyQt6\b", re.MULTILINE)
 
 def test_the_qt_free_layer_imports_without_pyqt():
     """A reviewer who never installs PyQt6 must still be able to import the data layer."""
-    for module in ("__init__", "data", "i18n", "preregistration", "cli",
+    for module in ("__init__", "i18n", "lab", "preregistration", "cli",
                    "pages/__init__"):
         source = (GUI / f"{module}.py").read_text(encoding="utf-8")
-        assert not QT_IMPORT.search(source), f"{module}.py imports Qt at module level"
+        assert not QT_IMPORT.search(source), f"gui/{module}.py imports Qt at module level"
+    # The results reader is used by the manuscript builder as well as the window, so
+    # it has to stay importable with no GUI toolkit anywhere in sight.
+    assert not QT_IMPORT.search(RESULTS_READER.read_text(encoding="utf-8")), (
+        "gatempc/results.py imports Qt at module level"
+    )
 
 
 # ------------------------------------------------------------------------- i18n

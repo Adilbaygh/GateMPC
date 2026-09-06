@@ -1,10 +1,10 @@
 """The GateMPC results explorer.
 
-``data``, ``preregistration`` and ``i18n`` are free of Qt, so they can be imported on a
-machine that has never installed a GUI toolkit — the tests rely on that. Everything
-that needs PyQt6 is reached through the lazy attribute below, which means
+``preregistration``, ``i18n``, ``lab`` and the page registry are free of Qt, as is
+``gatempc.results``, which reads the published result files. Everything that needs
+PyQt6 is reached through the lazy attribute below, which means
 
-    from gatempc.gui import data
+    from gatempc.gui import preregistration
 
 costs nothing, while
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from typing import Any
 
-__all__ = ["launch", "MainWindow", "data", "i18n", "preregistration"]
+__all__ = ["launch", "MainWindow", "i18n", "lab", "preregistration"]
 
 
 def __getattr__(name: str) -> Any:

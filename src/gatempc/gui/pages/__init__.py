@@ -26,7 +26,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Callable
 
-from .. import data as gdata
+from ... import results as gdata
 
 if TYPE_CHECKING:  # pragma: no cover - typing only, never imported at run time
     from PyQt6.QtWidgets import QWidget

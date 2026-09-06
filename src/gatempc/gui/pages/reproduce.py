@@ -18,7 +18,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from .. import data as gdata
+from ... import results as gdata
 from .. import i18n
 from .. import widgets as w
 from ..theme import COLORS
