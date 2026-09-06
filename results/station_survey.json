@@ -1,0 +1,202 @@
+{
+ "by_site": [
+  {
+   "detail": "2 gate series, one per leaf",
+   "series": {},
+   "site": "02237293",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "4 gate series, one per leaf",
+   "series": {},
+   "site": "02243960",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "3 gate series, one per leaf",
+   "series": {},
+   "site": "02299710",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "6 gate series, one per leaf",
+   "series": {},
+   "site": "02428400",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "8 gate series, one per leaf",
+   "series": {},
+   "site": "02430161",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "3 gate series, one per leaf",
+   "series": {},
+   "site": "02430626",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "4 gate series, one per leaf",
+   "series": {},
+   "site": "02431011",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "14 gate series, one per leaf",
+   "series": {},
+   "site": "02433151",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "4 gate series, one per leaf",
+   "series": {},
+   "site": "02433496",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "6 gate series, one per leaf",
+   "series": {},
+   "site": "02437100",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "5 gate series, one per leaf",
+   "series": {},
+   "site": "02441390",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "4 gate series, one per leaf",
+   "series": {},
+   "site": "02444160",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "5 gate series, one per leaf",
+   "series": {},
+   "site": "02447025",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "6 gate series, one per leaf",
+   "series": {},
+   "site": "02466030",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "8 gate series, one per leaf",
+   "series": {},
+   "site": "02469761",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "2 gate series, one per leaf",
+   "series": {},
+   "site": "07027003",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "6 gate series, one per leaf",
+   "series": {},
+   "site": "08051100",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "6 gate series, one per leaf",
+   "series": {},
+   "site": "08072500",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "6 gate series, one per leaf",
+   "series": {},
+   "site": "08073000",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  },
+  {
+   "detail": "the four never share a whole calendar year",
+   "series": {},
+   "site": "09428500",
+   "usable": false,
+   "why": "no_whole_year_in_common"
+  },
+  {
+   "detail": "2011-2025",
+   "series": {
+    "discharge": "d3ec91292d17403397678bc7ed056f2d",
+    "gate_opening": "aa7306544e844561ad2ccf2476f7ca58",
+    "headwater": "373d93c6f7d24462aae0c5e9b3056415",
+    "tailwater": "4b3972dec3cc43beb1c05be12b7804f7"
+   },
+   "site": "09522700",
+   "usable": true,
+   "why": "usable"
+  },
+  {
+   "detail": "1 stage series, needs 2",
+   "series": {},
+   "site": "09523200",
+   "usable": false,
+   "why": "stages_not_two"
+  },
+  {
+   "detail": "1 stage series, needs 2",
+   "series": {},
+   "site": "09525000",
+   "usable": false,
+   "why": "stages_not_two"
+  },
+  {
+   "detail": "3 gate series, one per leaf",
+   "series": {},
+   "site": "50093045",
+   "usable": false,
+   "why": "one_opening_per_leaf"
+  }
+ ],
+ "criteria": [
+  "exactly one series with parameter code 45592",
+  "exactly two with 00065, labelled clearly enough to tell the headwater from the tailwater",
+  "at least one with 00060",
+  "the four share at least one whole calendar year of advertised record, 1 January to 31 December"
+ ],
+ "licence": "USGS water data are public domain (U.S. Geological Survey, https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits)",
+ "parameter_code": "45592",
+ "query": "https://api.waterdata.usgs.gov/ogcapi/v0/collections/time-series-metadata/items?parameter_code=45592&limit=10000&f=json",
+ "question": "how many structures in the archive publish the four series this method needs",
+ "refused_because": {
+  "no_discharge_series": 0,
+  "no_gate_series": 0,
+  "no_whole_year_in_common": 1,
+  "one_opening_per_leaf": 20,
+  "stages_not_labelled": 0,
+  "stages_not_two": 2
+ },
+ "registered_as": "requirements/hypotheses.md, H6, before this was run",
+ "retrieved_utc": "2026-09-06T16:51:02+00:00",
+ "stations_with_a_gate": 24,
+ "usable": 1,
+ "usable_sites": [
+  "09522700"
+ ]
+}

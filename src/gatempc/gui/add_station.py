@@ -44,6 +44,10 @@ from .pages import Context
 from .theme import COLORS
 from .workers import FunctionRunner
 
+#: Where a person searches the archive by hand. Opened and read 2026-09-06; the
+#: page titles itself "Explore - USGS Water Data for the Nation".
+EXPLORE = "https://waterdata.usgs.gov/explore/"
+
 ROLE_LABELS = {
     "gate_opening": ("Затвор очилиши", "Gate opening"),
     "headwater": ("Юқори бьеф H₁", "Headwater H₁"),
@@ -80,19 +84,58 @@ class AddStationDialog(QDialog):
         layout = QVBoxLayout(self)
         layout.setSpacing(12)
 
+        # A dialog that opens by demanding a site number assumes the reader has
+        # one. Almost nobody does. The scarce series is the gate opening, so the
+        # button below asks the archive which structures publish one at all —
+        # one request for the whole country — and the reader picks from that
+        # instead of guessing. The links are the human route to the same place.
+        intro = w.paragraph(context.pick(
+            "Сайт рақами қўлингизда бўлмаса, қуйидаги тугма архивдан <b>затвор "
+            "очилишини эълон қиладиган</b> барча станцияларни сўрайди — битта "
+            "сўров. Айнан шу қатор камёб: сатҳ ва сарф минглаб станцияда бор, "
+            "затвор очилиши эса жуда камида. Қўлда қидирмоқчи бўлсангиз, "
+            f"<a href=\"{EXPLORE}\">USGS Water Data — Explore</a> да ҳудуд ва "
+            "маълумот тури бўйича изланг; қидирув калити — параметр коди "
+            "<b>45592, «Gate opening, height»</b>, ва иншоот шу билан бирга "
+            "иккита сатҳ (00065) ва сарф (00060) қаторига эга бўлиши шарт.",
+            "If you do not have a site number to hand, the button below asks the "
+            "archive which structures publish a <b>gate opening</b> at all — one "
+            "request. That is the scarce series: stage and discharge are at "
+            "thousands of stations, a gate opening at very few. To search by hand, "
+            f"use <a href=\"{EXPLORE}\">USGS Water Data — Explore</a> by area and "
+            "type of data; the key to look for is parameter code <b>45592, \"Gate "
+            "opening, height\"</b>, and the structure must carry two stage series "
+            "(00065) and a discharge (00060) alongside it.",
+        ))
+        intro.linkActivated.connect(w.open_url)
+        layout.addWidget(intro)
+
+        self.find_button = QPushButton(
+            context.pick("Затвор очилиши бор станцияларни топиш",
+                         "Find stations with a gate opening")
+        )
+        self.find_button.clicked.connect(self.find_stations)
+        self.candidates = w.combo([])
+        self.candidates.setEnabled(False)
+        self.candidates.currentIndexChanged.connect(self._candidate_chosen)
+        found_row = QHBoxLayout()
+        found_row.setSpacing(8)
+        found_row.addWidget(self.find_button, 0)
+        found_row.addWidget(self.candidates, 1)
+        layout.addLayout(found_row)
+
         layout.addWidget(w.paragraph(context.pick(
-            "USGS сайт рақамини киритинг. Ойна архивдан ўша станциянинг барча "
-            "қаторларини сўрайди — битта сўров, ҳеч нарса юкланмайди — ва "
-            "детекторга керак бўлган тўрттасини таклиф қилади. Таклифни "
-            "<b>сиз тасдиқлайсиз</b>: иккала бьеф сатҳи бир хил параметр коди "
-            "остида берилади ва фақат эркин матнли белги билан ажралади, шунинг "
-            "учун уларни алмаштириб юбориш Δh ишорасини жимгина ағдаради.",
-            "Type a USGS site number. The window asks the archive what series that "
-            "station publishes — one request, nothing downloaded — and proposes the "
-            "four the detector needs. <b>You confirm the proposal</b>: the two "
-            "stages are published under one parameter code and are told apart only "
-            "by a free-text label, so getting them the wrong way round inverts Δh "
-            "and nothing complains.",
+            "Рақамни киритиб «Қидириш» босганда ойна ўша станциянинг барча "
+            "қаторларини сўрайди ва детекторга керак бўлган тўрттасини таклиф "
+            "қилади. Таклифни <b>сиз тасдиқлайсиз</b>: иккала бьеф сатҳи бир хил "
+            "параметр коди остида берилади ва фақат эркин матнли белги билан "
+            "ажралади, шунинг учун уларни алмаштириб юбориш Δh ишорасини жимгина "
+            "ағдаради.",
+            "With a number in the field, “Look up” asks the archive what that "
+            "station publishes and proposes the four series the detector needs. "
+            "<b>You confirm the proposal</b>: the two stages are published under "
+            "one parameter code and are told apart only by a free-text label, so "
+            "getting them the wrong way round inverts Δh and nothing complains.",
         )))
 
         self.site = QLineEdit()
@@ -182,6 +225,64 @@ class AddStationDialog(QDialog):
         # bounds would be recomputed twice for one click.
         for box in self.role_boxes.values():
             box.currentIndexChanged.connect(self._roles_changed)
+
+    # -- finding a candidate -------------------------------------------------------
+
+    def find_stations(self) -> None:
+        context = self.context
+        if self.runner is not None:
+            return
+        self.find_button.setEnabled(False)
+        self._say(context.pick("Архивдан сўралмоқда…", "Asking the archive…"),
+                  COLORS["ink_soft"])
+        runner = FunctionRunner(lab.stations_with_a_gate, context.paths)
+        runner.done.connect(self._candidates_found)
+        runner.failed.connect(self._candidates_failed)
+        self.runner = runner
+        runner.start()
+
+    def _candidates_failed(self, message: str) -> None:
+        self._finish_lookup()
+        self.find_button.setEnabled(True)
+        self._say(message, COLORS["fail"])
+
+    def _candidates_found(self, answer) -> None:
+        context = self.context
+        self._finish_lookup()
+        self.find_button.setEnabled(True)
+        stations, _url, from_cache = answer
+        self.candidates.blockSignals(True)
+        self.candidates.clear()
+        self.candidates.addItem(
+            context.pick(f"— {len(stations)} та станция —",
+                         f"— {len(stations)} stations —"), "")
+        for site in sorted(stations):
+            entry = stations[site]
+            where = ", ".join(sorted(entry["where"]))
+            extent = f"{entry['begin']}–{entry['end']}".strip("–")
+            label = "  ·  ".join(part for part in (site, where, extent) if part)
+            self.candidates.addItem(label, site)
+        self.candidates.setCurrentIndex(0)
+        self.candidates.blockSignals(False)
+        self.candidates.setEnabled(bool(stations))
+        self._say(
+            context.pick(
+                f"{len(stations)} та станцияда затвор очилиши бор"
+                + (" (кэшдан)." if from_cache else ".")
+                + " Биттасини танланг — бу ҳали етарли эмас, «Қидириш» иккита "
+                  "сатҳ ва сарф ҳам борлигини текширади.",
+                f"{len(stations)} stations publish a gate opening"
+                + (" (from the cache)." if from_cache else ".")
+                + " Pick one — that is necessary, not sufficient; “Look up” checks "
+                  "for the two stages and the discharge.",
+            ),
+            COLORS["ink_soft"],
+        )
+
+    def _candidate_chosen(self, *_ignored) -> None:
+        site = str(self.candidates.currentData() or "")
+        if site:
+            self.site.setText(site)
 
     # -- looking up ----------------------------------------------------------------
 

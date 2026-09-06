@@ -88,6 +88,13 @@ class ProjectPaths:
 
 #: Result files the GUI knows about, in the order the pipeline writes them.
 RESULT_FILES: tuple[str, ...] = (
+    # A dated snapshot of somebody else's archive rather than a computation over
+    # the published package: it answers how many structures publish what the
+    # method needs, as of the day it was asked, and a later run may legitimately
+    # answer differently. Every other file here is reproducible offline from
+    # DATA/ and will give the same number in ten years. The file carries its own
+    # query and retrieval date for that reason.
+    "station_survey",
     "archive_diagnostics",
     "gate_law",
     "discharge_coefficient",
@@ -375,6 +382,18 @@ PIPELINE: tuple[Step, ...] = (
         "Verify the data package — SHA-256 of every file",
         ("DATA/USGS_canal_gates_v1/SHA256SUMS",),
         ("--verify",),
+        "< 1",
+    ),
+    Step(
+        "download_usgs.py",
+        "Архив сурати (H6): затвор очилишини эълон қиладиган иншоотлардан "
+        "нечтаси усул талаб қиладиган тўртта қаторни ҳам эълон қилади. "
+        "ТАРМОҚ керак; уланиш бўлмаса эълон қилинган сурат сақлаб қолинади",
+        "A census of the archive (H6): how many structures publishing a gate "
+        "opening also publish the four series the method needs. NEEDS THE "
+        "NETWORK; with none, the published snapshot is kept rather than lost",
+        ("results/station_survey.json",),
+        ("--survey",),
         "< 1",
     ),
     Step(

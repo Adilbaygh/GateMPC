@@ -410,6 +410,29 @@ def lookup_station(paths: gdata.ProjectPaths, site: str):
     return records, proposal, problems, url, from_cache
 
 
+def stations_with_a_gate(paths: gdata.ProjectPaths):
+    """Every structure in the archive that publishes a gate opening series.
+
+    Returns ``({site: {"series", "begin", "end", "where"}}, url, from_cache)``.
+    One request for the whole country, because the gate opening is the scarce
+    series: stage and discharge are at thousands of stations and would answer
+    nothing. This is a list of candidates, not of usable structures — each one
+    still has to carry two stages and a discharge, which :func:`lookup_station`
+    checks a station at a time.
+    """
+    module = downloader(paths)
+    if module is None:
+        raise RuntimeError("scripts/download_usgs.py could not be read")
+    from ..usgs import UsgsClient
+
+    client = UsgsClient(str(paths.root / "DATA" / ".raw_cache"))
+    records, url, from_cache = client.sites_with_parameter(
+        module.ROLE_PCODE["gate_opening"])
+    # The grouping is the script's, not a second copy of it. The window and the
+    # command line print the same list, and a defect in it is one defect.
+    return module.stations_from_series(records), url, from_cache
+
+
 def advertised_years(records: Sequence[dict], chosen: dict[str, str]) -> tuple[int, ...]:
     """The years the four chosen series claim to overlap in.
 

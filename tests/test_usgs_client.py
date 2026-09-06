@@ -415,3 +415,270 @@ def test_an_ambiguous_id_prefix_stops_the_run_too():
             for record in PALO_VERDE]
     message = module.unresolved_series(["09429000"], rows)
     assert "matches" in message and "nothing was written" in message
+
+
+def test_the_national_gate_query_asks_for_a_parameter_and_no_site(tmp_path):
+    """One request answers "which structures have a gate opening at all".
+
+    The query carries a parameter code and deliberately no monitoring location:
+    that is what turns "which structure could I use" from a guess into a list.
+    Stage and discharge must never be asked for this way — they are at thousands
+    of stations and paging through them would spend the hourly quota.
+    """
+    seen: list[str] = []
+    payload = {
+        "type": "FeatureCollection",
+        "features": [
+            {"properties": {"id": "aa", "monitoring_location_id": "USGS-09522700",
+                            "parameter_code": "45592", "begin": "2002-08-01",
+                            "end": "2026-09-05", "sublocation_identifier": "Gate Opening"}},
+            {"properties": {"id": "bb", "monitoring_location_id": "USGS-09428500",
+                            "parameter_code": "45592", "begin": "2026-05-04",
+                            "end": "2026-09-05", "sublocation_identifier": None}},
+        ],
+        "links": [],
+    }
+    c = UsgsClient(cache_dir=str(tmp_path / "cache"), log=lambda _m: None)
+
+    def get(url, timeout=None):
+        seen.append(url)
+        return StubResponse(200, json_body=payload)
+
+    c.session.get = get  # type: ignore[assignment]
+    records, url, from_cache = c.sites_with_parameter("45592")
+    assert not from_cache
+    assert "parameter_code=45592" in url
+    assert "monitoring_location_id" not in url
+    assert len(seen) == 1
+    sites = {r["monitoring_location_id"] for r in records}
+    assert sites == {"USGS-09522700", "USGS-09428500"}
+    # Cached under the parameter, so a second call spends nothing.
+    again, _url, cached = c.sites_with_parameter("45592")
+    assert cached and len(seen) == 1
+    assert [r["id"] for r in again] == ["bb", "aa"], "sorted by station, then series"
+
+
+def test_the_candidate_list_groups_series_by_station_and_prints():
+    """The grouping is exercised without a network, because the first one was not.
+
+    ``find_stations`` was written and shipped without ever being run: the query
+    needs the live archive. Its one loop carried ``sorted({...}) - {""}`` — a set
+    difference applied to a list — and the first real query crashed on it after
+    printing the header. The grouping is now a pure function, and this is the
+    test that would have caught it.
+    """
+    module = downloader()
+    records = [
+        {"id": "a", "monitoring_location_id": "USGS-09522700",
+         "sublocation_identifier": "Gate Opening",
+         "begin": "2002-08-01T07:15:00", "end": "2026-09-05T06:30:00"},
+        {"id": "b", "monitoring_location_id": "USGS-09522700",
+         "sublocation_identifier": None,
+         "begin": "2010-01-01T00:00:00", "end": "2026-09-06T00:00:00"},
+        {"id": "c", "monitoring_location_id": "USGS-09428500",
+         "sublocation_identifier": "",
+         "begin": "2026-05-04T00:00:00", "end": "2026-09-05T08:00:00"},
+        {"id": "d", "monitoring_location_id": ""},
+    ]
+    stations = module.stations_from_series(records)
+    assert set(stations) == {"09522700", "09428500"}, "a blank location is dropped"
+    first = stations["09522700"]
+    assert first["series"] == 2
+    assert first["begin"] == "2002-08-01" and first["end"] == "2026-09-06"
+    assert first["where"] == ["Gate Opening"], "a blank label is not a label"
+    assert stations["09428500"]["where"] == []
+    # The formatting the command line does, run here rather than only in anger.
+    for site, entry in sorted(stations.items()):
+        line = (f"{site:12}  {entry['series']:<6}  {', '.join(entry['where'])[:24]:24}  "
+                f"{entry['begin']:10}  {entry['end']:10}")
+        assert site in line and str(entry["series"]) in line
+
+
+def test_a_multi_leaf_structure_is_refused_rather_than_offered_one_of_its_gates():
+    """Fourteen gate series and one discharge is a different object, not a choice.
+
+    The national query found stations reporting Gate 1 ... Gate 14 separately
+    while publishing a single discharge for the whole structure. Pairing that
+    discharge with one leaf's opening is not the relation this detector tests:
+    the effective width is wrong and so is everything computed from it. The
+    published primary site sidesteps it by reporting the average over its two
+    leaves as one series, which the manuscript records as a limitation.
+
+    So the proposer must not offer a gate here even if one of them happens to
+    carry Primary, which the single-candidate helper would otherwise do.
+    """
+    module = downloader()
+    records = [{"id": f"g{n}", "parameter_code": "45592",
+                "sublocation_identifier": f"Gate {n}",
+                "primary": "Primary" if n == 1 else ""} for n in range(1, 15)]
+    records += [
+        {"id": "q", "parameter_code": "00060", "primary": "Primary"},
+        {"id": "h1", "parameter_code": "00065",
+         "sublocation_identifier": "H1 (Headwater)"},
+        {"id": "h2", "parameter_code": "00065",
+         "sublocation_identifier": "H2 (Tailwater)"},
+    ]
+    proposal, problems = module.propose_roles(records)
+    assert "gate_opening" not in proposal, "a single leaf must never be proposed"
+    assert any("one per leaf" in p and "structure as a whole" in p for p in problems)
+    # The rest still resolves, so the reader is told exactly what is wrong.
+    assert proposal["headwater"] == "h1" and proposal["tailwater"] == "h2"
+
+
+def test_a_station_metadata_page_is_followed_to_its_end(tmp_path):
+    """A truncated metadata reply looks exactly like a station missing a series.
+
+    ``time_series_metadata`` asks for 100 series and every station seen so far
+    has far fewer, but "so far" is not a guarantee. Stopping at the first page
+    would make the window report "1 stage series; the detector needs two" about
+    a station that publishes three — a wrong verdict, delivered confidently.
+    """
+    first = {
+        "type": "FeatureCollection",
+        "features": [{"properties": {"id": "a", "parameter_code": "00060"}}],
+        "links": [{"rel": "next", "href": "https://example.invalid/page2"}],
+    }
+    second = {
+        "type": "FeatureCollection",
+        "features": [{"properties": {"id": "b", "parameter_code": "00065"}}],
+        "links": [],
+    }
+    c = client(tmp_path, [StubResponse(200, json_body=first),
+                          StubResponse(200, json_body=second)])
+    records, _url, from_cache = c.time_series_metadata("09523200")
+    assert [r["id"] for r in records] == ["a", "b"], "the second page was dropped"
+    assert not from_cache
+
+
+# ------------------------------------------------------- H6, the station survey
+#
+# The criteria are the ones registered in requirements/hypotheses.md before the
+# survey was run. These tests pin them to the three real shapes already seen, so
+# that a later edit cannot quietly loosen a criterion to make the count nicer.
+
+WELLTON_MOHAWK_DATED = [
+    {"id": "aa73", "parameter_code": "45592", "sublocation_identifier": "Gate Opening",
+     "begin": "2002-08-01T07:15:00", "end": "2026-09-05T06:30:00"},
+    {"id": "373d", "parameter_code": "00065",
+     "sublocation_identifier": "H1 (Headwater)",
+     "begin": "2007-10-01T07:00:00", "end": "2026-09-05T05:15:00"},
+    {"id": "4b39", "parameter_code": "00065",
+     "sublocation_identifier": "H2 (Tailwater)",
+     "begin": "2007-10-01T07:00:00", "end": "2026-09-05T05:30:00"},
+    {"id": "d3ec", "parameter_code": "00060", "sublocation_identifier": None,
+     "begin": "2010-10-01T07:00:00", "end": "2026-09-05T05:15:00"},
+]
+
+# USGS 09525000, read 2026-09-06: gate, discharge, and only ONE stage.
+IMPERIAL = [
+    {"id": "0a53", "parameter_code": "45592", "sublocation_identifier": "Gate Opening",
+     "begin": "2011-03-30T00:00:00", "end": "2026-09-06T00:00:00"},
+    {"id": "34cf", "parameter_code": "00065",
+     "sublocation_identifier": "H1 (Headwater)",
+     "begin": "2011-03-30T00:00:00", "end": "2026-09-06T00:00:00"},
+    {"id": "4155", "parameter_code": "00060", "sublocation_identifier": None,
+     "begin": "2017-04-11T00:00:00", "end": "2026-09-06T00:00:00"},
+    {"id": "f4bf", "parameter_code": "00060", "sublocation_identifier": None,
+     "begin": "1930-10-01T00:00:00", "end": "2026-09-05T00:00:00"},
+]
+
+
+def test_a_full_calendar_year_means_january_to_december():
+    module = downloader()
+    whole = [{"begin": "2011-01-01T00:00:00", "end": "2013-12-31T23:59:59"}]
+    assert module.full_calendar_years(whole) == (2011, 2012, 2013)
+    # Mid-year edges lose the partial years at both ends.
+    partial = [{"begin": "2011-03-30T00:00:00", "end": "2013-09-06T00:00:00"}]
+    assert module.full_calendar_years(partial) == (2012,)
+    # No dates at all is not an overlap of unknown length; it is no answer.
+    assert module.full_calendar_years([{"begin": "", "end": ""}]) == ()
+
+
+def test_the_primary_structure_meets_the_methods_requirements():
+    module = downloader()
+    ok, category, detail, chosen = module.meets_the_method(WELLTON_MOHAWK_DATED)
+    assert ok, detail
+    assert category == "usable"
+    assert set(chosen) == set(module.ROLE_ORDER)
+    assert chosen["headwater"] == "373d" and chosen["tailwater"] == "4b39"
+    assert detail == "2011-2025", "advertised extents, which overstate; H6 says so"
+
+
+def test_a_station_with_one_stage_series_fails_the_survey():
+    """09525000 has a gate and a discharge and only a headwater. No head difference."""
+    module = downloader()
+    ok, category, detail, chosen = module.meets_the_method(IMPERIAL)
+    assert not ok and chosen == {}
+    assert category == "stages_not_two"
+    assert "1 stage series" in detail
+
+
+def test_a_multi_leaf_station_fails_the_survey_on_its_gates():
+    module = downloader()
+    records = [{"id": f"g{n}", "parameter_code": "45592",
+                "sublocation_identifier": f"Gate {n}"} for n in range(1, 15)]
+    ok, category, detail, _chosen = module.meets_the_method(records)
+    assert not ok and "one per leaf" in detail
+    assert category == "one_opening_per_leaf"
+
+
+def test_an_ambiguous_discharge_does_not_disqualify_a_station():
+    """H6 registered "at least one 00060": choosing among them is the reader's job.
+
+    Both candidates checked by hand carry two discharge series, both marked
+    Primary. Treating that as a defect would answer a different question from the
+    one registered, and would have changed the count.
+    """
+    module = downloader()
+    records = list(WELLTON_MOHAWK_DATED) + [
+        {"id": "extra", "parameter_code": "00060", "sublocation_identifier": None,
+         "begin": "1950-10-01T00:00:00", "end": "2026-09-05T00:00:00"},
+    ]
+    ok, _category, detail, chosen = module.meets_the_method(records)
+    assert ok, detail
+    assert chosen["discharge"] == "extra", "the longest overlap is the one tested"
+    assert detail == "2008-2025"
+
+
+def test_every_refusal_the_survey_can_report_has_a_stable_key():
+    """The counts in results/station_survey.json are grouped by these keys.
+
+    The manuscript cites them, so a reworded message must not be able to rename
+    a published key. The first version derived the keys by splitting the prose,
+    which would have done exactly that.
+    """
+    module = downloader()
+    shapes = {
+        "no_gate_series": [{"id": "q", "parameter_code": "00060"}],
+        "one_opening_per_leaf": [
+            {"id": "g1", "parameter_code": "45592"},
+            {"id": "g2", "parameter_code": "45592"}],
+        "stages_not_two": [
+            {"id": "g", "parameter_code": "45592"},
+            {"id": "h", "parameter_code": "00065",
+             "sublocation_identifier": "H1 (Headwater)"}],
+        "stages_not_labelled": [
+            {"id": "g", "parameter_code": "45592"},
+            {"id": "a", "parameter_code": "00065", "sublocation_identifier": "A"},
+            {"id": "b", "parameter_code": "00065", "sublocation_identifier": "B"}],
+        "no_discharge_series": [
+            {"id": "g", "parameter_code": "45592"},
+            {"id": "h1", "parameter_code": "00065",
+             "sublocation_identifier": "H1 (Headwater)"},
+            {"id": "h2", "parameter_code": "00065",
+             "sublocation_identifier": "H2 (Tailwater)"}],
+        "no_whole_year_in_common": IMPERIAL[:1] + [
+            {"id": "h1", "parameter_code": "00065",
+             "sublocation_identifier": "H1 (Headwater)",
+             "begin": "2026-05-04T00:00:00", "end": "2026-09-06T00:00:00"},
+            {"id": "h2", "parameter_code": "00065",
+             "sublocation_identifier": "H2 (Tailwater)",
+             "begin": "2026-05-04T00:00:00", "end": "2026-09-06T00:00:00"},
+            {"id": "q", "parameter_code": "00060",
+             "begin": "2026-05-04T00:00:00", "end": "2026-09-06T00:00:00"}],
+    }
+    assert set(shapes) == set(module.REFUSALS), "a refusal with no shape to prove it"
+    for expected, records in shapes.items():
+        ok, category, detail, _chosen = module.meets_the_method(records)
+        assert not ok, (expected, detail)
+        assert category == expected, (expected, category, detail)

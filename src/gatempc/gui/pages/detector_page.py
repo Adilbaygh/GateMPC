@@ -179,6 +179,20 @@ class DetectorPanel(QWidget):
                           f"<a href=\"{page}\">{example}</a>.")
             example_en = (f" To see a station's own page, open "
                           f"<a href=\"{page}\">{example}</a>.")
+        # How scarce a usable structure actually is, from the survey rather than
+        # from an adjective. The same two numbers are what the manuscript's
+        # limitation paragraph reports, read from the same file, so the window and
+        # the paper cannot come to differ about it.
+        counted = context.results.value("station_survey:stations_with_a_gate")
+        passed = context.results.value("station_survey:usable")
+        scarcity_uz = scarcity_en = ""
+        if counted.ok and passed.ok:
+            scarcity_uz = (f" Архивда затвор очилишини эълон қиладиган "
+                           f"{counted.value} та иншоотдан фақат {passed.value} "
+                           f"таси тўртала қаторни ҳам эълон қилади.")
+            scarcity_en = (f" Of the {counted.value} structures in the archive "
+                           f"that publish a gate opening, only {passed.value} "
+                           f"publish all four series.")
         self.site_help = w.paragraph(
             context.pick(
                 "Бу рақамлар — USGS станцияларининг рақамлари; станцияни "
@@ -186,7 +200,8 @@ class DetectorPanel(QWidget):
                 "ҳудуд ва маълумот тури бўйича қидириб топасиз. Детектор учун "
                 "станция тўртта узлуксиз қаторни эълон қилиши шарт: затвор очилиши, "
                 "юқори бьеф сатҳи, қуйи бьеф сатҳи ва сарф. Камёби — затвор "
-                "очилиши: аксарият станцияларда бундай қатор йўқ." + example_uz
+                "очилиши: аксарият станцияларда бундай қатор йўқ."
+                + scarcity_uz + example_uz
                 + " <b>Ўз иншоотингизни текшириш учун «Ўз файлимдан» режимига "
                   "ўтинг.</b>",
                 "These are USGS station numbers; you can search for a station on "
@@ -194,7 +209,7 @@ class DetectorPanel(QWidget):
                 "and by type of data. A station is usable here only if it publishes "
                 "four continuous series: the gate opening, the headwater stage, the "
                 "tailwater stage and the discharge. The gate opening is the rare one; "
-                "most stations do not have it." + example_en
+                "most stations do not have it." + scarcity_en + example_en
                 + " <b>To check a structure of your own, switch to “From my own "
                   "file”.</b>",
             )

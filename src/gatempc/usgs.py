@@ -207,6 +207,12 @@ class UsgsClient:
         That field is what distinguishes the two ``00065`` stage series as
         H1 (Headwater) and H2 (Tailwater); guessing from the values would be an
         assumption, and this makes it a measurement.
+
+        Paging is followed. ``limit=100`` covers every station seen so far by a
+        wide margin, but a request that returned exactly the limit and a ``next``
+        link would otherwise be truncated in silence — and a station whose
+        metadata is cut short looks like a station missing a series, which is a
+        verdict this window hands the reader.
         """
         name = f"{site}_tsmeta"
         params = {"monitoring_location_id": f"USGS-{site}", "limit": 100, "f": "json"}
@@ -214,12 +220,51 @@ class UsgsClient:
         cached = self._read_cache(name)
         if cached is not None:
             return cached, url, True
-        payload = self._get(url)
-        records = [f["properties"] for f in payload["features"]]
+        records: list[dict[str, Any]] = []
+        next_url: str | None = url
+        while next_url:
+            payload = self._get(next_url)
+            records.extend(f["properties"] for f in payload["features"])
+            following = [link["href"] for link in payload.get("links", [])
+                         if link.get("rel") == "next"]
+            next_url = following[0] if following else None
         records.sort(key=lambda r: (r.get("parameter_code", ""), r.get("id", "")))
         self._write_cache(name, records, url)
         return records, url, False
 
+
+    def sites_with_parameter(self, parameter_code: str, limit: int = 10000
+                             ) -> tuple[list[dict[str, Any]], str, bool]:
+        """Every time series in the archive carrying one parameter code.
+
+        The metadata collection accepts ``parameter_code`` with no monitoring
+        location, so one request answers a question that would otherwise need a
+        request per site: which structures publish a gate opening at all. That is
+        the scarce series — discharge and stage are everywhere — so this narrows
+        the whole country to a list a person can work through, and each candidate
+        is then checked properly with :meth:`time_series_metadata`.
+
+        Do not call this with 00060 or 00065. Those return a substantial part of
+        the national network and would spend the hourly quota paging through it.
+        """
+        name = f"parameter_{parameter_code}"
+        params = {"parameter_code": parameter_code, "limit": limit, "f": "json"}
+        url = TS_METADATA + "?" + urlencode(params)
+        cached = self._read_cache(name)
+        if cached is not None:
+            return cached, url, True
+        records: list[dict[str, Any]] = []
+        next_url: str | None = url
+        while next_url:
+            payload = self._get(next_url)
+            records.extend(f["properties"] for f in payload["features"])
+            following = [link["href"] for link in payload.get("links", [])
+                         if link.get("rel") == "next"]
+            next_url = following[0] if following else None
+        records.sort(key=lambda r: (str(r.get("monitoring_location_id") or ""),
+                                    str(r.get("id") or "")))
+        self._write_cache(name, records, url)
+        return records, url, False
 
     def field_measurements(self, site: str) -> tuple[list[dict[str, Any]], str, bool]:
         """Discrete field discharge measurements -- the INDEPENDENT observations.

@@ -267,12 +267,23 @@ def propose_roles(records: list[dict]) -> tuple[dict[str, str], list[str]]:
     if not gates:
         problems.append("no gate opening series (parameter code 45592): this site "
                         "cannot be used by the detector at all")
+    elif len(gates) > 1:
+        # Not a choice to hand to the reader. A station reporting Gate 1..Gate 14
+        # publishes one opening per leaf and ONE discharge for the whole
+        # structure, so pairing that discharge with a single leaf's opening is
+        # not the relation this detector tests -- it is a different structure
+        # with a different area. The published primary site avoids this by
+        # reporting the average over its two leaves as one series, which the
+        # manuscript states as a limitation rather than a convenience.
+        labels = ", ".join(sorted(str(record.get("sublocation_identifier") or "?")
+                                  for record in gates)[:6])
+        problems.append(
+            f"{len(gates)} gate opening series, one per leaf ({labels}...): the "
+            f"discharge is published for the structure as a whole, so no single "
+            f"leaf's opening pairs with it. This detector needs a structure whose "
+            f"opening is published as one series")
     else:
-        chosen, problem = one_of(gates, "gate opening series")
-        if chosen:
-            proposal["gate_opening"] = chosen
-        if problem:
-            problems.append(problem)
+        proposal["gate_opening"] = identifier(gates[0])
 
     flows = by_code.get("00060", [])
     if not flows:
@@ -334,6 +345,262 @@ def unresolved_series(sites: list[str], meta_rows: list[list[str]]) -> str:
             return (f"{site}: " + "; ".join(crowded)
                     + ". Give more characters of the id; nothing was written.")
     return ""
+
+
+def stations_from_series(records: list[dict]) -> dict[str, dict]:
+    """Group time-series records by the station that publishes them.
+
+    Returns ``{site: {"series": int, "begin": str, "end": str, "where": [str]}}``
+    with the site number stripped of its agency prefix. Pure, so both the command
+    line and the window can format the same grouping instead of each writing its
+    own — the first version had two, and the printed one carried a bracket error
+    that only a live query could reach.
+    """
+    stations: dict[str, dict] = {}
+    for record in records:
+        site = str(record.get("monitoring_location_id") or "").replace("USGS-", "")
+        if not site:
+            continue
+        entry = stations.setdefault(
+            site, {"series": 0, "begin": "", "end": "", "where": set()})
+        entry["series"] += 1
+        begin = str(record.get("begin") or "")[:10]
+        end = str(record.get("end") or "")[:10]
+        if begin and (not entry["begin"] or begin < entry["begin"]):
+            entry["begin"] = begin
+        if end > entry["end"]:
+            entry["end"] = end
+        label = str(record.get("sublocation_identifier") or "")
+        if label:
+            entry["where"].add(label)
+    for entry in stations.values():
+        entry["where"] = sorted(entry["where"])
+    return stations
+
+
+def full_calendar_years(records: list[dict]) -> tuple[int, ...]:
+    """Calendar years every one of these series covers from 1 January to 31 December.
+
+    A series beginning on 2011-03-30 does not cover 2011, and one ending on
+    2026-09-06 does not cover 2026: a partial year is not a year of overlap. The
+    dates are the archive's advertised extent, which overstates — the primary
+    site's gate series advertises 2007 while stage is absent until 2017 — so this
+    is an upper bound, and H6 registered it as one.
+    """
+    starts: list[int] = []
+    stops: list[int] = []
+    for record in records:
+        begin = str(record.get("begin") or "")[:10]
+        end = str(record.get("end") or "")[:10]
+        if len(begin) < 10 or len(end) < 10:
+            return ()
+        starts.append(int(begin[:4]) + (0 if begin[5:] == "01-01" else 1))
+        stops.append(int(end[:4]) - (0 if end[5:] == "12-31" else 1))
+    if not starts or max(starts) > min(stops):
+        return ()
+    return tuple(range(max(starts), min(stops) + 1))
+
+
+#: The reasons a station can fail, as stable keys. The counts in
+#: ``results/station_survey.json`` are grouped by these and the manuscript cites
+#: them, so they are part of a published file's contract: rewording a message
+#: below must never silently rename a key the paper refers to. That is why the
+#: category is returned alongside the prose instead of being parsed back out of it.
+REFUSALS = (
+    "no_gate_series",
+    "one_opening_per_leaf",
+    "stages_not_two",
+    "stages_not_labelled",
+    "no_discharge_series",
+    "no_whole_year_in_common",
+)
+
+
+def meets_the_method(records: list[dict]) -> tuple[bool, str, str, dict[str, str]]:
+    """Does this station publish what the detector needs? The H6 criteria, literally.
+
+    Written to match ``requirements/hypotheses.md`` H6, which was registered
+    before this ran, and deliberately not adjusted to what the archive turned out
+    to hold. Two of them are worth restating because they are where stations fail:
+
+    * exactly ONE gate series. Several means one opening per leaf against a single
+      discharge for the whole structure, which is a different object.
+    * exactly TWO stage series, labelled clearly enough to tell head from tail.
+      Guessing would invert the head difference in silence.
+
+    Discharge is registered as "at least one", so an ambiguous choice does not
+    disqualify a station: the question is whether a usable combination exists, and
+    the reader picks. The discharge giving the longest overlap is the one tested.
+    """
+    by_code: dict[str, list[dict]] = {}
+    for record in records:
+        by_code.setdefault(str(record.get("parameter_code") or ""), []).append(record)
+
+    gates = by_code.get("45592", [])
+    if not gates:
+        return False, "no_gate_series", "no gate series", {}
+    if len(gates) > 1:
+        return False, "one_opening_per_leaf", f"{len(gates)} gate series, one per leaf", {}
+    stages = by_code.get("00065", [])
+    if len(stages) != 2:
+        return False, "stages_not_two", f"{len(stages)} stage series, needs 2", {}
+    labelled: dict[str, dict] = {}
+    for role, words in STAGE_WORDS.items():
+        hits = [record for record in stages
+                if any(word in str(record.get("sublocation_identifier") or "").lower()
+                       for word in words)]
+        if len(hits) == 1:
+            labelled[role] = hits[0]
+    if set(labelled) != {"headwater", "tailwater"}:
+        return False, "stages_not_labelled", "stages not labelled head/tail", {}
+    if labelled["headwater"] is labelled["tailwater"]:
+        return False, "stages_not_labelled", "one stage matched both sides", {}
+    flows = by_code.get("00060", [])
+    if not flows:
+        return False, "no_discharge_series", "no discharge series", {}
+
+    base = [gates[0], labelled["headwater"], labelled["tailwater"]]
+    best: tuple[dict, tuple[int, ...]] | None = None
+    for flow in flows:
+        years = full_calendar_years(base + [flow])
+        if years and (best is None or len(years) > len(best[1])):
+            best = (flow, years)
+    if best is None:
+        return False, "no_whole_year_in_common", \
+            "the four never share a whole calendar year", {}
+    flow, years = best
+    chosen = {
+        "gate_opening": str(gates[0].get("id") or ""),
+        "headwater": str(labelled["headwater"].get("id") or ""),
+        "tailwater": str(labelled["tailwater"].get("id") or ""),
+        "discharge": str(flow.get("id") or ""),
+    }
+    return True, "usable", f"{years[0]}-{years[-1]}", chosen
+
+
+SURVEY_OUT = os.path.join(ROOT, "results", "station_survey.json")
+
+
+def survey(client: UsgsClient, out: str = SURVEY_OUT) -> int:
+    """H6: how many gate-opening stations carry everything the method needs.
+
+    One metadata request per station, all of them cached, so a second run costs
+    nothing. Metadata only: no observations are downloaded.
+
+    The result is a **dated snapshot of somebody else's archive**, not a
+    computation over the published package, and the two must not be confused.
+    Every other result file in this repository is reproducible offline from
+    ``DATA/`` and will give the same number in ten years; this one answers a
+    question about the archive as it stood on the day it was asked, and a later
+    run may legitimately answer differently. So the file records its query and
+    its retrieval date, the manuscript reports the number as of that date, and a
+    reader with no network keeps the published snapshot rather than losing it:
+    the run says why it could not refresh and leaves the file alone.
+    """
+    try:
+        records, url, from_cache = client.sites_with_parameter(
+            ROLE_PCODE["gate_opening"])
+    except (FetchFailed, QuotaExhausted) as error:
+        if os.path.exists(out):
+            print(f"could not reach the archive: {error}")
+            print(f"keeping the published snapshot at {out}; it is dated, and a "
+                  f"reader offline should not lose it")
+            return 0
+        return _fail(f"could not reach the archive and there is no snapshot to "
+                     f"keep: {error}", quota=isinstance(error, QuotaExhausted))
+    stations = stations_from_series(records)
+    print(f"# H6 — {len(stations)} stations publish a gate opening series"
+          + ("  [list from cache]" if from_cache else ""))
+    print(f"# {url}")
+    print("# criteria registered in requirements/hypotheses.md before this ran")
+    print(f"\n{'site':12}  {'verdict':8}  reason, or the years the four share")
+    usable: list[str] = []
+    by_site: list[dict[str, object]] = []
+    refused: dict[str, int] = {key: 0 for key in REFUSALS}
+    unreachable = 0
+    for site in sorted(stations):
+        try:
+            found, _url, _cached = client.time_series_metadata(site)
+        except (FetchFailed, QuotaExhausted) as error:
+            print(f"{site:12}  {'?':8}  {type(error).__name__}: {error}")
+            by_site.append({"site": site, "usable": None,
+                            "reason": f"{type(error).__name__}: {error}"})
+            unreachable += 1
+            continue
+        ok, category, detail, chosen = meets_the_method(found)
+        print(f"{site:12}  {'USABLE' if ok else 'no':8}  {detail}")
+        by_site.append({"site": site, "usable": ok, "why": category,
+                        "detail": detail, "series": chosen})
+        if ok:
+            usable.append(site)
+        else:
+            refused[category] = refused.get(category, 0) + 1
+    print(f"\n# {len(usable)} of {len(stations)} stations publish all four series "
+          f"with at least one full calendar year in common")
+    if usable:
+        print("#   " + ", ".join(usable))
+    print(f"# {client.requests_made} HTTP requests this run")
+
+    if unreachable:
+        # A partial survey is a different number from a complete one, and the two
+        # must never be printed the same way. Nothing is written.
+        return _fail(f"{unreachable} of {len(stations)} stations could not be "
+                     f"read; a partial count is not the measurement and was not "
+                     f"written")
+
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    dump_json({
+        "question": "how many structures in the archive publish the four series "
+                    "this method needs",
+        "registered_as": "requirements/hypotheses.md, H6, before this was run",
+        "retrieved_utc": dt.datetime.now(dt.timezone.utc).replace(
+            microsecond=0).isoformat(),
+        "query": url,
+        "parameter_code": ROLE_PCODE["gate_opening"],
+        "licence": LICENCE,
+        "criteria": [
+            "exactly one series with parameter code 45592",
+            "exactly two with 00065, labelled clearly enough to tell the "
+            "headwater from the tailwater",
+            "at least one with 00060",
+            "the four share at least one whole calendar year of advertised "
+            "record, 1 January to 31 December",
+        ],
+        "stations_with_a_gate": len(stations),
+        "usable": len(usable),
+        "usable_sites": sorted(usable),
+        "refused_because": refused,
+        "by_site": by_site,
+    }, out)
+    print(f"written to {out}")
+    return 0
+
+
+def find_stations(client: UsgsClient) -> int:
+    """Every station in the archive that publishes a gate opening series.
+
+    One request. The gate opening is the scarce one — discharge and stage are at
+    thousands of stations, a gate opening at very few — so asking the metadata
+    collection for parameter code 45592 with no site attached turns "which
+    structure could I use" from a guess into a list. It is a list of candidates
+    and nothing more: a station here still has to carry two stages and a
+    discharge, which ``--list-series`` checks one station at a time.
+    """
+    records, url, from_cache = client.sites_with_parameter(ROLE_PCODE["gate_opening"])
+    stations = stations_from_series(records)
+    print(f"# {len(stations)} stations publish a gate opening series "
+          f"(parameter code {ROLE_PCODE['gate_opening']})"
+          + ("  [from cache]" if from_cache else ""))
+    print(f"# {url}")
+    print(f"\n{'site':12}  {'series':6}  {'sublocation':24}  {'begin':10}  {'end':10}")
+    for site in sorted(stations):
+        entry = stations[site]
+        where = ", ".join(entry["where"])
+        print(f"{site:12}  {entry['series']:<6}  {where[:24]:24}  "
+              f"{entry['begin']:10}  {entry['end']:10}")
+    print("\n# a gate opening is necessary, not sufficient: check a candidate with")
+    print("#   python scripts/download_usgs.py --list-series --sites <site>")
+    return 0
 
 
 def list_series(client: UsgsClient, sites: list[str]) -> int:
@@ -735,6 +1002,11 @@ def main() -> int:
                     help="recompute checksums and compare with SHA256SUMS")
     ap.add_argument("--list-series", action="store_true",
                     help="print the time series each --sites publishes, and stop")
+    ap.add_argument("--find-stations", action="store_true",
+                    help="list every station that publishes a gate opening, and stop")
+    ap.add_argument("--survey", action="store_true",
+                    help="H6: check every gate-opening station against the "
+                         "method's requirements, and stop")
     ap.add_argument("--series", default="",
                     help="role=time_series_id for a site the registry does not "
                          "hold, comma separated; all four roles are required")
@@ -746,7 +1018,11 @@ def main() -> int:
 
     sites = [s.strip() for s in args.sites.split(",") if s.strip()]
 
-    # Looking is not fetching: this works for any site number and writes nothing.
+    # Looking is not fetching: these work for any site number and write nothing.
+    if args.survey:
+        return survey(UsgsClient(args.cache_dir))
+    if args.find_stations:
+        return find_stations(UsgsClient(args.cache_dir))
     if args.list_series:
         return list_series(UsgsClient(args.cache_dir), sites)
 
