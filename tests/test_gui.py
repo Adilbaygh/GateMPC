@@ -9,6 +9,7 @@ and nobody would notice until a reviewer did.
 
 from __future__ import annotations
 
+import ast
 import re
 from pathlib import Path
 
@@ -232,6 +233,33 @@ def test_the_qt_free_layer_imports_without_pyqt():
     assert not QT_IMPORT.search(RESULTS_READER.read_text(encoding="utf-8")), (
         "gatempc/results.py imports Qt at module level"
     )
+
+
+def test_every_folder_the_file_menu_opens_says_what_is_in_it():
+    """A menu item named after a folder tells the reader nothing they can act on.
+
+    Three of them tell a reader less than one would, because the question stops
+    being what the item does and becomes which of the three to pick. Every action
+    that opens a folder therefore carries a tip, and the tip is bilingual like
+    every other string in the window.
+    """
+    tree = ast.parse((GUI / "window.py").read_text(encoding="utf-8"))
+    opens = [
+        node for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "_act"
+        and "open_in_file_manager" in ast.unparse(node)
+    ]
+    assert len(opens) == 3, f"expected three folder actions, found {len(opens)}"
+    for call in opens:
+        label = ast.literal_eval(call.args[0])
+        tip = next((word.value for word in call.keywords if word.arg == "tip"), None)
+        assert tip is not None, f"{label!r} opens a folder without saying what is in it"
+        assert isinstance(tip, ast.Tuple) and len(tip.elts) == 2, label
+        uzbek, english = (ast.literal_eval(part) for part in tip.elts)
+        assert uzbek.strip() and english.strip(), label
+        assert uzbek != english, label
 
 
 # ------------------------------------------------------------------------- i18n

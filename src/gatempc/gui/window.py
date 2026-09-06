@@ -151,7 +151,12 @@ class MainWindow(QMainWindow):
         if shortcut:
             action.setShortcut(QKeySequence(shortcut))
         if tip:
-            action.setStatusTip(self.pick(*tip))
+            # Both, because the two are read in different places: the status tip in
+            # the bar at the foot of the window, the tool tip under the cursor. A
+            # menu shows the second only when the menu is asked to.
+            text = self.pick(*tip)
+            action.setStatusTip(text)
+            action.setToolTip(text)
             action.setData((uzbek, english, *tip))
         action.triggered.connect(slot)
         return action
@@ -163,15 +168,48 @@ class MainWindow(QMainWindow):
         self._actions: list[QAction] = []
 
         # -- File
+        #
+        # Three folders, and their names alone do not tell a reader which one holds
+        # the answer to the question being asked. Each item therefore says what is
+        # inside, and the tip separates the two that are easy to confuse: results/
+        # is what the published scripts wrote, build/lab/ is what this window
+        # computed for the reader, and the second sits outside the public
+        # repository precisely so that it can never be taken for the first.
         file_menu = bar.addMenu(self.pick("&Файл", "&File"))
+        file_menu.setToolTipsVisible(True)
         self._menus.append((file_menu, ("&Файл", "&File")))
         for action in (
-            self._act("Лойиҳа папкасини очиш", "Open the project folder",
-                      lambda: w.open_in_file_manager(self.paths.root)),
-            self._act("results папкасини очиш", "Open the results folder",
-                      lambda: w.open_in_file_manager(self.paths.results)),
-            self._act("build/lab папкасини очиш", "Open the build/lab folder",
-                      lambda: w.open_in_file_manager(lab.lab_directory(self.paths))),
+            self._act(
+                "Лойиҳа папкаси — код, маълумот пакети ва мақола",
+                "Project folder — the code, the data package and the manuscript",
+                lambda: w.open_in_file_manager(self.paths.root),
+                tip=("Лойиҳанинг илдиз папкаси: scripts/, results/, DATA/, tests/ "
+                     "ва paper/ шу ерда.",
+                     "The project root: scripts/, results/, DATA/, tests/ and "
+                     "paper/ all live here."),
+            ),
+            self._act(
+                "results/ — мақоладаги сонлар, расмлар ва жадваллар",
+                "results/ — the numbers, figures and tables the paper prints",
+                lambda: w.open_in_file_manager(self.paths.results),
+                tip=("Скриптлар ёзган эълон қилинган натижалар. Мақоладаги ҳар бир "
+                     "сон шу ердан ўқилади, ва формадан чиққан ҳеч нарса бу ерга "
+                     "ёзилмайди.",
+                     "The published results the scripts wrote. Every number in the "
+                     "paper is read from here, and nothing produced from a form is "
+                     "written into it."),
+            ),
+            self._act(
+                "build/lab/ — шу ойнада ўзингиз ҳисоблаганлар",
+                "build/lab/ — what you compute in this window",
+                lambda: w.open_in_file_manager(lab.lab_directory(self.paths)),
+                tip=("ЛАБОРАТОРИЯ саҳифаларидан (7–9) бошланган юришлар шу ерга "
+                     "ёзилади. build/ оммавий репозиторийга кирмайди, шунинг учун "
+                     "сизнинг юришингиз эълон қилинган натижа билан аралашмайди.",
+                     "Runs started from the laboratory pages (7–9) are written "
+                     "here. build/ is not part of the public repository, so your "
+                     "own run can never be mistaken for a published result."),
+            ),
         ):
             file_menu.addAction(action)
             self._actions.append(action)
