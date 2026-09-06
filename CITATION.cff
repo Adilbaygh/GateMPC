@@ -4,8 +4,9 @@
 # kept. Citing this work is therefore a request, not a requirement. This file is here so
 # that the request is easy to honour.
 #
-# TWO THINGS ARE STILL OPEN, and are deliberately absent rather than guessed:
-#   * one further author, whose details are not yet settled;
+# The author list was completed on 2026-09-06 and now matches the manuscript, in the same
+# order. TWO THINGS ARE STILL OPEN, and are deliberately absent rather than guessed:
+#   * one ORCID, for E. Urazimbetova, which has not been supplied;
 #   * `preferred-citation`, which is added once the paper has a DOI. Until then there is
 #     no article to point at, and inventing one would be worse than pointing at nothing.
 
@@ -46,6 +47,9 @@ authors:
   - family-names: Ispanova
     given-names: Jadira
     orcid: "https://orcid.org/0009-0006-5701-7200"
+    affiliation: "Karakalpak State University named after Berdakh"
+  - family-names: Urazimbetova
+    given-names: Elzura
     affiliation: "Karakalpak State University named after Berdakh"
   - family-names: Absametov
     given-names: Bayram
