@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gatempc"
-version = "0.1.0"
+version = "1.0.0"
 description = "Identification of a real canal gate law from an open archive, and its effect on predictive control"
 requires-python = ">=3.11"
 readme = "README.md"

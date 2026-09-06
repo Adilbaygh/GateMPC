@@ -5,7 +5,10 @@
 # that the request is easy to honour.
 #
 # The author list was completed on 2026-09-06 and now matches the manuscript, in the same
-# order. TWO THINGS ARE STILL OPEN, and are deliberately absent rather than guessed:
+# order. The version below is the one the git tag v1.0.0 marks and the one Zenodo
+# archives; if the tag moves, this moves with it, or the archived snapshot contradicts
+# its own metadata. TWO THINGS ARE STILL OPEN, and are deliberately absent rather than
+# guessed:
 #   * one ORCID, for E. Urazimbetova, which has not been supplied;
 #   * `preferred-citation`, which is added once the paper has a DOI. Until then there is
 #     no article to point at, and inventing one would be worse than pointing at nothing.
@@ -24,7 +27,8 @@ abstract: >-
   scripts that compute them, the tests, and a desktop application that shows the
   results and applies the method to a structure of the reader's own.
 type: software
-version: "0.1.0"
+version: "1.0.0"
+date-released: "2026-09-06"
 
 authors:
   - family-names: Kudaybergenov
