@@ -694,31 +694,28 @@ def fig_structure():
 
 # ------------------------------------------------------------------ registry
 
-# number, function, one-line purpose, and the manuscript section the figure
-# belongs to. The section is the one thing here that cannot be measured -- it is
-# an editorial decision -- so it is declared, and Appendix A reads it from here
-# rather than from a second list of its own.
+# Number, function and one-line purpose. The number here is this script's own file
+# number -- fig01..fig10, the order the figures were written -- and has nothing to do
+# with the number a figure carries in the manuscript, which follows from the order of
+# the @figure directives in paper/sections/.
+#
+# There used to be a fourth field naming the manuscript section, with a comment
+# calling it "the one thing here that cannot be measured". It can: the builder walks
+# the sources and knows exactly which subsection each figure landed in. The declared
+# answers were wrong for all ten figures, six of them naming a Section 4 that holds
+# the Discussion. build/make_manuscript.py supplies it now, and refuses to build if
+# a figure it renders has no provenance row here.
 CATALOGUE = {
-    "kappa": (1, fig_kappa, "kappa is a rating output, not a measurement",
-              "Section 3.1"),
-    "gaugings": (2, fig_gaugings, "benchmark gate law against 77 gaugings",
-                 "Section 3.2"),
-    "storage": (3, fig_storage, "A_s is not identifiable from the archive",
-                "Section 3.3"),
-    "census": (4, fig_census, "why the folds are 2018-2025",
-               "Section 2.3"),
-    "envelope": (5, fig_envelope, "modelling error over the operating envelope",
-                 "Section 3.4"),
-    "control": (6, fig_control, "closed-loop cost, and its unstable sign",
-                "Section 3.4"),
-    "moves": (7, fig_moves, "gate movements on the archive's own grid",
-              "Section 2.2"),
-    "grid": (8, fig_grid, "the one-second timestamp offset and its cost",
-             "Section 2.4"),
-    "rating": (9, fig_rating, "how tightly the rating holds its coefficient",
-               "Section 3.1"),
-    "structure": (10, fig_structure, "the structure and its published series",
-                  "Section 2.1"),
+    "kappa": (1, fig_kappa, "kappa is a rating output, not a measurement"),
+    "gaugings": (2, fig_gaugings, "benchmark gate law against 77 gaugings"),
+    "storage": (3, fig_storage, "A_s is not identifiable from the archive"),
+    "census": (4, fig_census, "why the folds are 2018-2025"),
+    "envelope": (5, fig_envelope, "modelling error over the operating envelope"),
+    "control": (6, fig_control, "closed-loop cost, and its unstable sign"),
+    "moves": (7, fig_moves, "gate movements on the archive's own grid"),
+    "grid": (8, fig_grid, "the one-second timestamp offset and its cost"),
+    "rating": (9, fig_rating, "how tightly the rating holds its coefficient"),
+    "structure": (10, fig_structure, "the structure and its published series"),
 }
 
 PROVENANCE = os.path.join(RESULTS, "figure_provenance.json")
@@ -752,13 +749,13 @@ def main() -> int:
     wanted = args.only or sorted(CATALOGUE, key=lambda k: CATALOGUE[k][0])
     manifest = []
     for name in sorted(wanted, key=lambda k: CATALOGUE[k][0]):
-        number, fn, what, section = CATALOGUE[name]
+        number, fn, what = CATALOGUE[name]
         OPENED.clear()
         fig = fn()
         path = os.path.join(FIGURES, f"fig{number:02d}_{name}.png")
         fig.savefig(path, dpi=DPI)
         plt.close(fig)
-        manifest.append({"number": number, "name": name, "section": section,
+        manifest.append({"number": number, "name": name,
                          "what": what, "sources": sorted(OPENED)})
         w_in, h_in = fig.get_size_inches()
         print(f"fig{number:02d}_{name}.png  {w_in * 25.4:.1f} × "

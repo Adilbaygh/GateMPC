@@ -159,6 +159,10 @@ def test_every_file_named_in_appendix_a_is_on_disk():
     go looking. The table is generated rather than typed, so this should hold by
     construction -- which is exactly why it is worth asserting: the day it stops
     holding, something in the generation has quietly changed.
+
+    Both columns are checked. The artefact a row describes has to be on disk too,
+    not only the files it was built from: a row for a figure nobody draws any more
+    would describe the provenance of nothing.
     """
     if not os.path.exists(APPENDIX_A):
         pytest.skip("Appendix A has not been built; run scripts/make_tables.py")
@@ -167,13 +171,16 @@ def test_every_file_named_in_appendix_a_is_on_disk():
     missing = []
     with open(APPENDIX_A, encoding="utf-8", newline="") as fh:
         for row in csv.DictReader(fh):
+            artefact = row["Artefact"].strip()
+            if artefact not in index:
+                missing.append((artefact, artefact))
             for token in row["Built from"].split(","):
                 token = token.strip()
                 # Prose entries ("drawn by ..., no data") are not file names.
                 if not token or " " in token or "." not in token:
                     continue
                 if token not in index:
-                    missing.append((row["Item"], token))
+                    missing.append((artefact, token))
     assert not missing, (
         "Appendix A names files that are not in the repository:\n  " +
         "\n  ".join(f"{item}: {name}" for item, name in missing))
@@ -191,24 +198,60 @@ def test_appendix_a_covers_every_table_and_figure_that_exists():
         pytest.skip("Appendix A has not been built; run scripts/make_tables.py")
 
     with open(APPENDIX_A, encoding="utf-8", newline="") as fh:
-        listed = {row["Item"] for row in csv.DictReader(fh)}
+        listed = {row["Artefact"].strip() for row in csv.DictReader(fh)}
 
     tables_dir = os.path.join(ROOT, "results", "tables")
     figures_dir = os.path.join(ROOT, "results", "figures")
 
+    # File names on both sides. An earlier version of this test rebuilt the expected
+    # set as "Table 1", "Fig. 1" ... from those same file names, which quietly assumed
+    # that a figure's file number is its number in the manuscript. It is not: the
+    # manuscript numbers by order of appearance, and the two agreed for none of the
+    # ten figures. Appendix A is keyed by file name for that reason, and the
+    # manuscript number against each row is supplied by build/make_manuscript.py.
     expected = set()
     for name in os.listdir(tables_dir):
         m = re.fullmatch(r"table_(\w+?)_\w+\.csv", name)
         if m and m.group(1) != "A1":
-            expected.add(f"Table {m.group(1)}")
+            expected.add(name)
     if os.path.isdir(figures_dir):
         for name in os.listdir(figures_dir):
-            m = re.fullmatch(r"fig(\d+)_\w+\.png", name)
-            if m:
-                expected.add(f"Fig. {int(m.group(1))}")
+            if re.fullmatch(r"fig(\d+)_\w+\.png", name):
+                expected.add(name)
 
     assert expected, "no tables or figures on disk to check the appendix against"
     assert expected <= listed, (
         "these exist on disk but Appendix A does not account for them: "
         f"{sorted(expected - listed)}. Rerun scripts/make_figures.py and then "
         f"scripts/make_tables.py so the appendix is rebuilt from what is there.")
+
+
+def test_no_table_cites_a_source_by_private_shorthand():
+    """A table's sources have to be citations, not codes only the author knows.
+
+    Table 4 named its sources [C98] and [B25]. The builder resolves [@key] and
+    passes everything else through, so both reached the manuscript as themselves.
+    Nobody saw it because the committed CSV was older than the script that writes
+    it and still carried the [@key] form -- the build had been reading a file that
+    no longer matched its own generator, and the day the generator was rerun the
+    paper quietly lost a reference.
+    """
+    tables_dir = os.path.join(ROOT, "results", "tables")
+    if not os.path.isdir(tables_dir):
+        pytest.skip("no tables built; run scripts/make_tables.py")
+
+    shorthand = re.compile(r"\[(?!@)[A-Za-z][A-Za-z0-9]*\]")
+    found = []
+    for name in sorted(os.listdir(tables_dir)):
+        if not name.endswith(".csv"):
+            continue
+        with open(os.path.join(tables_dir, name), encoding="utf-8", newline="") as fh:
+            for row in csv.reader(fh):
+                for cell in row:
+                    for code in shorthand.findall(cell):
+                        found.append(f"{name}: {code}")
+    assert not found, (
+        "these table cells name a source by a code a reader cannot look up:\n  "
+        + "\n  ".join(sorted(set(found)))
+        + "\nWrite it as [@key] against paper/references.json and rerun "
+          "scripts/make_tables.py.")

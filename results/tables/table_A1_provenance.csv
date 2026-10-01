@@ -1,19 +1,19 @@
-Manuscript section,Item,Built from
-Section 2.1,Table 1,"time_series_metadata.csv, coverage_census.csv, archive_diagnostics.json"
-Section 2.3,Table 2,coverage_census.csv
-Section 2.4,Table 3,"archive_diagnostics.json, gate_law.json, grid_diagnostics.csv, coverage_census.csv, gaugings.csv"
-Section 2.9,Table 4,"control_comparison.json, model_error_envelope.json"
-Section 3.3,Table 5,"gate_law.json, archive_diagnostics.json"
-Section 3.2,Table 6,gate_law_validation.json
-Section 3.4,Table 7,control_comparison.json
-Section 3.5,Table 8,control_comparison.json
-Section 3.1,Fig. 1,"archive_diagnostics.json, kappa_daily.csv"
-Section 3.2,Fig. 2,"gate_law_validation.json, gauging_residual_bins.csv, gauging_residuals.csv"
-Section 3.3,Fig. 3,"archive_diagnostics.json, storage_estimates.csv"
-Section 2.3,Fig. 4,coverage_census.csv
-Section 3.4,Fig. 5,model_error_envelope.json
-Section 3.4,Fig. 6,control_comparison.json
-Section 2.2,Fig. 7,"archive_diagnostics.json, gate_step_histogram.csv"
-Section 2.4,Fig. 8,grid_diagnostics.csv
-Section 3.1,Fig. 9,"discharge_coefficient.json, discharge_coefficient_bins.csv"
-Section 2.1,Fig. 10,"drawn by scripts/make_figures.py, no data"
+Artefact,Built from
+table_1_series.csv,"time_series_metadata.csv, coverage_census.csv, archive_diagnostics.json"
+table_2_folds.csv,coverage_census.csv
+table_3_defects.csv,"archive_diagnostics.json, gate_law.json, grid_diagnostics.csv, coverage_census.csv, gaugings.csv"
+table_4_parameters.csv,"control_comparison.json, model_error_envelope.json"
+table_5_identifiability.csv,"gate_law.json, archive_diagnostics.json"
+table_6_h4.csv,gate_law_validation.json
+table_7_control.csv,control_comparison.json
+table_8_delta.csv,control_comparison.json
+fig01_kappa.png,"archive_diagnostics.json, kappa_daily.csv"
+fig02_gaugings.png,"gate_law_validation.json, gauging_residual_bins.csv, gauging_residuals.csv"
+fig03_storage.png,"archive_diagnostics.json, storage_estimates.csv"
+fig04_census.png,coverage_census.csv
+fig05_envelope.png,model_error_envelope.json
+fig06_control.png,control_comparison.json
+fig07_moves.png,"archive_diagnostics.json, gate_step_histogram.csv"
+fig08_grid.png,grid_diagnostics.csv
+fig09_rating.png,"discharge_coefficient.json, discharge_coefficient_bins.csv"
+fig10_structure.png,"drawn by scripts/make_figures.py, no data"

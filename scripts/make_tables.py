@@ -35,6 +35,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, "src"))
 
 from gatempc.archive import implausible_discharge  # noqa: E402
+from gatempc.results import as_scientific  # noqa: E402
 
 RESULTS = os.path.join(ROOT, "results")
 TABLES = os.path.join(RESULTS, "tables")
@@ -68,22 +69,66 @@ def pct(x, places=2, sign=True):
     return f"{100 * x:{'+' if sign else ''}.{places}f}%"
 
 
+# --- how a symbol is written in a table cell -------------------------------
+#
+# The body of the paper sets every variable as maths: $A_s$, $\Gamma$, $\alpha$,
+# $\Delta h$.  build/make_manuscript.py passes $...$ through a table cell exactly
+# as it passes it through a paragraph (add_runs), and MathType's Toggle TeX
+# converts both in the same pass, so a cell can carry the same notation the
+# sentence beside it carries.  Until 2026-09-07 the cells did not: they wrote
+# A_s, Gamma_syn, alpha, a/Dh in plain characters, so the same quantity appeared
+# upright in a table and italic two lines above it.  That is what a copy-editor
+# marks, and it costs nothing to remove.
+#
+# The rule below is: a variable, an exponent or an operator goes inside $...$; a
+# unit that Unicode can write (m, s, m², m³/s) stays plain text, because the
+# table's other units are plain text and one maths unit among them would be the
+# new inconsistency.  m^1.5/s is the exception -- Unicode has no superscript
+# 1.5 -- so it is set as maths.
+
+M15_PER_S = r"$\mathrm{m}^{1.5}/\mathrm{s}$"
+
+#: The archive's own strings, rewritten the way the paper writes them.  Anything
+#: not listed passes through untouched, so a series the archive adds later is
+#: never silently renamed.
+ARCHIVE_NOTATION = {
+    "H1 (Headwater)": "$H_1$ (headwater)",
+    "H2 (Tailwater)": "$H_2$ (tailwater)",
+    "ft^3/s": "ft³/s",
+}
+
+
+def as_paper_writes_it(text: str) -> str:
+    return ARCHIVE_NOTATION.get(text, text)
+
+
+def combo_maths(combo: str) -> str:
+    r"""'M_syn->P_id' -> '$M_{syn} \to P_{id}$'."""
+    left, right = combo.split("->")
+    def sym(part):
+        name, sub = part.split("_", 1)
+        return f"{name}_{{{sub}}}"
+    return f"${sym(left)} \\to {sym(right)}$"
+
+
 class Table:
     """One manuscript table, with everything Appendix A needs to describe it.
 
     ``sources`` are the repository-relative files this table's numbers were read
-    from; ``section`` is where the table appears in the manuscript. Appendix A is
-    generated from these two fields rather than from a list of its own, because
-    the list of its own drifted: Table 3 gained two data sources and the appendix
-    went on naming three.
+    from. Appendix A is generated from that field rather than from a list of its
+    own, because the list of its own drifted: Table 3 gained two data sources and
+    the appendix went on naming three.
+
+    There is deliberately no ``section``. Where a table appears is a property of
+    paper/sections/, not of this script, and the hand-typed answer that used to live
+    here was wrong for four of eight tables -- it named Section 4 for tables that are
+    in Section 3. build/make_manuscript.py supplies it now.
     """
 
-    def __init__(self, number, slug, caption, columns, rows, sources,
-                 section="", note=""):
+    def __init__(self, number, slug, caption, columns, rows, sources, note=""):
         self.number, self.slug, self.caption = number, slug, caption
         self.columns, self.rows = columns, rows
         self.sources, self.note = sources, note
-        self.section = section
 
 
 # ------------------------------------------------------------------ section 2
@@ -104,7 +149,8 @@ def t1_series():
                     key=lambda r: (r["parameter_code"],
                                    r["sublocation_identifier"])):
         role = role_of.get(m["parameter_code"], m["sublocation_identifier"])
-        rows.append([m["parameter_code"], role, m["unit_of_measure"],
+        rows.append([m["parameter_code"], as_paper_writes_it(role),
+                     as_paper_writes_it(m["unit_of_measure"]),
                      m["begin"][:10] if m["begin"] else "—",
                      m["end"][:10] if m["end"] else "—"])
     return Table(
@@ -120,7 +166,7 @@ def t1_series():
          "results/archive_diagnostics.json"],
         note=f"usable four-series samples over the folds: "
              f"{diag['kappa']['n_usable']:,}",
-        section="Section 2.1")
+    )
 
 
 def t2_folds():
@@ -148,7 +194,7 @@ def t2_folds():
          "Approved, %", "Fold", "Why not"],
         rows,
         ["DATA/USGS_canal_gates_v1/coverage_census.csv"],
-        section="Section 2.3")
+    )
 
 
 def _why_not(year, all4, moves, appr):
@@ -191,7 +237,8 @@ def t3_defects():
 
     rows = [
         ["Undocumented rating revision",
-         f"{pct(k['step_relative'])} step in Q/(a√(2gΔh)) overnight",
+         f"{pct(k['step_relative'])} step in "
+         r"$Q/(a\sqrt{2g\,\Delta h})$" " overnight",
          f"{k['split_after']} to {k['split_before']}",
          "no note in the published record"],
         ["Telemetry timestamp offset",
@@ -236,10 +283,10 @@ def t3_defects():
          "DATA/USGS_canal_gates_v1/grid_diagnostics.csv",
          "DATA/USGS_canal_gates_v1/coverage_census.csv",
          "DATA/USGS_canal_gates_v1/gaugings.csv"],
-        section="Section 2.4")
+    )
 
 
-# ----------------------------------------------- section 2, control apparatus
+# ------------------------------------------------------------------ section 3
 
 def t4_parameters():
     """The synthetic baseline, as actually used by the code."""
@@ -255,20 +302,21 @@ def t4_parameters():
         ["Drop across the gate", f"{ref['dh_ref_m']:.1f}", "m", "[@clemmens1998] Table 1"],
         ["Gate width", f"{ref['w_asce_m']:.0f}", "m", "[@clemmens1998] Table 3"],
         ["Gate height", f"{gate['a_max_m']:.1f}", "m", "[@clemmens1998] Table 3"],
-        # NOT the benchmark's own value. [C98] p. 24 leaves the gate relation open --
-        # "the committee was less specific with the form of the relationship" -- so
-        # 0.61 is the value the linear-model study of the same test cases uses. The
-        # table says so rather than letting a reader assume it came with [C98].
+        # Not the benchmark's. [C98] leaves the form of the gate relation open --
+        # "the committee was less specific with the form of the relationship" (p. 24)
+        # -- so the constant 0.61 is the Bonet group's choice, and the row says so.
+        # Model/02_asce_parameters.md holds the quotation and the reasoning.
         ["Discharge coefficient", f"{ref['cd_asce']:.2f}", "—",
          "[@bonet2025] Table 5; not fixed by [@clemmens1998]"],
-        ["Storage area A_s", f"{pool['storage_area_m2']:,.0f}", "m²",
+        ["Storage area $A_s$", f"{pool['storage_area_m2']:,.0f}", "m²",
          "derived: length × top width"],
-        ["Delay τ", f"{pool['delay_s']:.0f}", "s", "derived: L/(v+c)"],
+        ["Delay $\\tau$", f"{pool['delay_s']:.0f}", "s", "derived: L/(v+c)"],
         ["Regulation step", f"{d['dt_s']:.0f}", "s", "[@clemmens1998] p. 24"],
         ["Reference discharge", f"{ref['q_ref_m3s']:.1f}", "m³/s",
          "[@clemmens1998] Table 6"],
-        ["Matching opening a_ref", f"{ref['a_ref_m']:.4f}", "m", "derived"],
-        ["Γ_syn = C_d W √(2g)", f"{ref['gamma_syn']:.4f}", "m^1.5/s", "derived"],
+        ["Matching opening $a_{ref}$", f"{ref['a_ref_m']:.4f}", "m", "derived"],
+        [r"$\Gamma_{syn} = C_d\,W\,\sqrt{2g}$", f"{ref['gamma_syn']:.4f}",
+         M15_PER_S, "derived"],
     ]
     return Table(
         4, "parameters",
@@ -277,10 +325,10 @@ def t4_parameters():
         "computed by the code from the cited ones.",
         ["Parameter", "Value", "Unit", "Source"], rows,
         ["results/control_comparison.json", "results/model_error_envelope.json"],
-        section="Section 2.9")
+    )
 
 
-# ------------------------------------------------------------------ section 3
+# ------------------------------------------------------------------ section 5
 
 def t5_identifiability():
     """What eight years of open archive can and cannot pin down."""
@@ -289,20 +337,24 @@ def t5_identifiability():
     cv, h0c2, sto = law["cross_validation"], law["h0c2_second_condition"], \
         diag["storage"]
     rows = [
-        ["Γ = C_d W_eff", f"{cv['gamma_mean_m']:.4f} m^1.5/s",
+        [r"$\Gamma = C_d\,W_{eff}$", f"{cv['gamma_mean_m']:.4f} {M15_PER_S}",
          f"[{cv['gamma_ci95'][0]:.4f}, {cv['gamma_ci95'][1]:.4f}]",
          "identified"],
-        ["α (opening exponent)", f"{cv['alpha_mean']:.4f}",
+        [r"$\alpha$ (opening exponent)", f"{cv['alpha_mean']:.4f}",
          f"[{cv['alpha_ci95'][0]:.4f}, {cv['alpha_ci95'][1]:.4f}]",
          "identified"],
-        ["β (head exponent)", f"{cv['beta_mean']:.4f}",
+        [r"$\beta$ (head exponent)", f"{cv['beta_mean']:.4f}",
          f"[{cv['beta_ci95'][0]:.4f}, {cv['beta_ci95'][1]:.4f}]",
          "identified"],
-        ["z₀ (sill elevation)", f"{law['full_fit']['z0_ft']:.2f} ft",
+        ["$z_0$ (sill elevation)", f"{law['full_fit']['z0_ft']:.2f} ft",
          f"flat valley {h0c2['flat_valley_width_ft']:.2f} ft wide",
          f"NOT identified — free-flow fraction "
-         f"{h0c2['free_fraction_at_optimum']:.1e}"],
-        ["A_s (pool storage area)", f"{sto['median_m2']:,.0f} m²",
+         # Two digits, which is what as_scientific defaults to and what the {{...|sci}}
+         # placeholder gives Section 3.3 for this same number. One digit here printed
+         # 1.1e-5 in the table against 1.13e-5 in the text: the same quantity, written
+         # to two precisions, in a paper whose argument is about how numbers are read.
+         f"{as_scientific(h0c2['free_fraction_at_optimum'])}"],
+        ["$A_s$ (pool storage area)", f"{sto['median_m2']:,.0f} m²",
          f"IQR/median {sto['iqr_ratio']:.3f}",
          f"NOT identified — {pct(sto['negative_fraction'], 1, False)} of "
          f"{sto['n_accepted']:,} estimates physically impossible"],
@@ -315,9 +367,12 @@ def t5_identifiability():
         "asserting it.",
         ["Quantity", "Estimate", "Spread or interval", "Verdict"], rows,
         ["results/gate_law.json", "results/archive_diagnostics.json"],
+        # Named by section, not by table number: the table numbers here are file
+        # numbers, and this note once pointed a reader at the wrong table because of
+        # it. Section references are checked by the builder against the sources.
         note="The identification is against the continuous discharge series, "
-             "which is a rating output; see Table 6 for the non-circular test.",
-        section="Section 3.3")
+             "which is a rating output; see Section 3.2 for the non-circular test.",
+    )
 
 
 def t6_h4():
@@ -350,10 +405,10 @@ def t6_h4():
         ["Interquartile range", pct(r["iqr"], sign=False), ""],
         ["5th to 95th percentile", f"{pct(r['q05'])} to {pct(r['q95'])}", ""],
         ["Full range", f"{pct(r['min'])} to {pct(r['max'])}", ""],
-        ["Structure against a/Δh",
+        [r"Structure against $a/\Delta h$",
          pct(v["structure_spread"]["a/dh"], sign=False),
          f"criterion {100 * v['criteria']['structure']:.0f}%"],
-        ["Structure against Δh", pct(v["structure_spread"]["dh"], sign=False),
+        [r"Structure against $\Delta h$", pct(v["structure_spread"]["dh"], sign=False),
          ""],
         ["Before the rating change",
          f"{pct(v['by_period']['before']['median'])} "
@@ -373,7 +428,7 @@ def t6_h4():
         note=f"verdict: {'supported' if v['h4_supported'] else 'not supported'}"
              f" — the idealised law is adequate for this structure. "
              + _gauging_accuracy_note(v),
-        section="Section 3.2")
+    )
 
 
 def _gauging_accuracy_note(v: dict) -> str:
@@ -424,7 +479,7 @@ def t7_control():
         for combo in ("M_syn->P_syn", "M_syn->P_id",
                       "M_id->P_syn", "M_id->P_id"):
             s = c["indicators"][combo]
-            rows.append([kind, combo.replace("->", " → "),
+            rows.append([kind, combo_maths(combo),
                          f"{s['IAE']['median']:.6f}",
                          f"{s['MAE']['median']:.6f}",
                          f"{s['StE']['median']:.6f}",
@@ -438,19 +493,19 @@ def t7_control():
         "applies. MAE, IAE and StE are normalised by the target depth; IAQ is "
         "the integrated absolute change in discharge and IAW the same for gate "
         "position.",
-        ["Controller", "Model → plant", "IAE", "MAE", "StE", "IAQ, m³/s",
+        ["Controller", r"Model $\to$ plant", "IAE", "MAE", "StE", "IAQ, m³/s",
          "IAW, m", "Saturation, %"], rows,
         ["results/control_comparison.json"],
         note="absolute values are not realistic canal performance: the pool is "
              "an integrator with delay, identical in both arms, so only the "
              "difference between arms is interpreted. " + _deadband_note(cc),
-        section="Section 3.4")
+    )
 
 
 def _deadband_note(cc: dict) -> str:
     """What an 11.5 mm minimum gate movement does to IAQ, read from the run.
 
-    [C98] proposes IAQ as the indicator against gate hunting (p. 26), so a large
+    [@clemmens1998] proposes IAQ as the indicator against gate hunting (p. 26), so a large
     IAQ invites the reading that the controller is chattering because the
     headline runs allow a movement of any size. It was measured instead of
     assumed (hypotheses.md, H2-s3): the deadband barely moves IAQ, so the large
@@ -492,24 +547,24 @@ def t8_delta():
     for kind in ("PI", "MPC"):
         c = cc["controllers"][kind]
         d, g = c["delta"], c["delta_absolute_m"]
-        rows.append([kind, "δ, headline", p3(d["median"]),
+        rows.append([kind, r"$\delta$, headline", p3(d["median"]),
                      f"[{p3(d['ci95'][0])}, {p3(d['ci95'][1])}]",
                      f"{1000 * g['median']:+.4f} mm"])
-        rows.append([kind, "δ, mirror (identified model on synthetic plant)",
+        rows.append([kind, r"$\delta$, mirror (identified model on synthetic plant)",
                      p3(c["delta_mirror"]["median"]),
                      f"[{p3(c['delta_mirror']['ci95'][0])}, "
                      f"{p3(c['delta_mirror']['ci95'][1])}]", "—"])
         s = cc["sensitivity"]
         e = s["exponent_ci"][kind]
-        rows.append([kind, "δ over the 95% region of (α, β)",
+        rows.append([kind, r"$\delta$ over the 95% region of $(\alpha, \beta)$",
                      f"{p3(e['min'])} to {p3(e['max'])}", "four corners", "—"])
         pl = s["pool_length"][kind]
-        rows.append([kind, "δ over pool lengths 2–7 km",
+        rows.append([kind, r"$\delta$ over pool lengths 2–7 km",
                      f"{p3(pl['min'])} to {p3(pl['max'])}",
                      "sign not stable" if pl["min"] * pl["max"] < 0
                      else "sign stable", "—"])
         ms = s["min_gate_step"][kind]
-        rows.append([kind, f"δ with an {1000 * ms['min_step_m']:.1f} mm "
+        rows.append([kind, f"$\\delta$ with an {1000 * ms['min_step_m']:.1f} mm "
                            f"minimum gate movement", p3(ms["delta_median"]),
                      f"[{p3(ms['delta_ci95'][0])}, "
                      f"{p3(ms['delta_ci95'][1])}]", "—"])
@@ -525,7 +580,7 @@ def t8_delta():
         ["results/control_comparison.json"],
         note=f"the level sensor resolves {1000 * step:.1f} mm, so the headline "
              f"difference is a small fraction of the instrument's own step",
-        section="Section 3.5")
+    )
 
 
 # ------------------------------------------------------------------ appendix
@@ -555,28 +610,35 @@ def ta1_provenance(tables):
     def names(paths):
         return ", ".join(os.path.basename(p) for p in paths)
 
+    # Keyed by the artefact's own file name, which is a fact about this script's
+    # output. The number a table carries in the manuscript and the subsection it
+    # appears in are NOT facts about this script: they follow from the order of the
+    # @figure and @table directives in paper/sections/, which only the builder walks.
+    # This function used to supply both, from t.number and a hand-typed section=, and
+    # got twelve of eighteen rows wrong -- every figure row among them, because the
+    # figures are named fig01..fig10 in the order they were written and appear in the
+    # manuscript in quite another. build/make_manuscript.py now joins this file to the
+    # numbering it actually assigned, and refuses to build if the two sets differ.
     entries = []
     for t in tables:
-        if not t.section:
-            raise SystemExit(f"Table {t.number} does not say which manuscript "
-                             f"section it belongs to; set section= on it")
-        entries.append([t.section, f"Table {t.number}", names(t.sources)])
+        entries.append([f"table_{t.number}_{t.slug}.csv", names(t.sources)])
     for f in sorted(figures, key=lambda f: f["number"]):
-        entries.append([f["section"], f"Fig. {f['number']}",
+        entries.append([f"fig{f['number']:02d}_{f['name']}.png",
                         names(f["sources"]) or
                         "drawn by scripts/make_figures.py, no data"])
 
     return Table(
         "A1", "provenance",
-        "Provenance of every table and figure. Each entry names the published "
-        "file its numbers were read from; all of those files are produced by "
-        "the scripts in the repository and are covered by the data package's "
-        "checksums where they belong to it.",
-        ["Manuscript section", "Item", "Built from"],
+        "Provenance of every table and figure, keyed by the artefact's own file "
+        "name. Each entry names the published file its numbers were read from; all "
+        "of those files are produced by the scripts in the repository and are "
+        "covered by the data package's checksums where they belong to it. The "
+        "manuscript number and section against each artefact are supplied by "
+        "build/make_manuscript.py, which is what assigns them.",
+        ["Artefact", "Built from"],
         entries,
         ["scripts/make_tables.py", "results/figure_provenance.json",
          "results/control_comparison.json"],
-        section="Appendix A",
         note=_reproducibility_note())
 
 

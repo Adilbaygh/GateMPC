@@ -221,6 +221,37 @@ def as_interval(pair: Any, digits: int = 4) -> str:
     return "—"
 
 
+def as_scientific(value: Any, digits: int = 2) -> str:
+    r"""1.21e-17 -> ``$1.21\times10^{-17}$``.
+
+    ``%e`` is how a machine writes a small number; a paper writes a mantissa, a
+    multiplication sign and a power of ten. Until 2026-09-07 three numbers reached
+    the manuscript in the machine's form -- the free-flow fraction twice, once in
+    the text and once in Table 5, and the matched-arm agreement once -- and read
+    as ``1.21e-17`` on the page.
+
+    The result is a ``$...$`` span, so build/make_manuscript.py passes it through
+    as maths exactly as it passes an equation, and MathType's Toggle TeX sets it
+    like every other formula in the document, in a paragraph and in a table cell
+    alike.
+
+    One home for two callers: build/make_manuscript.py resolves ``{{...|sci}}``
+    with it, and scripts/make_tables.py writes Table 5's free-flow fraction with
+    it. Two implementations would be two chances to drift, which is a mistake
+    requirements/decisions.md already records once.
+
+    An exponent of zero returns the mantissa alone: ``$4.00\times10^{0}$`` is a
+    worse way of writing 4.00 than 4.00 is.
+    """
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return "—"
+    mantissa, exponent = f"{float(value):.{digits}e}".split("e")
+    power = int(exponent)
+    if power == 0:
+        return mantissa
+    return rf"${mantissa}\times10^{{{power}}}$"
+
+
 # -------------------------------------------------------------------------- tables
 
 
