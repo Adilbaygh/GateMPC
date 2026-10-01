@@ -85,6 +85,9 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.22549214
     description: The versioned DOI of v1.0.0.
+  - type: doi
+    value: 10.5281/zenodo.23090666
+    description: The versioned DOI of v1.1.0, the snapshot the paper was built from.
 
 keywords:
   - canal automation
